@@ -3,77 +3,77 @@ This document is provided as-is, without warranty or liability.
 **Contents**
 ============
 
-[**Contacts 2**](#contacts)
+[**Contacts**](#contacts)
 
-[**Introduction 3**](#introduction)
+[**Introduction**](#introduction)
 
-[**Status of This Document 3**](#status-of-this-document)
+[**Status of This Document**](#status-of-this-document)
 
-[**Background Information 3**](#upgrade-schedule)
+[**Background Information**](#upgrade-schedule)
 
-[**Upgrade Schedule 3**](#_Toc47127850)
+[**Upgrade Schedule**](#_Toc47127850)
 
-[**Overview 3**](#overview)
+[**Overview**](#overview)
 
-[**Upgrade planning 4**](#upgrade-planning)
+[**Upgrade planning**](#upgrade-planning)
 
 [**Determining Upgrade and production requirements
 4**](#determining-upgrade-and-production-requirements)
 
-[**Documentation 4**](#documentation)
+[**Documentation**](#documentation)
 
-[**Checklist: 5**](#checklist)
+[**Checklist:**](#checklist)
 
 [**Write post-upgrade validation test plan
 5**](#write-post-upgrade-validation-test-plan)
 
-[**Checklist: 6**](#checklist-1)
+[**Checklist:**](#checklist-1)
 
 [**Document Database/API Connections
 6**](#document-databaseapi-connections)
 
-[**Scheduling Upgrades 6**](#scheduling-upgrades)
+[**Scheduling Upgrades**](#scheduling-upgrades)
 
 [**Opening a Synopsys SalesForce Request
 6**](#opening-a-synopsys-salesforce-request)
 
-[**Pre-Upgrade Activities 7**](#pre-upgrade-activities)
+[**Pre-Upgrade Activities**](#pre-upgrade-activities)
 
-[**Performance Issues 7**](#performance-issues)
+[**Performance Issues**](#performance-issues)
 
-[**Best Practices 7**](#best-practices)
+[**Best Practices**](#best-practices)
 
-[**Sage 7**](#sage)
+[**Sage**](#sage)
 
-[**System\_check.sh 7**](#system_check.sh)
+[**System\_check.sh**](#system_check.sh)
 
-[**Sar 7**](#sar)
+[**Sar**](#sar)
 
-[**Zenoss 8**](#zenoss)
+[**Zenoss**](#zenoss)
 
 [**SynopsysGatherServerSpecs\_202007.bash
 8**](#synopsysgatherserverspecs_202007.bash)
 
-[**Resolving Performance Issues 8**](#resolving-performance-issues)
+[**Resolving Performance Issues**](#resolving-performance-issues)
 
-[**Sysbench: 8**](#sysbench)
+[**Sysbench:**](#sysbench)
 
-[**Pgbench 9**](#pgbench)
+[**Pgbench**](#pgbench)
 
-[**pg\_test\_fsync: 10**](#pg_test_fsync)
+[**pg\_test\_fsync:**](#pg_test_fsync)
 
-[**bonnie++: 10**](#bonnie)
+[**bonnie++:**](#bonnie)
 
-[**dd: 11**](#dd)
+[**dd:**](#dd)
 
 [**Cleaning up Black Duck Projects and Scans
 11**](#cleaning-up-black-duck-projects-and-scans)
 
-[**Cleaning up Databases 12**](#cleaning-up-databases)
+[**Cleaning up Databases**](#cleaning-up-databases)
 
-[**bdio Database 12**](#bdio-database)
+[**bdio Database**](#bdio-database)
 
-[**bds\_hub\_report Database 12**](#bds_hub_report-database)
+[**bds\_hub\_report Database**](#bds_hub_report-database)
 
 [**bds\_hub, postgresql, template0, and template1 Database
 12**](#bds_hub-postgresql-template0-and-template1-database)
@@ -81,21 +81,21 @@ This document is provided as-is, without warranty or liability.
 [**Trimming the Notification and audit\_event logs
 12**](#trimming-the-notification-and-audit_event-logs)
 
-[**Notification Logs 12**](#notification-logs)
+[**Notification Logs**](#notification-logs)
 
-[**Audit\_Events 13**](#audit_events)
+[**Audit\_Events**](#audit_events)
 
-[**Database Cleanup 13**](#database-cleanup)
+[**Database Cleanup**](#database-cleanup)
 
 [**Remove any orphaned large objects
 13**](#remove-any-orphaned-large-objects)
 
-[**Run PostgreSQL tuning utility 13**](#run-postgresql-tuning-utility)
+[**Run PostgreSQL tuning utility**](#run-postgresql-tuning-utility)
 
 [**Upgrade O/S, Kernel, Docker, Postgresql
 14**](#upgrade-os-kernel-docker-postgresql)
 
-[**Full Vacuum of Database 14**](#full-vacuum-of-database)
+[**Full Vacuum of Database**](#full-vacuum-of-database)
 
 [**Duplicating Production Database in Staging Environment
 16**](#duplicating-production-database-in-staging-environment)
@@ -106,20 +106,20 @@ This document is provided as-is, without warranty or liability.
 [**Duplicating Production Environment in Staging Environment
 17**](#duplicating-production-environment-in-staging-environment)
 
-[**Perform Black Duck Upgrade 17**](#perform-black-duck-upgrade)
+[**Perform Black Duck Upgrade**](#perform-black-duck-upgrade)
 
-[**Pre-upgrade steps 17**](#pre-upgrade-steps)
+[**Pre-upgrade steps**](#pre-upgrade-steps)
 
-[**Check Memory 17**](#check-memory)
+[**Check Memory**](#check-memory)
 
-[**Download upgrade images 17**](#download-upgrade-images)
+[**Download upgrade images**](#download-upgrade-images)
 
-[**Download Orchestration Files 17**](#download-orchestration-files)
+[**Download Orchestration Files**](#download-orchestration-files)
 
 [**blackduck\_migrator-2020.6.1.yml
 18**](#blackduck_migrator-2020.6.1.yml)
 
-[**Schedule upgrade 18**](#schedule-upgrade)
+[**Schedule upgrade**](#schedule-upgrade)
 
 [**Perform Upgrade, Day of Upgrade (Staging then Production)
 18**](#perform-upgrade-day-of-upgrade-staging-then-production)
@@ -127,20 +127,20 @@ This document is provided as-is, without warranty or liability.
 [**Stop scanning and external connections
 18**](#stop-scanning-and-external-connections)
 
-[**Start the actual upgrade 19**](#start-the-actual-upgrade)
+[**Start the actual upgrade**](#start-the-actual-upgrade)
 
-[**Post-Upgrade Steps 22**](#post-upgrade-steps)
+[**Post-Upgrade Steps**](#post-upgrade-steps)
 
-[**Run upgrade-validation tests. 22**](#section-3)
+[**Run upgrade-validation tests.**](#section-3)
 
-[**Re-run benchmark tests. 22**](#re-run-benchmark-tests.)
+[**Re-run benchmark tests.**](#re-run-benchmark-tests.)
 
 [**Announce upgrade completion to stakeholders
 22**](#announce-upgrade-completion-to-stakeholders)
 
-[**Contingency: Fallback Steps 22**](#contingency-fallback-steps)
+[**Contingency: Fallback Steps**](#contingency-fallback-steps)
 
-[**Restore steps, during Fallback 22**](#restore-steps-during-fallback)
+[**Restore steps, during Fallback**](#restore-steps-during-fallback)
 
 **Contacts**
 ============
