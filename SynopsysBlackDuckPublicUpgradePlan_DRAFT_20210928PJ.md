@@ -128,19 +128,26 @@ This document is provided as-is, without warranty or liability.
 **Contacts**
 ============
 
-1.  **Customer: Customer**
+1.  Customer: 
 
-2.  **Case: 00887157. Synopsys Software Integrity Community:
-    <https://community.synopsys.com/s/>,
-    <software-integrity-support@synopsys.com>, Global. Note: prior
-    upgrade Cases for reference of issues and resolutions: *00805874,
-    00811525***
+2.  Case(s): 
+      - Prior related cases for reference: 
 
-3.  **Customer: Customer Customer, <customer@customer.com>, or
-    <customer.Customer@customer.com>, Eastern Time Zone.**
+3.  Customer: 
+      - Name:
+      - email:
+      - phone:
+      - timezone:
 
-4.  **Synopsys Support: Pete Jalajas, <pjalajas@synopsys.com>, +phone,
-    Eastern Time Zone. other, <other@synopsys.com>, Eastern Time Zone.**
+4.  Synopsys Support Staff member(s): 
+      - Name(s):  
+      - email(s):
+      - phone(s):
+      - timezone(s):
+
+5.  Support links: 
+      - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
+      - email:  software-integrity-support@synopsys.com
 
 **Introduction**
 ================
@@ -148,30 +155,29 @@ This document is provided as-is, without warranty or liability.
 **Status of This Document**
 ---------------------------
 
-1.  **This document is a Draft, last updated September 28, 2021. Contact
-    Pete Jalajas <pjalajas@synopsys.com> with any questions or
-    corrections. **
+1.  This document is a Draft, informal, test, work in progress.
+    - last updated September 28, 2021. 
+    - Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
 
-2.  **Document filename:
-    CustomerBlackDuckUpgradeSupportPlan\_v2bach\_20210927PJ.docx.**
+2.  Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
 
-3.  **This document has been reviewed by:**
-
-    1.  **TBD**
+3.  This document has been reviewed by:
+    1.  
+    1.  
 
 **Upgrade Schedule**
 --------------------
 
-1.  **On or about [~~Friday July 31, 2020~~
-    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_]{.underline}, Customer is scheduled
-    to upgrade their Staging Black Duck installation from Black Duck
-    (Hub) version ~~2020.4.1 to 2020.6.1~~
-    \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_. **
+1.  Staging: 
+    - Date: 
+    - From version:
+    - To version:
 
-2.  **After successful completion of the upgrade on Staging, and
+2.  Production:
+    - Only after successful completion of the upgrade on Staging, and
     resolution of any findings from that upgrade, Customer is currently
-    expected to schedule upgrading Production on [~~Thursday August 13,
-    2020~~ \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_]{.underline}.**
+    expected to schedule upgrading Production on 
+    - Date:
 
 **Background Information**
 --------------------------
