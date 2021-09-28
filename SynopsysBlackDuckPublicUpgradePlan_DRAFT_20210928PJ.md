@@ -666,15 +666,19 @@ supports testing CPU, memory, file I/O, mutex performance, and even
 If sysbench is not installed on the server (yum list installed \| grep
 sysbench), you can install it as root by running:
 
-`sudo su - yum install sysbench`
+```
+sudo su - yum install sysbench
+```
 
 To run sysbench, run the following as root:
 
-`date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
+```
+date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio \--file-test-mode=rndrw \--threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).\*/\" ; done`
-
+\"\\(read\\\|writ\\).\*/\" ; done
+```
+```
 Mon Jul 27 11:17:08 EDT 2020
 Mon Jul 27 15:17:08 UTC 2020
 sup-pjalajas-hub.dc1.lan
@@ -704,7 +708,7 @@ test threads 16
 real    0m30.055s
 user    0m5.440s
 sys     0m13.697s
-`
+```
 ### Pgbench
 
 pgbench is a simple program for running benchmark tests on
