@@ -657,7 +657,7 @@ or bonnie++) may be used to collect a performance baseline for
 comparison with a separate run after the upgrade, in both Staging and
 Production.
 
-### Sysbench
+### sysbench
 
 sysbench provides benchmarking capabilities for Linux. sysbench
 supports testing CPU, memory, file I/O, mutex performance, and even
@@ -666,75 +666,48 @@ supports testing CPU, memory, file I/O, mutex performance, and even
 If sysbench is not installed on the server (yum list installed \| grep
 sysbench), you can install it as root by running:
 
-sudo su -
-
+`sudo su -
 yum install sysbench
-
+`
 It will be dropped into /bin.
 
 To run sysbench, run the following as root:
 
-date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
+`date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio \--file-test-mode=rndrw \--threads=\$mthreads run \| grep -e
 \"\\(read\\\|writ\\).\*/\" ; done
 
 Mon Jul 27 11:17:08 EDT 2020
-
 Mon Jul 27 15:17:08 UTC 2020
-
 sup-pjalajas-hub.dc1.lan
-
 /home/pjalajas/Documents/dev/customers/customer
-
 pjalajas
-
 8
-
               total        used        free      shared  buff/cache  
 available
-
 Mem:             39          12          14           2         
 12          23
-
 Swap:             1           1           0
-
 test threads 4
-
     reads/s:                      7368.02
-
     writes/s:                     4912.01
-
     read, MiB/s:                  115.13
-
     written, MiB/s:               76.75
-
 test threads 8
-
     reads/s:                      13405.58
-
     writes/s:                     8936.89
-
     read, MiB/s:                  209.46
-
     written, MiB/s:               139.64
-
 test threads 16
-
     reads/s:                      19459.82
-
     writes/s:                     12973.21
-
     read, MiB/s:                  304.06
-
     written, MiB/s:               202.71
-
 real    0m30.055s
-
 user    0m5.440s
-
 sys     0m13.697s
-
+`
 ### Pgbench
 
 pgbench is a simple program for running benchmark tests on
