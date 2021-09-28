@@ -762,78 +762,48 @@ fastest
 is on your specific system, as well as supplying diagnostic information
 in the event of an identified I/O problem.
 
--   date \--utc ; hostname -f ; pg\_test\_fsync
+```
+date \--utc ; hostname -f ; pg\_test\_fsync
+```
 
+```
 > Fri Jul 24 19:56:41 UTC 2020
->
 > sup-pjalajas-hub.dc1.lan
->
 > 2 seconds per test
->
 > O\_DIRECT supported on this platform for open\_datasync and
 > open\_sync.
->
 > Compare file sync methods using one 8kB write:
->
 > (in wal\_sync\_method preference order, except fdatasync
->
 > is Linux\'s default)
->
 >         open\_datasync                    1828.665 ops/sec
->
 >         fdatasync                        1839.337 ops/sec
->
 >         fsync                             538.328 ops/sec
->
 >         fsync\_writethrough                            n/a
->
 >         open\_sync                         442.936 ops/sec
->
 > Compare file sync methods using two 8kB writes:
->
 > (in wal\_sync\_method preference order, except fdatasync
->
 > is Linux\'s default)
->
 >         open\_datasync                     945.146 ops/sec
->
 >         fdatasync                        1461.665 ops/sec
->
 >         fsync                             531.997 ops/sec
->
 >         fsync\_writethrough                            n/a
->
 >         open\_sync                         330.452 ops/sec
->
 > Compare open\_sync with different write sizes:
->
 > (This is designed to compare the cost of writing 16kB
->
 > in different write open\_sync sizes.)
->
 >          1 \* 16kB open\_sync write         595.042 ops/sec
->
 >          2 \*  8kB open\_sync writes        229.368 ops/sec
->
 >          4 \*  4kB open\_sync writes        121.647 ops/sec
->
 >          8 \*  2kB open\_sync writes         83.208 ops/sec
->
 >         16 \*  1kB open\_sync writes         39.609 ops/sec
->
 > Test if fsync on non-write file descriptor is honored:
->
 > (If the times are similar, fsync() can sync data written
->
 > on a different descriptor.)
->
 >         write, fsync, close               633.979 ops/sec
->
 >         write, close, fsync               486.340 ops/sec
->
 > Non-Sync\'ed 8kB writes:
->
 >         write                           244921.142 ops/sec
+```
 
 ### bonnie++
 
@@ -841,77 +811,53 @@ Bonnie++ allows you to benchmark how your file systems perform with
 respect to data read and write speed, the number of seeks that can be
 performed per second, and the number of file metadata operations that
 can be performed per second.
-
+```
 -   date \--utc ; hostname -f ; time bonnie++ \# need 2 x RAM to be
     free on disk 
-
+```
+```
 > Fri Jul 24 20:53:01 UTC 2020
->
 > sup-pjalajas-hub.dc1.lan
->
 > Writing a byte at a time\...done
->
 > Writing intelligently\...done
->
 > Rewriting\...done
->
 > Reading a byte at a time\...done
->
 > Reading intelligently\...done
->
 > start \'em\...done\...done\...done\...done\...done\...
->
 > Create files in sequential order\...done.
->
 > Stat files in sequential order\...done.
->
 > Delete files in sequential order\...done.
->
 > Create files in random order\...done.
->
 > Stat files in random order\...done.
->
 > Delete files in random order\...done.
->
 > Version  1.97       \-\-\-\-\--Sequential Output\-\-\-\-\--
 > \--Sequential Input- \--Random-
->
 > Concurrency   1     -Per Chr- \--Block\-- -Rewrite- -Per Chr-
 > \--Block\-- \--Seeks\--
->
 > Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec
 > %CP  /sec %CP
->
 > sup-pjalajas 80112M   668  99 993827  96 553909  59  1411  99
 > 1341920  79  8210 150
->
 > Latency             20730us   98013us    1412ms    8035us  
 > 41587us   15082us
->
 > Version  1.97       \-\-\-\-\--Sequential Create\-\-\-\-\--
 > \-\-\-\-\-\-\--Random Create\-\-\-\-\-\-\--
->
 > sup-pjalajas-hub.dc -Create\-- \--Read\-\-- -Delete\-- -Create\--
 > \--Read\-\-- -Delete\--
->
 >               files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec
 > %CP  /sec %CP
->
 >                  16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++
 > +++ +++++ +++
->
 > Latency              1262us    6290us     660us    3386us    
 > 228us     626us
->
 > 1.97,1.97,sup-pjalajas-hub.dc1.lan,1,1595640930,80112M,,668,99,993827,96,553909,59,1411,99,1341920,79,8210,150,16,,,,,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,20730us,98013us,1412ms,8035us,41587us,15082us,1262us,6290us,660us,3386us,228us,626us
 >
 > real    5m9.032s
->
 > user    0m56.024s
->
 > sys     2m53.775s
+```
 
-### dd:
+### dd
 
 You can use dd to create a large file as quickly as possible to
 see how long it takes. It's a very basic test and not very customisable
@@ -919,8 +865,10 @@ however it will give you a sense of the performance of the file system.
 You must make sure this file is larger than the amount of RAM you have
 on your system to avoid the whole file being cached in memory.
 
+```
 time sh -c \"dd if=/dev/zero of=\[PATH\] bs=\[BLOCK\_SIZE\]k
 count=\[LOOPS\] && sync\"
+```
 
 A break down of the command is as follows:
 
@@ -940,20 +888,17 @@ A break down of the command is as follows:
 
 Example:
 
+```
 time sh -c \"dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k
 count=2000000 && sync\"
-
 2000000+0 records in
-
 2000000+0 records out
-
 8192000000 bytes transferred in 159.062003 secs (51501929 bytes/sec)
 
 real 2m41.618s
-
 user 0m0.630s
-
 sys 0m14.998s
+```
 
 **Cleaning up Black Duck Projects and Scans**
 ---------------------------------------------
