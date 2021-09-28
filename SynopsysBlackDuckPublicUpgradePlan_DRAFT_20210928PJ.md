@@ -379,11 +379,11 @@ For example, as part of the 2020.6.0 release, the following are
 supported (please refer to your Install Guide for the actual versions
 for your release):
 
-  **O/S or Application**               **Version**
-  ------------------------------------ ---------------------
-  Red Hat Linux                    7.3
-  Docker                           Community 19.03
-  PostgreSQL (external database)   9.6.x or 11.7
+  |**O/S or Application**|**Version**|
+  |----------------------|-----------| 
+  |Red Hat Linux|7.3|
+  |Docker|Community 19.03|
+  |PostgreSQL (external database)|9.6.x or 11.7|
 
 ### **Checklist:**
 
