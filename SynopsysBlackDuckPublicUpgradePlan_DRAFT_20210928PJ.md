@@ -619,8 +619,9 @@ export PGPASSWORD='\<PSQL Database Password\>'
 ./SynopsysMonitorDbActivity\_202007.bash \>
 SynopsysMonitorDbActivity\_202007.out 2\>&1
 
-**Resolving Performance Issues**
---------------------------------
+**Resolving Performance and Networking Issues**
+-----------------------------------------------
+TODO:  add networking, proxy, firewall and other related improvements here
 
 Using the output of the sar/ksar command and the
 SynopsysGatherServerSpecs\_202007.bash script (and possibly the Zenoss
@@ -656,7 +657,7 @@ or bonnie++) may be used to collect a performance baseline for
 comparison with a separate run after the upgrade, in both Staging and
 Production.
 
-### Sysbench:
+### Sysbench
 
 sysbench provides benchmarking capabilities for Linux. sysbench
 supports testing CPU, memory, file I/O, mutex performance, and even
@@ -794,7 +795,7 @@ Example:
 >
 > sys 0m49.548s
 
-### pg\_test\_fsync:
+### pg\_test\_fsync
 
 pg\_test\_fsync is intended to give you a reasonable idea of what the
 fastest
@@ -875,7 +876,7 @@ in the event of an identified I/O problem.
 >
 >         write                           244921.142 ops/sec
 
-### bonnie++:
+### bonnie++
 
 Bonnie++ allows you to benchmark how your file systems perform with
 respect to data read and write speed, the number of seeks that can be
