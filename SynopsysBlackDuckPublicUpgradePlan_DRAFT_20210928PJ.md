@@ -185,6 +185,11 @@ This document is provided as-is, without warranty or liability.
 1.  Customer Black Duck instances: 
 
     1.  Run in Docker compose stack. 
+        - Number of container replicas:
+        - HUB_MAX_MEMORY
+        - Resource reservations and limits
+            - ram
+            - cpu
 
     2.  Database is external. 
 
@@ -317,50 +322,49 @@ This document is provided as-is, without warranty or liability.
 **Upgrade planning**
 ====================
 
-**Planning for an upgrade should occur days or weeks prior to an
+Planning for an upgrade should occur days or weeks prior to an
 upgrade. This is not about actually changing everything. It is only
 about planning on what to do prior to the Black Duck upgrade.**
 
-**~~for Upgrade, Days or Weeks Before Upgrade~~**
 
 **Determining Upgrade and production requirements**
 ---------------------------------------------------
 
-**In this section, the areas that need to be checked prior to upgrading
+In this section, the areas that need to be checked prior to upgrading
 Black Duck. This includes server setup (RAM, CPUs, Storage), O/S
-versions, and application versions.**
+versions, and application versions.
 
 ### **Documentation**
 
-**Synopsys provides the following documents to help with the
+Synopsys provides the following documents to help with the
 determination of what the RAM and CPUs that should be available to the
 server. It should be noted that as Black Duck expands its functionality,
 it may require additional memory or CPU cores. It is at this time that
 the Documentation used in setting up your server should be revisited to
-see if it still meets your needs.**
+see if it still meets your needs.
 
-**The following documents are normally only available when the Black
+The following documents are normally only available when the Black
 Duck release is available. Your Synopsys support person may be able to
-get you an advance copy. These documents include:**
+get you an advance copy. These documents include:
 
--   **Black Duck Release Notes
-    (<https://community.synopsys.com/s/article/Black-Duck-Release-Notes>)**
+-   Black Duck Release Notes
+    (<https://community.synopsys.com/s/article/Black-Duck-Release-Notes>)
 
--   **Black Duck Install Guide
-    (<https://community.synopsys.com/s/article/Black-Duck-Installing-Black-Duck-using-Docker-Swarm>)**
+-   Black Duck Install Guide
+    (<https://community.synopsys.com/s/article/Black-Duck-Installing-Black-Duck-using-Docker-Swarm>)
 
--   **Black Duck Scanning Best Practices
-    (<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)**
+-   Black Duck Scanning Best Practices
+    (<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)
 
-**As these documents are updated over time, it is important to keep up
-on the changes.**
+As these documents are updated over time, it is important to keep up
+on the changes.
 
-**Those documents are the primary resources the customer should follow;
+Those documents are the primary resources the customer should follow;
 this Upgrade Support Plan document tries to augment, not replicate,
 them. If something is unclear in this upgrade document, refer to the
-primary documents or ask Black Duck Support. **
+primary documents or ask Black Duck Support. 
 
-**In particular, Chapter 6 of the Installing Black Duck using Docker
+In particular, Chapter 6 of the Installing Black Duck using Docker
 Swarm (Upgrading Black Duck) should be reviewed. This document indicates
 the supported versions of the target operating system, kernel, java,
 docker, and PostgreSQL. NOTE: since certain versions of PostgreSQL are
@@ -369,172 +373,172 @@ minimum version prior to upgrading PostgreSQL. For instance, if the
 Installation Guide indicates that PostgreSQL 11.7 is now supported for
 external databases as part of the 2020.6.x release, you cannot upgrade
 PostgreSQL to 11.7 until the Black Duck server is at that release
-(minimum).**
+(minimum).
 
-**For example, as part of the 2020.6.0 release, the following are
+For example, as part of the 2020.6.0 release, the following are
 supported (please refer to your Install Guide for the actual versions
-for your release):**
+for your release):
 
   **O/S or Application**               **Version**
   ------------------------------------ ---------------------
-  **Red Hat Linux**                    **7.3**
-  **Docker**                           **Community 19.03**
-  **PostgreSQL (external database)**   **9.6.x or 11.7**
+  Red Hat Linux                    7.3
+  Docker                           Community 19.03
+  PostgreSQL (external database)   9.6.x or 11.7
 
 ### **Checklist:**
 
-**Depending on how many projects and versions of those projects your
+Depending on how many projects and versions of those projects your
 organization is planning on supporting, it is important to make sure
 that your Black Duck server has sufficient power to support your
-plans.**
+plans.
 
--   **Customer to ensure all system requirements are or will be met, as
+-   Customer to ensure all system requirements are or will be met, as
     listed in Chapter 2, Installation Planning, of the Installing Black
-    Duck using Docker Swarm. **
+    Duck using Docker Swarm. 
 
-    -   **O/S Version OK? If not, when should an upgrade occur?**
+    -   O/S Version OK? If not, when should an upgrade occur?
 
-    -   **Docker Version OK? If not, when should an upgrade occur?**
+    -   Docker Version OK? If not, when should an upgrade occur?
 
-    -   **PostgreSQL Version OK? If not, when should an upgrade occur?**
+    -   PostgreSQL Version OK? If not, when should an upgrade occur?
 
-    -   **RAM sufficient for the server (Check documentation and
+    -   RAM sufficient for the server (Check documentation and
         docker-compose.externaldb.yml or docker-compose.yml, and
-        docker-compose.local-overrides.yml on the Black Duck server)?**
+        docker-compose.local-overrides.yml on the Black Duck server)?
 
-    -   **CPUs sufficient for the server (Check documentation and the
-        same files as the RAM check)?**
+    -   CPUs sufficient for the server (Check documentation and the
+        same files as the RAM check)?
 
-    -   **Check Storage (df -hl on the Black Duck server)**
+    -   Check Storage (df -hl on the Black Duck server)
 
--   **Customer to review those documents and resolve with Synopsys any
-    questions or issues discovered with Synopsys.**
+-   Customer to review those documents and resolve with Synopsys any
+    questions or issues discovered with Synopsys.
 
--   **Customer needs to determine if any upgrades need to occur and if
-    they should be done prior to the Black Duck upgrade.**
+-   Customer needs to determine if any upgrades need to occur and if
+    they should be done prior to the Black Duck upgrade.
 
 **Write post-upgrade validation test plan**
 -------------------------------------------
 
-**It is highly recommended that you have a set of regression tests that
+It is highly recommended that you have a set of regression tests that
 you run when you upgrade Black Duck. If there was a hiccup that caused
 database corruption, then this will help provide validation that the
 upgrade worked correctly. This set of regression tests could be as
 simple as verifying that the same projects are visible, that the results
 of key BOMs of project-versions are OK, that admins can access license
-management, policy management, or other sections.**
+management, policy management, or other sections.
 
-**In addition to this, there will be new functionality with the new
+In addition to this, there will be new functionality with the new
 releases. If your organization is looking to take advantage of these
 changes, then you will need to make sure that these changes fit into
 your policies and procedures. Having tests to check these features will
-provide validation specific to your installation.**
+provide validation specific to your installation.
 
-**You may have cases open with Synopsys concerning your use of the
+You may have cases open with Synopsys concerning your use of the
 product that are slated to be fixed in this release. RFEs you have
 requested may also be part of this release. There should be some tests
 to verify that these fixes and improvements work as expected in this
-release.**
+release.
 
-**In this section, the areas that need to be checked prior to upgrading
+In this section, the areas that need to be checked prior to upgrading
 Black Duck. This includes server setup (RAM, CPUs, Storage), O/S
-versions, and application versions.**
+versions, and application versions.
 
 ### **Checklist:**
 
--   **Review Regression Tests to see if changes in functionality impact
-    the test cases.**
+-   Review Regression Tests to see if changes in functionality impact
+    the test cases.
 
-    -   **Make changes as necessary for target release**
+    -   Make changes as necessary for target release
 
--   **Review Release Notes for areas to test (at least both Chapters 1
-    and 2, for all applicable Black Duck versions).**
+-   Review Release Notes for areas to test (at least both Chapters 1
+    and 2, for all applicable Black Duck versions).
 
-    -   **Create Test Cases for the functionality that you will use or
-        may impact your use**
+    -   Create Test Cases for the functionality that you will use or
+        may impact your use
 
--   **Review issues opened with Synopsys (or recent issues not tracked
-    yet) and determine if any may be fixed in the target release**
+-   Review issues opened with Synopsys (or recent issues not tracked
+    yet) and determine if any may be fixed in the target release
 
-    -   **Create Test Cases for the functionality that you will use or
-        may impact your use**
+    -   Create Test Cases for the functionality that you will use or
+        may impact your use
 
--   **Review Scripts based on Black Duck APIs**
+-   Review Scripts based on Black Duck APIs
 
-    -   **Create Test Cases to verify that interface is still working
-        the same way after the upgrade**
+    -   Create Test Cases to verify that interface is still working
+        the same way after the upgrade
 
 **Document Database/API Connections**
 -------------------------------------
 
-**It is important to see what connections are made between the various
+It is important to see what connections are made between the various
 tools that may interact with the Black Duck Database and/or REST API.
 These will be used during the upgrade to minimize impact to the database
-and server.**
+and server.
 
-**Customer to create an inventory of all the different kinds of Black
+Customer to create an inventory of all the different kinds of Black
 Duck and PostgreSQL server connections from all kinds of clients, so
 that they may be efficiently and promptly terminated before starting the
-upgrade (guidance provided below) including:**
+upgrade (guidance provided below) including:
 
--   **External Queries using SQL or Rest API**
+-   External Queries using SQL or Rest API
 
-    -   **Utilities**
+    -   Utilities
 
-    -   **Scripts**
+    -   Scripts
 
-    -   **SDK Calls**
+    -   SDK Calls
 
--   **Scan Results (Scans interacting with Black Duck Server)**
+-   Scan Results (Scans interacting with Black Duck Server)
 
--   **Infrastructure Queries (e.g. server/docker monitoring)**
+-   Infrastructure Queries (e.g. server/docker monitoring)
 
--   **Server Logins (to either Black Duck or database server (if
-    external))**
+-   Server Logins (to either Black Duck or database server (if
+    external))
 
 **Scheduling Upgrades**
 -----------------------
 
-**If Synopsys Support is required, then the customer should schedule the
+If Synopsys Support is required, then the customer should schedule the
 start of an upgrade to occur during the morning of a normal business day
 (Eastern Time Zone). This request should occur at least 1 week prior to
 the upgrade. This will maximize the chance and duration of Synopsys
-Support help.**
+Support help.
 
-**Should the customer require Synopsys support, they should open a case
-requesting help.**
+Should the customer require Synopsys support, they should open a case
+requesting help.
 
 ### **Opening a Synopsys SalesForce Request**
 
-**You can create a SalesForce case by going to
+You can create a SalesForce case by going to
 <https://community.synopsys.com> and logging in with your Community site
 username and password. If you don't have one, request one from your
-sales and/or support contact.**
+sales and/or support contact.
 
-**Select Support -\> Create a Support case.**
+Select Support -\> Create a Support case.
 
-**The case should be set to *P3 -- Medium*. Should any issues be
+The case should be set to *P3 -- Medium*. Should any issues be
 encountered during the upgrade, the Customer will update the priority of
 that case to *P1 -- Critical*. Customer will then call Synopsys at
 800-873-7793 to have the on-call Technical Support Engineer (TSE)
-engaged.**
+engaged.
 
 **Pre-Upgrade Activities**
 ==========================
 
-**Prior to the target upgrade (be it test/staging or production), the
+Prior to the target upgrade (be it test/staging or production), the
 following activities must be performed to make sure that the server(s)
-is(are) ready.**
+is(are) ready.
 
 **Performance Issues**
 ----------------------
 
-**It is important that any performance issues be resolved or mitigated
+It is important that any performance issues be resolved or mitigated
 prior to an upgrade in order to keep the upgrade time required
-minimized. **
+minimized. 
 
-**These are a few of the documents/tools that can help determine if
-there are any issues.**
+These are a few of the documents/tools that can help determine if
+there are any issues.
 
 ### **Best Practices **
 
