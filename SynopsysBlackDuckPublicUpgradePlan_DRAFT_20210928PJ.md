@@ -18,24 +18,24 @@ This document is provided as-is, without warranty or liability.
 [**Upgrade planning**](#upgrade-planning)
 
 [**Determining Upgrade and production requirements
-4**](#determining-upgrade-and-production-requirements)
+**](#determining-upgrade-and-production-requirements)
 
 [**Documentation**](#documentation)
 
 [**Checklist:**](#checklist)
 
 [**Write post-upgrade validation test plan
-5**](#write-post-upgrade-validation-test-plan)
+**](#write-post-upgrade-validation-test-plan)
 
 [**Checklist:**](#checklist-1)
 
 [**Document Database/API Connections
-6**](#document-databaseapi-connections)
+**](#document-databaseapi-connections)
 
 [**Scheduling Upgrades**](#scheduling-upgrades)
 
 [**Opening a Synopsys SalesForce Request
-6**](#opening-a-synopsys-salesforce-request)
+**](#opening-a-synopsys-salesforce-request)
 
 [**Pre-Upgrade Activities**](#pre-upgrade-activities)
 
@@ -52,7 +52,7 @@ This document is provided as-is, without warranty or liability.
 [**Zenoss**](#zenoss)
 
 [**SynopsysGatherServerSpecs\_202007.bash
-8**](#synopsysgatherserverspecs_202007.bash)
+**](#synopsysgatherserverspecs_202007.bash)
 
 [**Resolving Performance Issues**](#resolving-performance-issues)
 
@@ -67,7 +67,7 @@ This document is provided as-is, without warranty or liability.
 [**dd:**](#dd)
 
 [**Cleaning up Black Duck Projects and Scans
-11**](#cleaning-up-black-duck-projects-and-scans)
+**](#cleaning-up-black-duck-projects-and-scans)
 
 [**Cleaning up Databases**](#cleaning-up-databases)
 
@@ -76,10 +76,10 @@ This document is provided as-is, without warranty or liability.
 [**bds\_hub\_report Database**](#bds_hub_report-database)
 
 [**bds\_hub, postgresql, template0, and template1 Database
-12**](#bds_hub-postgresql-template0-and-template1-database)
+**](#bds_hub-postgresql-template0-and-template1-database)
 
 [**Trimming the Notification and audit\_event logs
-12**](#trimming-the-notification-and-audit_event-logs)
+**](#trimming-the-notification-and-audit_event-logs)
 
 [**Notification Logs**](#notification-logs)
 
@@ -88,23 +88,23 @@ This document is provided as-is, without warranty or liability.
 [**Database Cleanup**](#database-cleanup)
 
 [**Remove any orphaned large objects
-13**](#remove-any-orphaned-large-objects)
+**](#remove-any-orphaned-large-objects)
 
 [**Run PostgreSQL tuning utility**](#run-postgresql-tuning-utility)
 
 [**Upgrade O/S, Kernel, Docker, Postgresql
-14**](#upgrade-os-kernel-docker-postgresql)
+**](#upgrade-os-kernel-docker-postgresql)
 
 [**Full Vacuum of Database**](#full-vacuum-of-database)
 
 [**Duplicating Production Database in Staging Environment
-16**](#duplicating-production-database-in-staging-environment)
+**](#duplicating-production-database-in-staging-environment)
 
 [**Production Database Replication
-16**](#production-database-replication)
+**](#production-database-replication)
 
 [**Duplicating Production Environment in Staging Environment
-17**](#duplicating-production-environment-in-staging-environment)
+**](#duplicating-production-environment-in-staging-environment)
 
 [**Perform Black Duck Upgrade**](#perform-black-duck-upgrade)
 
@@ -117,15 +117,15 @@ This document is provided as-is, without warranty or liability.
 [**Download Orchestration Files**](#download-orchestration-files)
 
 [**blackduck\_migrator-2020.6.1.yml
-18**](#blackduck_migrator-2020.6.1.yml)
+**](#blackduck_migrator-2020.6.1.yml)
 
 [**Schedule upgrade**](#schedule-upgrade)
 
 [**Perform Upgrade, Day of Upgrade (Staging then Production)
-18**](#perform-upgrade-day-of-upgrade-staging-then-production)
+**](#perform-upgrade-day-of-upgrade-staging-then-production)
 
 [**Stop scanning and external connections
-18**](#stop-scanning-and-external-connections)
+**](#stop-scanning-and-external-connections)
 
 [**Start the actual upgrade**](#start-the-actual-upgrade)
 
@@ -136,7 +136,7 @@ This document is provided as-is, without warranty or liability.
 [**Re-run benchmark tests.**](#re-run-benchmark-tests.)
 
 [**Announce upgrade completion to stakeholders
-22**](#announce-upgrade-completion-to-stakeholders)
+**](#announce-upgrade-completion-to-stakeholders)
 
 [**Contingency: Fallback Steps**](#contingency-fallback-steps)
 
