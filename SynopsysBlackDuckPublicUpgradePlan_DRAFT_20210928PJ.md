@@ -1110,65 +1110,45 @@ buffer).
 
 You can find the table sizes by using the \\l+ and \\dt+ psql
 commands:
-
+```
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\l+\" 
-
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\dt+ st.\*\"
 \| less
-
 df -hPT
+```
 
 You can also get a sorted list by running the following. NOTE: It
 might to help to save the script in a file and run it using the -f
 option.
-
+```
 SELECT
-
     relname AS \"relation\",
-
     pg\_size\_pretty (
-
         pg\_total\_relation\_size (C .oid)
-
     ) AS \"total\_size\"
-
 FROM
-
     pg\_class C
-
 LEFT JOIN pg\_namespace N ON (N.oid = C .relnamespace)
-
 WHERE
-
     nspname NOT IN (
-
         \'pg\_catalog\',
-
         \'information\_schema\'
-
     )
-
 AND C .relkind \<\> \'i\'
-
 AND nspname !\~ \'\^pg\_toast\'
-
 ORDER BY
-
     pg\_total\_relation\_size (C .oid) DESC;
+```
 
 The results look like:
-
+```
 relation \| total\_size
-
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--
-
 scan\_file \| 59 GB
-
 scan\_composite\_leaf \| 40 GB
-
 scan\_composite\_element \| 7639 MB
-
 scan\_match\_node \| 835 MB
+```
 
 > For vacuuming, ensure available disk space is at least the 1.2 \*
 > the size of the largest database table. If you are planning on
@@ -1205,18 +1185,10 @@ runtime,pid,datname,usename,query from pg\_stat\_activity where query !=
 desc;
 
 Look for "VACUUM" in the results
-
+```
       runtime         \|  pid   \| datname  \| usename  \|
-
- 
-
 \
                                                       query
-
- 
-
- 
-
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
@@ -1245,7 +1217,7 @@ TIME ZONE,\
   \'2020-08-10 21:12:36.640652-04\'::TIMESTAMP WITH TIME ZONE,          
   \'6B5E/18FC058\',\
           \'6B5E/18FC058\',             0,             0)
-
+```
 **Duplicating Production Database in Staging Environment**
 ----------------------------------------------------------
 
@@ -1395,37 +1367,29 @@ need to unwind and rollback during the Black Duck shutdown.
 > the actual upgrade.
 >
 > You can verify this by doing the following psql command:
-
+```
 psql -h hub-stg-db -U blackduck -p 5432 -d bds\_hub -c "SELECT \* FROM
 pg\_stat\_activity WHERE datname = \'bds\_hub\' and state =
 \'active\';"
-
 bds\_hub=\# SELECT \* FROM pg\_stat\_activity WHERE datname =
 \'bds\_hub\' and state = \'active\';
-
+```
+```
 datid \| datname \| pid \| usesysid \| usename \| application\_name \|
 client\_addr \| client\_hostname \| client\_port \| backend\_start
-
 \| xact\_start \| query\_start \| state\_change \| wait\_event\_type
 \| wait\_event \| state \| ba
-
 ckend\_xid \| backend\_xmin \| query
-
 \-\-\-\-\-\--+\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
-
 \-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\--
-
 \-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
-
 16441 \| bds\_hub \| 8722 \| 16440 \| blackduck \| psql \|
 10.251.22.151 \| \| 35794 \| 2020-08-04 22:56:43.585215-
-
 04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
 \| 2020-08-04 22:56:59.671215-04 \| \| \| active \|
-
 \| 94647657 \| SELECT \* FROM pg\_stat\_activity WHERE datname =
 \'bds\_hub\' and state = \'active\';
-
+```
 #### Stop External Connections
 
 Customer to ensure all Black Duck and PostgreSQL server activities are
@@ -1483,12 +1447,11 @@ start includes the name of the docker stack. For the purposes of this
 document, we will call it "hub".
 
 List the Docker services if you don't know the name:
-
+```
 > docker stack ls
->
 > NAME SERVICES
->
 > hub 10
+```
 
 Stop the Docker services associated with the existing Black Duck
 instance
@@ -1531,30 +1494,21 @@ the success column to see if it successfully completed (t). Synopsys
 Support can tell you what the latest Database Migration script version
 that is run with the target release.
 
+```
 v\_hub script status\...
-
 now \| inet\_server\_addr \| cmd \| loop \| installed\_rank \| version
 \| description
-
 \| type \| script \| checksum \| installed\_by \| insta
-
 lled\_on \| execution\_time \| success
-
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
-
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--
-
 \-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\--
-
 2020-08-05 17:27:25.254976-04 \| 10.251.22.104 \|
-v\_hub\_script\_status \| 1 \| 185 \| 2020.06.0.011 \| clear stale
-policies from central relea
-
-se \| SQL \|
+v\_hub\_script\_status \| 1 \| 185 \| 2020.06.0.011 \| clear stale policies from central release \| SQL \|
 hub\_V2020\_06\_0\_011\_\_clear\_stale\_policies\_from\_central\_release.sql.vpp
 \| -1470604476 \| blackduck \| 2020-08-05 1
-
 9:26:12.882272 \| 18 \| t
+```
 
 #### Monitor upgrade docker containers health.
 
@@ -1563,9 +1517,9 @@ docker containers are healthy, the upgrade installation is complete.
 
 You can monitor the services as follows:
 
-watch docker ps
+> watch docker ps
 
-> Restore database with 2020.4.1 hub\_db\_migrate.sh ??? 
+____Restore database with 2020.4.1 hub\_db\_migrate.sh ??? 
 
 #### Monitor the Black Duck database during Database Migration
 
@@ -1576,7 +1530,7 @@ To confirm progress, do the following:
 
 ##### Tail the container logs
 
-for mcontainer in \$(docker ps -q) ; do docker ps \| grep \$mcontainer
+> for mcontainer in \$(docker ps -q) ; do docker ps \| grep \$mcontainer
 ; docker logs \--tail 2 \$mcontainer \|& cut -c 1-150 ; done 
 
 ##### Check PostgreSQL activity
@@ -1585,8 +1539,7 @@ for mcontainer in \$(docker ps -q) ; do docker ps \| grep \$mcontainer
 
 export PGPASSWORD='\<PSQL Database Password\>'
 
-./SynopsysMonitorDbActivity\_202007.bash \>
-SynopsysMonitorDbActivity\_202007.out 2\>&1
+> ./SynopsysMonitorDbActivity\_202007.bash \> SynopsysMonitorDbActivity\_202007.out 2\>&1
 
 #### Start the official release of Black Duck
 
@@ -1595,23 +1548,22 @@ back down and start the official release:
 
 **Stop Docker**
 
-docker stack rm hub
+> docker stack rm hub
 
 Local Database:
 
-docker stack *deploy* -c docker-compose.yml -c
-docker-compose.local-overrides.yml \<stack name\>
+> docker stack *deploy* -c docker-compose.yml -c
+> docker-compose.local-overrides.yml \<stack name\>
 
-e.g. docker stack *deploy* -c docker-compose.yml -c
-docker-compose.local-overrides.yml hub
+e.g.:
+> docker stack *deploy* -c docker-compose.yml -c docker-compose.local-overrides.yml hub
 
 External Database:
 
-docker stack *deploy* -c docker-compose.externaldb.yml -c
-docker-compose.local-overrides.yml \<stack name\>
+> docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml \<stack name\>
 
-e.g. docker stack *deploy* -c docker-compose.externaldb.yml -c
-docker-compose.local-overrides.yml hub
+e.g. 
+> docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml hub
 
 #### Monitor upgrade docker containers health.
 
@@ -1622,12 +1574,13 @@ other services are up and healthy and then it will startup correctly.
 
 You can monitor the services as follows:
 
-watch docker ps
+> watch docker ps
 
 #### Start Additional Services
 
 If your target configuration has multiple instances of services (e.g.
 3 jobrunner services and 3 scan services, you need to start those.
+TODO:  better to put replices in .yml service block.
 
 #### docker service scale hub\_jobrunner=3
 
