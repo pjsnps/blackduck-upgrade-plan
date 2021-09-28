@@ -17,25 +17,21 @@ This document is provided as-is, without warranty or liability.
 
 [**Upgrade planning**](#upgrade-planning)
 
-[**Determining Upgrade and production requirements
-**](#determining-upgrade-and-production-requirements)
+[**Determining Upgrade and production requirements**](#determining-upgrade-and-production-requirements)
 
 [**Documentation**](#documentation)
 
 [**Checklist:**](#checklist)
 
-[**Write post-upgrade validation test plan
-**](#write-post-upgrade-validation-test-plan)
+[**Write post-upgrade validation test plan**](#write-post-upgrade-validation-test-plan)
 
 [**Checklist:**](#checklist-1)
 
-[**Document Database/API Connections
-**](#document-databaseapi-connections)
+[**Document Database/API Connections**](#document-databaseapi-connections)
 
 [**Scheduling Upgrades**](#scheduling-upgrades)
 
-[**Opening a Synopsys SalesForce Request
-**](#opening-a-synopsys-salesforce-request)
+[**Opening a Synopsys SalesForce Request**](#opening-a-synopsys-salesforce-request)
 
 [**Pre-Upgrade Activities**](#pre-upgrade-activities)
 
@@ -51,8 +47,7 @@ This document is provided as-is, without warranty or liability.
 
 [**Zenoss**](#zenoss)
 
-[**SynopsysGatherServerSpecs\_202007.bash
-**](#synopsysgatherserverspecs_202007.bash)
+[**SynopsysGatherServerSpecs\_202007.bash**](#synopsysgatherserverspecs_202007.bash)
 
 [**Resolving Performance Issues**](#resolving-performance-issues)
 
@@ -66,8 +61,7 @@ This document is provided as-is, without warranty or liability.
 
 [**dd:**](#dd)
 
-[**Cleaning up Black Duck Projects and Scans
-**](#cleaning-up-black-duck-projects-and-scans)
+[**Cleaning up Black Duck Projects and Scans**](#cleaning-up-black-duck-projects-and-scans)
 
 [**Cleaning up Databases**](#cleaning-up-databases)
 
@@ -75,11 +69,9 @@ This document is provided as-is, without warranty or liability.
 
 [**bds\_hub\_report Database**](#bds_hub_report-database)
 
-[**bds\_hub, postgresql, template0, and template1 Database
-**](#bds_hub-postgresql-template0-and-template1-database)
+[**bds\_hub, postgresql, template0, and template1 Database**](#bds_hub-postgresql-template0-and-template1-database)
 
-[**Trimming the Notification and audit\_event logs
-**](#trimming-the-notification-and-audit_event-logs)
+[**Trimming the Notification and audit\_event logs**](#trimming-the-notification-and-audit_event-logs)
 
 [**Notification Logs**](#notification-logs)
 
@@ -87,24 +79,19 @@ This document is provided as-is, without warranty or liability.
 
 [**Database Cleanup**](#database-cleanup)
 
-[**Remove any orphaned large objects
-**](#remove-any-orphaned-large-objects)
+[**Remove any orphaned large objects**](#remove-any-orphaned-large-objects)
 
 [**Run PostgreSQL tuning utility**](#run-postgresql-tuning-utility)
 
-[**Upgrade O/S, Kernel, Docker, Postgresql
-**](#upgrade-os-kernel-docker-postgresql)
+[**Upgrade O/S, Kernel, Docker, Postgresql**](#upgrade-os-kernel-docker-postgresql)
 
 [**Full Vacuum of Database**](#full-vacuum-of-database)
 
-[**Duplicating Production Database in Staging Environment
-**](#duplicating-production-database-in-staging-environment)
+[**Duplicating Production Database in Staging Environment**](#duplicating-production-database-in-staging-environment)
 
-[**Production Database Replication
-**](#production-database-replication)
+[**Production Database Replication**](#production-database-replication)
 
-[**Duplicating Production Environment in Staging Environment
-**](#duplicating-production-environment-in-staging-environment)
+[**Duplicating Production Environment in Staging Environment**](#duplicating-production-environment-in-staging-environment)
 
 [**Perform Black Duck Upgrade**](#perform-black-duck-upgrade)
 
@@ -116,16 +103,13 @@ This document is provided as-is, without warranty or liability.
 
 [**Download Orchestration Files**](#download-orchestration-files)
 
-[**blackduck\_migrator-2020.6.1.yml
-**](#blackduck_migrator-2020.6.1.yml)
+[**blackduck\_migrator-2020.6.1.yml**](#blackduck_migrator-2020.6.1.yml)
 
 [**Schedule upgrade**](#schedule-upgrade)
 
-[**Perform Upgrade, Day of Upgrade (Staging then Production)
-**](#perform-upgrade-day-of-upgrade-staging-then-production)
+[**Perform Upgrade, Day of Upgrade (Staging then Production)**](#perform-upgrade-day-of-upgrade-staging-then-production)
 
-[**Stop scanning and external connections
-**](#stop-scanning-and-external-connections)
+[**Stop scanning and external connections**](#stop-scanning-and-external-connections)
 
 [**Start the actual upgrade**](#start-the-actual-upgrade)
 
@@ -135,13 +119,11 @@ This document is provided as-is, without warranty or liability.
 
 [**Re-run benchmark tests.**](#re-run-benchmark-tests.)
 
-[**Announce upgrade completion to stakeholders
-**](#announce-upgrade-completion-to-stakeholders)
+[**Announce upgrade completion to stakeholders**](#announce-upgrade-completion-to-stakeholders)
 
 [**Contingency: Fallback Steps**](#contingency-fallback-steps)
 
 [**Restore steps, during Fallback**](#restore-steps-during-fallback)
-
 **Contacts**
 ============
 
