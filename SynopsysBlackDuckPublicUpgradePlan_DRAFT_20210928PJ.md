@@ -162,8 +162,8 @@ This document is provided as-is, without warranty or liability.
 2.  Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
 
 3.  This document has been reviewed by:
-    1.  
-    1.  
+    -  
+    -  
 
 **Upgrade Schedule**
 --------------------
@@ -182,54 +182,45 @@ This document is provided as-is, without warranty or liability.
 **Background Information**
 --------------------------
 
-1.  **Customer Black Duck instances: **
+1.  Customer Black Duck instances: 
 
-    1.  **run in Docker compose stack. **
+    1.  Run in Docker compose stack. 
 
-    2.  **Database is external. **
+    2.  Database is external. 
 
-    3.  **Database disks are connected over iSCSI over 2-NIC mpath
-        ethernet elsewhere in the same datacenter. **
+    2.  Includes Synopsys Alert.
+        - Alert database in external database.
 
-    4.  **~~Customer has several database functions using nfs disks,
-        including pg\_xlog. ~~**
+    3.  Database disks are connected over iSCSI over 2-NIC mpath
+        ethernet elsewhere in the same datacenter. 
 
-    5.  **~~Customer data *read* from remote storage seems slow. ~~**
+    7.  Customer investigating Synopsys-reported infrastructure
+        performance issues with their internal sysadmins, including possible proxy/firewall issues. 
 
-    6.  **~~Customer discussed upgrading ram and cpu on production Black
-        Duck and database servers. ~~**
-
-    7.  **Customer investigating Synopsys-reported infrastructure
-        performance issues with their internal sysadmins. **
-
-2.  **Customer has Staging and Production environments. Production
+2.  Customer has Staging and Production environments. Production
     environment is highly secure, with limited access. During a recent
     upgrade event, Staging underestimated Production upgrade task
     durations. With the smaller database and footprint, the Staging
     environment did not run into the same issues with the Database
-    Migration scripts that the Production server did.**
+    Migration scripts that the Production server did.
 
-    8.  **During a recent upgrade event, Customer docker container
+    1.  During a recent upgrade event, Customer docker container
         memory, cpu, and replica settings were misconfigured and had to
-        be fixed under a P1 Case. **
+        be fixed under a P1 Case. 
 
-3.  **Customer Production bds\_hub database was recently ~~2.3~~
-    TB\_\_\_\_\_\_\_\_\_\_\_.**
+3.  Customer Production bds\_hub database was recently 2.3 TB.
 
-4.  **The upgrade is planned to be performed using a simplified Upgrade
+4.  The upgrade is planned to be performed using a simplified Upgrade
     Docker stack implemented by deploying new Synopsys-supplied
     deployment (.yml) files. These Upgrade .yml files will be different
-    from the Production versions of the files. Not sure what this
-    means.**
+    from the Production versions of the files.
 
-5.  **~~No~~ \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ significant database
-    migration steps are expected. So, this upgrade should complete
-    faster than the prior upgrade event. **
+5.  Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
 
-6.  **The upgrade is expected to take about \_\_\_\_\_ hours. **
+6.  The upgrade is expected to take about \_\_\_\_\_ hours. 
 
-    9.  **If Fallback is required, an additional \_\_\_\_ hours would be
-        required.**
+    9.  If Fallback is required, an additional \_\_\_\_ hours would be
+        required.
 
 **Overview**
 ============
