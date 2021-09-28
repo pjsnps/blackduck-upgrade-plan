@@ -666,17 +666,14 @@ supports testing CPU, memory, file I/O, mutex performance, and even
 If sysbench is not installed on the server (yum list installed \| grep
 sysbench), you can install it as root by running:
 
-`sudo su -
-yum install sysbench
-`
-It will be dropped into /bin.
+`sudo su - yum install sysbench`
 
 To run sysbench, run the following as root:
 
 `date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio \--file-test-mode=rndrw \--threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).\*/\" ; done
+\"\\(read\\\|writ\\).\*/\" ; done`
 
 Mon Jul 27 11:17:08 EDT 2020
 Mon Jul 27 15:17:08 UTC 2020
