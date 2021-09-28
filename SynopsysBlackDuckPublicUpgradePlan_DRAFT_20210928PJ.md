@@ -204,7 +204,7 @@ This document is provided as-is, without warranty or liability.
     environment did not run into the same issues with the Database
     Migration scripts that the Production server did.
 
-- During a recent upgrade event, Customer docker container
+    1. During a recent upgrade event, Customer docker container
         memory, cpu, and replica settings were misconfigured and had to
         be fixed under a P1 Case. 
 
@@ -219,7 +219,7 @@ This document is provided as-is, without warranty or liability.
 
 6.  The upgrade is expected to take about \_\_\_\_\_ hours. 
 
-- If Fallback is required, an additional \_\_\_\_ hours would be
+    - If Fallback is required, an additional \_\_\_\_ hours would be
         required.
 
 **Overview**
