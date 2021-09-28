@@ -530,8 +530,10 @@ Prior to the target upgrade (be it test/staging or production), the
 following activities must be performed to make sure that the server(s)
 is(are) ready.
 
-**Performance Issues**
+**Performance and Networking Issues**
 ----------------------
+
+TODO:  be sure to elaborate on resolving networking issues, such as proxies, firewalls, tls certificates, etc, etc.
 
 It is important that any performance issues be resolved or mitigated
 prior to an upgrade in order to keep the upgrade time required
@@ -540,777 +542,777 @@ minimized.
 These are a few of the documents/tools that can help determine if
 there are any issues.
 
-### **Best Practices **
+### Best Practices 
 
-**(<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)**
+(<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)
 
-**These are the practices for project setup and scans as recommended by
+These are the practices for project setup and scans as recommended by
 Synopsys. These are updated over time and should be reviewed prior to an
 upgrade. If there are any changes that apply, these should be assessed
 prior to the upgrade. If a change would reduce the footprint of the
-database prior to the upgrade, that should be rolled out first.**
+database prior to the upgrade, that should be rolled out first.
 
-### **Sage **
+### Sage 
 
-**(<https://github.com/blackducksoftware/sage>)**
+(<https://github.com/blackducksoftware/sage>)
 
-**This tool looks at the status of the projects in the target Black Duck
+This tool looks at the status of the projects in the target Black Duck
 server. If there are issues flagged, then they should be resolved prior
-to the upgrade:**
+to the upgrade:
 
--   **Unmapped Scans**
+-   Unmapped Scans
 
--   **Projects with Too Many Versions**
+-   Projects with Too Many Versions
 
--   **Projects with No Owners**
+-   Projects with No Owners
 
--   **Project Versions with Excessive Scans**
+-   Project Versions with Excessive Scans
 
--   **Project Versions with No Scans**
+-   Project Versions with No Scans
 
-### **System\_check.sh**
+### System\_check.sh
 
-**(.../hub/hub\_docker/hub\_\<version\>/docker-swarm/bin/system\_check.sh)**
+(.../hub/hub\_docker/hub\_\<version\>/docker-swarm/bin/system\_check.sh)
 
-**Run on Black Duck Server and Database Server. Check to see if there
-are any issues that need to be dealt with prior to the upgrades**
+Run on Black Duck Server and Database Server. Check to see if there
+are any issues that need to be dealt with prior to the upgrades
 
-### **Sar**
+### Sar
 
-**Check out the iowait values on the Database Server. **
+Check out the iowait values on the Database Server. 
 
-**06:00:01 PM CPU %user %nice %system %iowait %steal %idle**
+06:00:01 PM CPU %user %nice %system %iowait %steal %idle
 
-**06:10:01 PM all 2.04 0.00 1.12 0.02 0.00 96.83**
+06:10:01 PM all 2.04 0.00 1.12 0.02 0.00 96.83
 
-**06:20:01 PM all 2.21 0.00 1.02 0.02 0.00 96.76**
+06:20:01 PM all 2.21 0.00 1.02 0.02 0.00 96.76
 
-**Should there be any issues, then you need to talk to your server,
+Should there be any issues, then you need to talk to your server,
 network, and database admins to see what you can do to remove any
-bottlenecks. Synopsys Support may be able to help.**
+bottlenecks. Synopsys Support may be able to help.
 
-**NOTE: Should you need to look at the SAR results from the other day,
+NOTE: Should you need to look at the SAR results from the other day,
 go to /var/log/sa and type "sar -f sa\#\#" where \#\# is the day of the
-month.**
+month.
 
-### **Zenoss**
+### Zenoss
 
-**Not sure what this gives us.**
+Not sure what this gives us.
 
-### **SynopsysGatherServerSpecs\_202007.bash**
+### SynopsysGatherServerSpecs\_202007.bash
 
-**TODO: Pete to test and update this script if needed.This captures a
+TODO: Pete to test and update this script if needed.This captures a
 lot of system data including top, cpu, mem, application versions, etc.
 It has several psql queries that need to be modified for your setup. The
 end of the script does latency testing that may need to be configured if
-there are any partitions you don't wish tested.**
+there are any partitions you don't wish tested.
 
-**Synopsys can provide the script:**
+Synopsys can provide the script:
 
-**TODO:is this is a different script, needs own header, or did the
-filename change?**
+TODO:is this is a different script, needs own header, or did the
+filename change?
 
-**bash**
+bash
 
-**export PGPASSWORD='\<PSQL Database Password\>'**
+export PGPASSWORD='\<PSQL Database Password\>'
 
-**./SynopsysMonitorDbActivity\_202007.bash \>
-SynopsysMonitorDbActivity\_202007.out 2\>&1**
+./SynopsysMonitorDbActivity\_202007.bash \>
+SynopsysMonitorDbActivity\_202007.out 2\>&1
 
 **Resolving Performance Issues**
 --------------------------------
 
-**Using the output of the sar/ksar command and the
+Using the output of the sar/ksar command and the
 SynopsysGatherServerSpecs\_202007.bash script (and possibly the Zenoss
-output), determine if you have any Performance issues.**
+output), determine if you have any Performance issues.
 
-**This could potentially include memory, network performance between
+This could potentially include memory, network performance between
 database server and iSCI disks (especially "read"), nfs-mounted database
-directories**
+directories
 
-**Get help from the Customer Admins to resolve the Performance Issues**
+Get help from the Customer Admins to resolve the Performance Issues
 
-**The Server, network, and database admins should be able to help the
+The Server, network, and database admins should be able to help the
 customer in resolving any detected performance issues. Using the data
 from the previous section (e.g. sar, cpus, mem) combined with the Best
 Practices and the following tools, the Customer should work with their
-Admins to determine the appropriate actions:**
+Admins to determine the appropriate actions:
 
--   **Increase RAM of the Black Duck and/or Database Server (if
-    needed)**
+-   Increase RAM of the Black Duck and/or Database Server (if
+    needed)
 
--   **Increase CPU Cores of the Black Duck and/or Database Server (if
-    needed)**
+-   Increase CPU Cores of the Black Duck and/or Database Server (if
+    needed)
 
--   **Make sure sufficient storage is available for database,
-    application, and log partitions (if needed)**
+-   Make sure sufficient storage is available for database,
+    application, and log partitions (if needed)
 
--   **Make sure that the connection to the database (e.g. NFS, iSCSI,
+-   Make sure that the connection to the database (e.g. NFS, iSCSI,
     fibre-connected) has sufficient bandwidth to avoid iowaits, caching,
-    and latency issues.**
+    and latency issues.
 
-**Some of the following benchmarking tools (e.g. dd, pgbench, sysbench,
+Some of the following benchmarking tools (e.g. dd, pgbench, sysbench,
 or bonnie++) may be used to collect a performance baseline for
 comparison with a separate run after the upgrade, in both Staging and
-Production.**
+Production.
 
-### **Sysbench:**
+### Sysbench:
 
-**sysbench provides benchmarking capabilities for Linux. sysbench
+sysbench provides benchmarking capabilities for Linux. sysbench
 supports testing CPU, memory, file I/O, mutex performance, and even
-[MySQL](https://wiki.gentoo.org/wiki/MySQL) benchmarking.**
+[MySQL](https://wiki.gentoo.org/wiki/MySQL) benchmarking.
 
-**If sysbench is not installed on the server (yum list installed \| grep
-sysbench), you can install it as root by running:**
+If sysbench is not installed on the server (yum list installed \| grep
+sysbench), you can install it as root by running:
 
-**sudo su -**
+sudo su -
 
-**yum install sysbench**
+yum install sysbench
 
-**It will be dropped into /bin.**
+It will be dropped into /bin.
 
-**To run sysbench, run the following as root:**
+To run sysbench, run the following as root:
 
-**date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
+date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio \--file-test-mode=rndrw \--threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).\*/\" ; done**
+\"\\(read\\\|writ\\).\*/\" ; done
 
-**Mon Jul 27 11:17:08 EDT 2020**
+Mon Jul 27 11:17:08 EDT 2020
 
-**Mon Jul 27 15:17:08 UTC 2020**
+Mon Jul 27 15:17:08 UTC 2020
 
-**sup-pjalajas-hub.dc1.lan**
+sup-pjalajas-hub.dc1.lan
 
-**/home/pjalajas/Documents/dev/customers/customer**
+/home/pjalajas/Documents/dev/customers/customer
 
-**pjalajas**
+pjalajas
 
-**8**
+8
 
-**              total        used        free      shared  buff/cache  
-available**
+              total        used        free      shared  buff/cache  
+available
 
-**Mem:             39          12          14           2         
-12          23**
+Mem:             39          12          14           2         
+12          23
 
-**Swap:             1           1           0**
+Swap:             1           1           0
 
-**test threads 4**
+test threads 4
 
-**    reads/s:                      7368.02**
+    reads/s:                      7368.02
 
-**    writes/s:                     4912.01**
+    writes/s:                     4912.01
 
-**    read, MiB/s:                  115.13**
+    read, MiB/s:                  115.13
 
-**    written, MiB/s:               76.75**
+    written, MiB/s:               76.75
 
-**test threads 8**
+test threads 8
 
-**    reads/s:                      13405.58**
+    reads/s:                      13405.58
 
-**    writes/s:                     8936.89**
+    writes/s:                     8936.89
 
-**    read, MiB/s:                  209.46**
+    read, MiB/s:                  209.46
 
-**    written, MiB/s:               139.64**
+    written, MiB/s:               139.64
 
-**test threads 16**
+test threads 16
 
-**    reads/s:                      19459.82**
+    reads/s:                      19459.82
 
-**    writes/s:                     12973.21**
+    writes/s:                     12973.21
 
-**    read, MiB/s:                  304.06**
+    read, MiB/s:                  304.06
 
-**    written, MiB/s:               202.71**
+    written, MiB/s:               202.71
 
-**real    0m30.055s**
+real    0m30.055s
 
-**user    0m5.440s**
+user    0m5.440s
 
-**sys     0m13.697s**
+sys     0m13.697s
 
-### **Pgbench**
+### Pgbench
 
-**pgbench is a simple program for running benchmark tests on
-PostgreSQL.**
+pgbench is a simple program for running benchmark tests on
+PostgreSQL.
 
-**Caution: pgbench -i creates four tables pgbench\_accounts,
+Caution: pgbench -i creates four tables pgbench\_accounts,
 pgbench\_branches, pgbench\_history, and pgbench\_tellers, destroying
 any existing tables of these names. Be very careful to use another
-database if you have tables having these names!**
+database if you have tables having these names!
 
-**If pgbench is not installed on the server (yum list installed \| grep
-pgbench), you can install it as root by running:**
+If pgbench is not installed on the server (yum list installed \| grep
+pgbench), you can install it as root by running:
 
-**sudo su -**
+sudo su -
 
-**yum install postgresql-contrib**
+yum install postgresql-contrib
 
-**It will be dropped into /bin or /usr/bin/pgbench**
+It will be dropped into /bin or /usr/bin/pgbench
 
-**To run pgbench, run the following as yourself:**
+To run pgbench, run the following as yourself:
 
-**Example:**
+Example:
 
--   **date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432
+-   date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432
     -d bds\_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2\> /dev/null
-    **
+    
 
-> **Example output:**
+> Example output:
 >
-> **Fri Jul 24 13:50:59 EDT 2020**
+> Fri Jul 24 13:50:59 EDT 2020
 >
-> **sup-pjalajas-hub.dc1.lan**
+> sup-pjalajas-hub.dc1.lan
 >
-> **pghost: sup-pjalajas-2 pgport: 55436 nclients: 200 nxacts: 1000
-> dbName: bds\_hub**
+> pghost: sup-pjalajas-2 pgport: 55436 nclients: 200 nxacts: 1000
+> dbName: bds\_hub
 >
-> **transaction type: TPC-B (sort of)**
+> transaction type: TPC-B (sort of)
 >
-> **scaling factor: 1**
+> scaling factor: 1
 >
-> **query mode: prepared**
+> query mode: prepared
 >
-> **number of clients: 200**
+> number of clients: 200
 >
-> **number of threads: 100**
+> number of threads: 100
 >
-> **number of transactions per client: 1000**
+> number of transactions per client: 1000
 >
-> **number of transactions actually processed: 200000/200000**
+> number of transactions actually processed: 200000/200000
 >
-> **tps = 439.798734 (including connections establishing)**
+> tps = 439.798734 (including connections establishing)
 >
-> **tps = 440.029375 (excluding connections establishing)**
+> tps = 440.029375 (excluding connections establishing)
 >
-> **real 7m34.812s**
+> real 7m34.812s
 >
-> **user 0m23.666s**
+> user 0m23.666s
 >
-> **sys 0m49.548s**
+> sys 0m49.548s
 
-### **pg\_test\_fsync:**
+### pg\_test\_fsync:
 
-**pg\_test\_fsync is intended to give you a reasonable idea of what the
+pg\_test\_fsync is intended to give you a reasonable idea of what the
 fastest
 [wal\_sync\_method](https://www.postgresql.org/docs/current/runtime-config-wal.html#GUC-WAL-SYNC-METHOD)
 is on your specific system, as well as supplying diagnostic information
-in the event of an identified I/O problem.**
+in the event of an identified I/O problem.
 
--   **date \--utc ; hostname -f ; pg\_test\_fsync**
+-   date \--utc ; hostname -f ; pg\_test\_fsync
 
-> **Fri Jul 24 19:56:41 UTC 2020**
+> Fri Jul 24 19:56:41 UTC 2020
 >
-> **sup-pjalajas-hub.dc1.lan**
+> sup-pjalajas-hub.dc1.lan
 >
-> **2 seconds per test**
+> 2 seconds per test
 >
-> **O\_DIRECT supported on this platform for open\_datasync and
-> open\_sync.**
+> O\_DIRECT supported on this platform for open\_datasync and
+> open\_sync.
 >
-> **Compare file sync methods using one 8kB write:**
+> Compare file sync methods using one 8kB write:
 >
-> **(in wal\_sync\_method preference order, except fdatasync**
+> (in wal\_sync\_method preference order, except fdatasync
 >
-> **is Linux\'s default)**
+> is Linux\'s default)
 >
-> **        open\_datasync                    1828.665 ops/sec**
+>         open\_datasync                    1828.665 ops/sec
 >
-> **        fdatasync                        1839.337 ops/sec**
+>         fdatasync                        1839.337 ops/sec
 >
-> **        fsync                             538.328 ops/sec**
+>         fsync                             538.328 ops/sec
 >
-> **        fsync\_writethrough                            n/a**
+>         fsync\_writethrough                            n/a
 >
-> **        open\_sync                         442.936 ops/sec**
+>         open\_sync                         442.936 ops/sec
 >
-> **Compare file sync methods using two 8kB writes:**
+> Compare file sync methods using two 8kB writes:
 >
-> **(in wal\_sync\_method preference order, except fdatasync**
+> (in wal\_sync\_method preference order, except fdatasync
 >
-> **is Linux\'s default)**
+> is Linux\'s default)
 >
-> **        open\_datasync                     945.146 ops/sec**
+>         open\_datasync                     945.146 ops/sec
 >
-> **        fdatasync                        1461.665 ops/sec**
+>         fdatasync                        1461.665 ops/sec
 >
-> **        fsync                             531.997 ops/sec**
+>         fsync                             531.997 ops/sec
 >
-> **        fsync\_writethrough                            n/a**
+>         fsync\_writethrough                            n/a
 >
-> **        open\_sync                         330.452 ops/sec**
+>         open\_sync                         330.452 ops/sec
 >
-> **Compare open\_sync with different write sizes:**
+> Compare open\_sync with different write sizes:
 >
-> **(This is designed to compare the cost of writing 16kB**
+> (This is designed to compare the cost of writing 16kB
 >
-> **in different write open\_sync sizes.)**
+> in different write open\_sync sizes.)
 >
-> **         1 \* 16kB open\_sync write         595.042 ops/sec**
+>          1 \* 16kB open\_sync write         595.042 ops/sec
 >
-> **         2 \*  8kB open\_sync writes        229.368 ops/sec**
+>          2 \*  8kB open\_sync writes        229.368 ops/sec
 >
-> **         4 \*  4kB open\_sync writes        121.647 ops/sec**
+>          4 \*  4kB open\_sync writes        121.647 ops/sec
 >
-> **         8 \*  2kB open\_sync writes         83.208 ops/sec**
+>          8 \*  2kB open\_sync writes         83.208 ops/sec
 >
-> **        16 \*  1kB open\_sync writes         39.609 ops/sec**
+>         16 \*  1kB open\_sync writes         39.609 ops/sec
 >
-> **Test if fsync on non-write file descriptor is honored:**
+> Test if fsync on non-write file descriptor is honored:
 >
-> **(If the times are similar, fsync() can sync data written**
+> (If the times are similar, fsync() can sync data written
 >
-> **on a different descriptor.)**
+> on a different descriptor.)
 >
-> **        write, fsync, close               633.979 ops/sec**
+>         write, fsync, close               633.979 ops/sec
 >
-> **        write, close, fsync               486.340 ops/sec**
+>         write, close, fsync               486.340 ops/sec
 >
-> **Non-Sync\'ed 8kB writes:**
+> Non-Sync\'ed 8kB writes:
 >
-> **        write                           244921.142 ops/sec**
+>         write                           244921.142 ops/sec
 
-### **bonnie++:**
+### bonnie++:
 
-**Bonnie++ allows you to benchmark how your file systems perform with
+Bonnie++ allows you to benchmark how your file systems perform with
 respect to data read and write speed, the number of seeks that can be
 performed per second, and the number of file metadata operations that
-can be performed per second.**
+can be performed per second.
 
--   **date \--utc ; hostname -f ; time bonnie++ \# need 2 x RAM to be
-    free on disk **
+-   date \--utc ; hostname -f ; time bonnie++ \# need 2 x RAM to be
+    free on disk 
 
-> **Fri Jul 24 20:53:01 UTC 2020**
+> Fri Jul 24 20:53:01 UTC 2020
 >
-> **sup-pjalajas-hub.dc1.lan**
+> sup-pjalajas-hub.dc1.lan
 >
-> **Writing a byte at a time\...done**
+> Writing a byte at a time\...done
 >
-> **Writing intelligently\...done**
+> Writing intelligently\...done
 >
-> **Rewriting\...done**
+> Rewriting\...done
 >
-> **Reading a byte at a time\...done**
+> Reading a byte at a time\...done
 >
-> **Reading intelligently\...done**
+> Reading intelligently\...done
 >
-> **start \'em\...done\...done\...done\...done\...done\...**
+> start \'em\...done\...done\...done\...done\...done\...
 >
-> **Create files in sequential order\...done.**
+> Create files in sequential order\...done.
 >
-> **Stat files in sequential order\...done.**
+> Stat files in sequential order\...done.
 >
-> **Delete files in sequential order\...done.**
+> Delete files in sequential order\...done.
 >
-> **Create files in random order\...done.**
+> Create files in random order\...done.
 >
-> **Stat files in random order\...done.**
+> Stat files in random order\...done.
 >
-> **Delete files in random order\...done.**
+> Delete files in random order\...done.
 >
-> **Version  1.97       \-\-\-\-\--Sequential Output\-\-\-\-\--
-> \--Sequential Input- \--Random-**
+> Version  1.97       \-\-\-\-\--Sequential Output\-\-\-\-\--
+> \--Sequential Input- \--Random-
 >
-> **Concurrency   1     -Per Chr- \--Block\-- -Rewrite- -Per Chr-
-> \--Block\-- \--Seeks\--**
+> Concurrency   1     -Per Chr- \--Block\-- -Rewrite- -Per Chr-
+> \--Block\-- \--Seeks\--
 >
-> **Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec
-> %CP  /sec %CP**
+> Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec
+> %CP  /sec %CP
 >
-> **sup-pjalajas 80112M   668  99 993827  96 553909  59  1411  99
-> 1341920  79  8210 150**
+> sup-pjalajas 80112M   668  99 993827  96 553909  59  1411  99
+> 1341920  79  8210 150
 >
-> **Latency             20730us   98013us    1412ms    8035us  
-> 41587us   15082us**
+> Latency             20730us   98013us    1412ms    8035us  
+> 41587us   15082us
 >
-> **Version  1.97       \-\-\-\-\--Sequential Create\-\-\-\-\--
-> \-\-\-\-\-\-\--Random Create\-\-\-\-\-\-\--**
+> Version  1.97       \-\-\-\-\--Sequential Create\-\-\-\-\--
+> \-\-\-\-\-\-\--Random Create\-\-\-\-\-\-\--
 >
-> **sup-pjalajas-hub.dc -Create\-- \--Read\-\-- -Delete\-- -Create\--
-> \--Read\-\-- -Delete\--**
+> sup-pjalajas-hub.dc -Create\-- \--Read\-\-- -Delete\-- -Create\--
+> \--Read\-\-- -Delete\--
 >
-> **              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec
-> %CP  /sec %CP**
+>               files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec
+> %CP  /sec %CP
 >
-> **                 16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++
-> +++ +++++ +++**
+>                  16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++
+> +++ +++++ +++
 >
-> **Latency              1262us    6290us     660us    3386us    
-> 228us     626us**
+> Latency              1262us    6290us     660us    3386us    
+> 228us     626us
 >
-> **1.97,1.97,sup-pjalajas-hub.dc1.lan,1,1595640930,80112M,,668,99,993827,96,553909,59,1411,99,1341920,79,8210,150,16,,,,,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,20730us,98013us,1412ms,8035us,41587us,15082us,1262us,6290us,660us,3386us,228us,626us**
+> 1.97,1.97,sup-pjalajas-hub.dc1.lan,1,1595640930,80112M,,668,99,993827,96,553909,59,1411,99,1341920,79,8210,150,16,,,,,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,20730us,98013us,1412ms,8035us,41587us,15082us,1262us,6290us,660us,3386us,228us,626us
 >
-> **real    5m9.032s**
+> real    5m9.032s
 >
-> **user    0m56.024s**
+> user    0m56.024s
 >
-> **sys     2m53.775s**
+> sys     2m53.775s
 
-### **dd:**
+### dd:
 
-**You can use** dd** to create a large file as quickly as possible to
+You can use dd to create a large file as quickly as possible to
 see how long it takes. It's a very basic test and not very customisable
 however it will give you a sense of the performance of the file system.
 You must make sure this file is larger than the amount of RAM you have
-on your system to avoid the whole file being cached in memory.**
+on your system to avoid the whole file being cached in memory.
 
-**time sh -c \"dd if=/dev/zero of=\[PATH\] bs=\[BLOCK\_SIZE\]k
-count=\[LOOPS\] && sync\"**
+time sh -c \"dd if=/dev/zero of=\[PATH\] bs=\[BLOCK\_SIZE\]k
+count=\[LOOPS\] && sync\"
 
-**A break down of the command is as follows:**
+A break down of the command is as follows:
 
--   **time -- times the overall process from start to finish**
+-   time -- times the overall process from start to finish
 
--   **of= this is the path which you would like to test. The path must
-    be read/ writable.**
+-   of= this is the path which you would like to test. The path must
+    be read/ writable.
 
--   **bs= is the block size to use. If you have a specific load which
+-   bs= is the block size to use. If you have a specific load which
     you are testing for, make this value mirror the write size which you
-    would expect.**
+    would expect.
 
--   **sync -- forces the process to write the entire file to disk before
+-   sync -- forces the process to write the entire file to disk before
     completing. Note, that dd will return before completing but the time
     command will not, therefore the time output will include the sync to
-    disk.**
+    disk.
 
-**Example:**
+Example:
 
-**time sh -c \"dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k
-count=2000000 && sync\"**
+time sh -c \"dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k
+count=2000000 && sync\"
 
-**2000000+0 records in**
+2000000+0 records in
 
-**2000000+0 records out**
+2000000+0 records out
 
-**8192000000 bytes transferred in 159.062003 secs (51501929 bytes/sec)**
+8192000000 bytes transferred in 159.062003 secs (51501929 bytes/sec)
 
-**real 2m41.618s**
+real 2m41.618s
 
-**user 0m0.630s**
+user 0m0.630s
 
-**sys 0m14.998s**
+sys 0m14.998s
 
 **Cleaning up Black Duck Projects and Scans**
 ---------------------------------------------
 
-**Using the output of the Sage script, you can determine what scans,
-project-versions, and whole projects can be removed.**
+Using the output of the Sage script, you can determine what scans,
+project-versions, and whole projects can be removed.
 
-**For instance, the Customer Third Party Verification process may only
+For instance, the Customer Third Party Verification process may only
 require that the last 3 releases of data be maintained on a Black Duck
 Server. So, prior to the upgrade, make sure that only those
-project-versions related to those releases are maintained.**
+project-versions related to those releases are maintained.
 
-**Unmapped scans may occur because there was an error in a scan, a scan
+Unmapped scans may occur because there was an error in a scan, a scan
 was manually generated without indicating a target project and version,
 or a project-version linked to the scans may have been deleted
 (resulting in an unmapped scan). These should be removed prior to a full
-vacuum and/or an application upgrade.**
+vacuum and/or an application upgrade.
 
 **Cleaning up Databases**
 -------------------------
 
-**From time-to-time, Databases used by Black Duck become obsolete. If an
+From time-to-time, Databases used by Black Duck become obsolete. If an
 upcoming release requires the removal of a database as part of the
 Database Migration scripts (part of the upgrade), then this should be
-explicitly tested as part of the staging testing. **
+explicitly tested as part of the staging testing. 
 
-**Contact your Synopsys Support to make sure you understand what might
+Contact your Synopsys Support to make sure you understand what might
 be impacted by the database removal. Make sure your verification tests
 can verify that that data migrated correctly and that the database is
-removed.**
+removed.
 
-**Since Synopsys will tend to migrate the data from a database in one
+Since Synopsys will tend to migrate the data from a database in one
 release and then remove the database in another release (to make sure
 that there are no issues prior to deleting the data), this test may need
-to be done in each release.**
+to be done in each release.
 
-### **bdio Database**
+### bdio Database
 
-**The BDIO Database was removed as part of the 2020.2.0 upgrade (???).
+The BDIO Database was removed as part of the 2020.2.0 upgrade (???).
 One of the Database Migration scripts removed that database. Should your
 database be greater than 1 TB, there may be timeout issues when running
 that script. Make sure you either test that migration with a copy of the
 production database or make sure Synopsys Support is present during the
-upgrade or both.**
+upgrade or both.
 
-### **bds\_hub\_report Database**
+### bds\_hub\_report Database
 
-**In Black Duck version 2019.10.0, to make it easier for users to
+In Black Duck version 2019.10.0, to make it easier for users to
 quickly create, use, back up, and restore the reporting database, the
 tables from the separate reporting database (bds\_hub\_report) have been
 moved to the *reporting* schema, with periodically updated materialized
-views, in the Black Duck database, bds\_hub.**
+views, in the Black Duck database, bds\_hub.
 
-**So, as part of the 2020.6.0 release, the bds\_hub\_report database was
+So, as part of the 2020.6.0 release, the bds\_hub\_report database was
 removed as part of the Database Migration scripts. If the Customer has
 not generated any reports using the bds\_hub\_report database, the
-Database Migration script to remove that database should be quick.**
+Database Migration script to remove that database should be quick.
 
-### **bds\_hub, postgresql, template0, and template1 Database**
+### bds\_hub, postgresql, template0, and template1 Database
 
-**These databases are still valid as of the 2020.6.1 release.**
+These databases are still valid as of the 2020.6.1 release.
 
 **Trimming the Notification and audit\_event logs**
 ---------------------------------------------------
 
-**Depending on the activity on the Black Duck server, the number of
+Depending on the activity on the Black Duck server, the number of
 records taken up by the logging could be in the millions. It is
 important to trim those logs periodically and definitely prior to an
-upgrade.**
+upgrade.
 
-### **Notification Logs**
+### Notification Logs
 
-**Notification logs are sometimes used by integration tools to trigger
+Notification logs are sometimes used by integration tools to trigger
 alerts or the generation/update of JIRA cases so they do need to stick
-around for a bit.**
+around for a bit.
 
-**In the blackduck-config.env file, the Customer can indicate how long
+In the blackduck-config.env file, the Customer can indicate how long
 the notifications logs should be retained, by default that duration is
-30 days:**
+30 days:
 
-**BLACKDUCK\_HUB\_NOTIFICATIONS\_DELETE\_DAYS=30**
+BLACKDUCK\_HUB\_NOTIFICATIONS\_DELETE\_DAYS=30
 
-### **Audit\_Events**
+### Audit\_Events
 
-**There is no automatic cleanup of Audit Events as of 2020.6.1. These
+There is no automatic cleanup of Audit Events as of 2020.6.1. These
 events are required for a few days but other logging has now been added
 to the Black Duck tool so these Events are no longer needed as logging.
-They don't need to be kept longer than 10 days.**
+They don't need to be kept longer than 10 days.
 
-**As such, a psql command should be run periodically to clean up the
-Audit events:**
+As such, a psql command should be run periodically to clean up the
+Audit events:
 
-**delete from st.audit\_event where event\_timestamp \< now() - interval
-\'10 days\';**
+delete from st.audit\_event where event\_timestamp \< now() - interval
+\'10 days\';
 
 **Database Cleanup**
 --------------------
 
-### **Remove any orphaned large objects**
+### Remove any orphaned large objects
 
-**If the Customer generates many default reports, this could result in
+If the Customer generates many default reports, this could result in
 "orphaned" large objects
-(<https://www.postgresql.org/docs/9.5/vacuumlo.html>).**
+(<https://www.postgresql.org/docs/9.5/vacuumlo.html>).
 
-**The customer should run "vacuumlo" to remove any orphaned large
-objects.**
+The customer should run "vacuumlo" to remove any orphaned large
+objects.
 
-#### **vacuumlo**
+#### vacuumlo
 
-**vacuumlo is a simple utility program that will remove any**
-\"orphaned\" **large objects from a PostgreSQL database. An orphaned
+vacuumlo is a simple utility program that will remove any
+\"orphaned\" large objects from a PostgreSQL database. An orphaned
 large object (LO) is considered to be any LO whose OID does not appear
-in any oid or lo data column of the database.**
+in any oid or lo data column of the database.
 
-**Example:**
+Example:
 
-**Vacuumlo bds\_hub (????)**
+Vacuumlo bds\_hub (????)
 
-### **Run PostgreSQL tuning utility**
+### Run PostgreSQL tuning utility
 
-**The customer should run pgtune (PostgreSQL Config Tuner) or a similar
+The customer should run pgtune (PostgreSQL Config Tuner) or a similar
 PostgreSQL tuning utility on the PostgreSQL database. This is not
 required but highly recommended. Detailed instructions are available
-upon request from Synopsys support.**
+upon request from Synopsys support.
 
-#### **Pgtune**
+#### Pgtune
 
-**pgtune takes the wimpy default postgresql.conf and expands the
+pgtune takes the wimpy default postgresql.conf and expands the
 database server to be as powerful as the hardware it\'s being deployed
-on. It is available from <https://github.com/gregs1104/pgtune/>.**
+on. It is available from <https://github.com/gregs1104/pgtune/>.
 
-**Example: **
+Example: 
 
-> **date ; hostname ; pgtune \--type OLTP \--connections=800 -i
-> /tmp/postgresql.conf -o /tmp/postgresql.conf.pgtune**
+> date ; hostname ; pgtune \--type OLTP \--connections=800 -i
+> /tmp/postgresql.conf -o /tmp/postgresql.conf.pgtune
 >
-> **diff /tmp/postgresql.conf /tmp/postgresql.conf.pgtune**
+> diff /tmp/postgresql.conf /tmp/postgresql.conf.pgtune
 
-**If this has been done as part of the database server setup, then this
+If this has been done as part of the database server setup, then this
 does not need to be redone unless the server configuration has changed
-(e.g. memory, cores, storage)**
+(e.g. memory, cores, storage)
 
-### **Upgrade O/S, Kernel, Docker, Postgresql**
+### Upgrade O/S, Kernel, Docker, Postgresql
 
-**As time passes, the minimum requirements for Black Duck changes. There
+As time passes, the minimum requirements for Black Duck changes. There
 tends to be a transitional period across multiple releases where one
-version is supported, then two, then just the latest.**
+version is supported, then two, then just the latest.
 
-**So, most upgrades of the O/S, Kernel, Docker, and Postgresql are done
-between Black Duck upgrades.**
+So, most upgrades of the O/S, Kernel, Docker, and Postgresql are done
+between Black Duck upgrades.
 
-**Take a look at the supported versions in the next release
+Take a look at the supported versions in the next release
 (installation guide) and determine if the O/S, kernel, docker, or
 PostgreSQL need to be upgraded. NOTE that some require the Black Duck to
 be upgraded before you can upgrade the O/S, Kernel, Docker, or
 PostgreSQL. This is because the current version may not support the new
-version until after the upgrade.**
+version until after the upgrade.
 
-#### **O/S and/or Kernel upgrade**
+#### O/S and/or Kernel upgrade
 
-**Working with your server admins for the downtime required to upgrade
+Working with your server admins for the downtime required to upgrade
 the O/S and/or kernel. Sometimes the upgrade occurs because a patch
 (security or bugfix) is required. Sometimes it is because Black Duck
-will no longer be supporting the version you are using.**
+will no longer be supporting the version you are using.
 
-**Work with your system admins to perform the upgrade.**
+Work with your system admins to perform the upgrade.
 
-#### **Docker Upgrades**
+#### Docker Upgrades
 
-**At this point, it looks like there is no "upgrade" per se. The
+At this point, it looks like there is no "upgrade" per se. The
 currently supported version is 18.03. However 19.03 of Docker is
 available. So, to "upgrade", the old Docker installation would have to
 be uninstalled and the new Docker installation would have to be
-installed.**
+installed.
 
-**\<Need to test in order to verify that images and cert secrets don't
-have to be reinstalled\>**
+\<Need to test in order to verify that images and cert secrets don't
+have to be reinstalled\>
 
-#### **PostgreSQL Upgrades**
+#### PostgreSQL Upgrades
 
-**Work with your Database Administrators to upgrade your Postgresql
+Work with your Database Administrators to upgrade your Postgresql
 instance. 9.6.x is currently supported in both the container and
 external databases. 11.7.x is supported in the external databases as of
 Black Duck 2020.6. But, since 11.7.x is not supported until Black Duck
 2020.6.x, you need to upgrade Black Duck to at least 2020.6.0 before
-upgrading Postgresql.**
+upgrading Postgresql.
 
 ### 
 
-### **Full Vacuum of Database**
+### Full Vacuum of Database
 
-**Due to the vestiges that are left behind by notifications, alerts, and
+Due to the vestiges that are left behind by notifications, alerts, and
 scans and project-versions that are created and deleted, Synopsys
 recommends periodic Full Vacuums. These will clean up the unused space
-that autovacuums will not.**
+that autovacuums will not.
 
-**You should also do a Full Vacuum prior to an upgrade if you haven't
-done one recently.**
+You should also do a Full Vacuum prior to an upgrade if you haven't
+done one recently.
 
-**NOTE: It takes about 24 hours to Auto Vacuum 1 TB of space.**
+NOTE: It takes about 24 hours to Auto Vacuum 1 TB of space.
 
-#### **Make sure the database pgdata partition has enough space**
+#### Make sure the database pgdata partition has enough space
 
-**A Full Vacuum copies the table being vacuumed to a new table name. It
+A Full Vacuum copies the table being vacuumed to a new table name. It
 cleans that new table, swaps it with the production table and then
 deletes the temp table. As such, it is recommended that the storage
 holding the database has 150% of the size of the largest table (100% +
-buffer).**
+buffer).
 
-**You can find the table sizes by using the \\l+ and \\dt+ psql
-commands:**
+You can find the table sizes by using the \\l+ and \\dt+ psql
+commands:
 
-**psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\l+\" **
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\l+\" 
 
-**psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\dt+ st.\*\"
-\| less**
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\dt+ st.\*\"
+\| less
 
-**df -hPT**
+df -hPT
 
-**You can also get a sorted list by running the following. NOTE: It
+You can also get a sorted list by running the following. NOTE: It
 might to help to save the script in a file and run it using the -f
-option.**
+option.
 
-**SELECT**
+SELECT
 
-**    relname AS \"relation\",**
+    relname AS \"relation\",
 
-**    pg\_size\_pretty (**
+    pg\_size\_pretty (
 
-**        pg\_total\_relation\_size (C .oid)**
+        pg\_total\_relation\_size (C .oid)
 
-**    ) AS \"total\_size\"**
+    ) AS \"total\_size\"
 
-**FROM**
+FROM
 
-**    pg\_class C**
+    pg\_class C
 
-**LEFT JOIN pg\_namespace N ON (N.oid = C .relnamespace)**
+LEFT JOIN pg\_namespace N ON (N.oid = C .relnamespace)
 
-**WHERE**
+WHERE
 
-**    nspname NOT IN (**
+    nspname NOT IN (
 
-**        \'pg\_catalog\',**
+        \'pg\_catalog\',
 
-**        \'information\_schema\'**
+        \'information\_schema\'
 
-**    )**
+    )
 
-**AND C .relkind \<\> \'i\'**
+AND C .relkind \<\> \'i\'
 
-**AND nspname !\~ \'\^pg\_toast\'**
+AND nspname !\~ \'\^pg\_toast\'
 
-**ORDER BY**
+ORDER BY
 
-**    pg\_total\_relation\_size (C .oid) DESC;**
+    pg\_total\_relation\_size (C .oid) DESC;
 
-**The results look like:**
+The results look like:
 
-**relation \| total\_size**
+relation \| total\_size
 
-**\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--**
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--
 
-**scan\_file \| 59 GB**
+scan\_file \| 59 GB
 
-**scan\_composite\_leaf \| 40 GB**
+scan\_composite\_leaf \| 40 GB
 
-**scan\_composite\_element \| 7639 MB**
+scan\_composite\_element \| 7639 MB
 
-**scan\_match\_node \| 835 MB**
+scan\_match\_node \| 835 MB
 
-> **For vacuuming, ensure available disk space is at least the 1.2 \*
+> For vacuuming, ensure available disk space is at least the 1.2 \*
 > the size of the largest database table. If you are planning on
 > vacuuming tables in parallel, you should have 1.5\* the total database
-> size in available disk space.**
+> size in available disk space.
 >
-> **Refer to the "Installing Black Duck using Docker Swarm" document,
+> Refer to the "Installing Black Duck using Docker Swarm" document,
 > Chapter 6: "Upgrading Black Duck", "Upgrading from an existing Docker
-> architecture" section.**
+> architecture" section.
 >
-> **The data migration will temporarily require an additional free disk
+> The data migration will temporarily require an additional free disk
 > space at approximately 2.5 times your original database volume. Add in
 > stuff on pg\_dump being to a different partition. Pg 61 of the install
-> guide 6.1**
+> guide 6.1
 >
-> **pg 61 install guide: The data migration will temporarily require an
+> pg 61 install guide: The data migration will temporarily require an
 > additional free disk space at approximately 2.5 times youroriginal
 > database volume size to hold the database dump and the new database
 > volume. As a rule-of-thumb, if the volume upon which your database
-> resides is at least 60% free, there should be enough diskspace. ????**
+> resides is at least 60% free, there should be enough diskspace. ????
 
-#### **Perform Full Vacuum**
+#### Perform Full Vacuum
 
-**Make sure that any monitoring software (e.g. Zenoss) has been
-terminated.**
+Make sure that any monitoring software (e.g. Zenoss) has been
+terminated.
 
-**\<Fill in Steps\>**
+\<Fill in Steps\>
 
-**Monitor the vacuum to see if it is still going**
+Monitor the vacuum to see if it is still going
 
-**select current\_timestamp - query\_start as
+select current\_timestamp - query\_start as
 runtime,pid,datname,usename,query from pg\_stat\_activity where query !=
 \'\<IDLE\>\' and query not in (\'COMMIT\',\'ROLLBACK\')order by 1
-desc;**
+desc;
 
-**Look for "VACUUM" in the results**
+Look for "VACUUM" in the results
 
-**      runtime         \|  pid   \| datname  \| usename  \|**
+      runtime         \|  pid   \| datname  \| usename  \|
 
-** **
+ 
 
-**\
-                                                      query**
+\
+                                                      query
 
-** **
+ 
 
-** **
+ 
 
-**\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
@@ -1337,390 +1339,390 @@ standby\_location,             replication\_lag,             apply\_
 TIME ZONE,\
   \'2020-08-10 21:12:36.640652-04\'::TIMESTAMP WITH TIME ZONE,          
   \'6B5E/18FC058\',\
-          \'6B5E/18FC058\',             0,             0)**
+          \'6B5E/18FC058\',             0,             0)
 
 **Duplicating Production Database in Staging Environment**
 ----------------------------------------------------------
 
-**Sometimes issues arise due to scale. Unless you have created a test
+Sometimes issues arise due to scale. Unless you have created a test
 database with the possible scaling issues of the production database,
-issues may not be detected until the upgrade occurs in production.**
+issues may not be detected until the upgrade occurs in production.
 
-**So, one way to do that is to build the staging database with similar
-data as in production.**
+So, one way to do that is to build the staging database with similar
+data as in production.
 
-**Another way is to replicate the production data in the staging
-environment. This is easier with an external database.**
+Another way is to replicate the production data in the staging
+environment. This is easier with an external database.
 
-### **Production Database Replication**
+### Production Database Replication
 
-**If the production database is going to be duplicated in the
-staging/test environment, then the following steps must be performed.**
+If the production database is going to be duplicated in the
+staging/test environment, then the following steps must be performed.
 
 **Duplicating Production Environment in Staging Environment**
 -------------------------------------------------------------
 
-**Just as with the creation of a similar/exact copy of the production
+Just as with the creation of a similar/exact copy of the production
 database in the test/staging environment, the same should be done with
 the hardware (CPU Cores, RAM, storage access (iSCSI vs NFS), storage
 type (spinning disk vs flash), and amount of storage. The versions of
-Linux, Docker, and PostgreSQL should also be the same.**
+Linux, Docker, and PostgreSQL should also be the same.
 
 **Perform Black Duck Upgrade**
 ==============================
 
-**Once you environment is where you want it, you need to actually
+Once you environment is where you want it, you need to actually
 perform the upgrade. The steps are the same for staging as for
-production**
+production
 
 **Pre-upgrade steps**
 ---------------------
 
-### **Check Memory**
+### Check Memory
 
-**As with all application it is important to make sure that there is
+As with all application it is important to make sure that there is
 sufficient RAM and storage for the upgrade. Changes to orchestration,
 additions of services, etc may result in more usage or RAM and/or
-storage. The new images will take up more space in docker. **
+storage. The new images will take up more space in docker. 
 
-> **free -g**
+> free -g
 
-### **Check Storage**
+### Check Storage
 
-**\<blah blah check storage. Add in comment on pruning containers,
+\<blah blah check storage. Add in comment on pruning containers,
 volumes, and system/images?\> /opt/docker/..... copy and paste here.
-???**
+???
 
 **'docker volume prune'**
 
-### **Download upgrade images**
+### Download upgrade images
 
-**Any new docker images used by the Black Duck application should be
+Any new docker images used by the Black Duck application should be
 downloaded to the target server prior to the upgrade. Downloading and
-adding the new images can be done any time prior to the upgrade.**
+adding the new images can be done any time prior to the upgrade.
 
-**These are available at a location specified by your Synopsys Support
-person.**
+These are available at a location specified by your Synopsys Support
+person.
 
-**Once they are on the target server, you can load them into docker:**
+Once they are on the target server, you can load them into docker:
 
-**ls \| while read image; do docker load -i \$image; done **
+ls \| while read image; do docker load -i \$image; done 
 
-### **Download Orchestration Files**
+### Download Orchestration Files
 
-**The Orchestration .yml and .env determine how the Black Duck
-application will startup with which functionality and resources.**
+The Orchestration .yml and .env determine how the Black Duck
+application will startup with which functionality and resources.
 
-**These need to be downloaded from github
+These need to be downloaded from github
 (<https://github.com/blackducksoftware/hub>) and updated to include
 customer-specific changes as indicated in the orchestration files for
-the previous release.**
+the previous release.
 
-**This may take a while so be careful with the updates to these files.**
+This may take a while so be careful with the updates to these files.
 
-#### **Updated YML Files**
+#### Updated YML Files
 
-**If Synopsys Support is providing updated YML files, then they will be
-dropped on the Synopsys sharefile or in the Support case**
+If Synopsys Support is providing updated YML files, then they will be
+dropped on the Synopsys sharefile or in the Support case
 
-### **blackduck\_migrator-2020.6.1.yml**
+### blackduck\_migrator-2020.6.1.yml
 
-**This is similar to docker-compose.yml and
+This is similar to docker-compose.yml and
 docker-compose.externaldb.yml. It starts up the required services.
 However, only those services required to do the Database Migration
-Scripts.**
+Scripts.
 
-**Copy it into your docker-swarm location with the other orchestration
+Copy it into your docker-swarm location with the other orchestration
 files. BUT, make sure that the services setup matches the number of
 available cores and memory for your target server. By default, it is
 using up 69 GB of RAM and 8 cores. For example, if you have 8 cores and
 32 GB of RAM, you may want to reduce the \# of cores used by "services"
-to 2.**
+to 2.
 
 **Upgrade Monitoring Scripts**
 
-**Test scripts may be provided by Synopsys to help with monitoring
-upgrades.**
+Test scripts may be provided by Synopsys to help with monitoring
+upgrades.
 
-**For instance, SynopsysMonitorDbActivity\_202007.bash is used to
+For instance, SynopsysMonitorDbActivity\_202007.bash is used to
 monitor PostgreSQL activity at the database/table level. It is to be
 used if the upgrade processing seems to have stalled (presumably due to
-a very large database table upgrade/migration).**
+a very large database table upgrade/migration).
 
-### **Schedule upgrade**
+### Schedule upgrade
 
-**Given that the Black Duck server will be up and down during the
+Given that the Black Duck server will be up and down during the
 upgrade, it is important that external scripts, scans, etc should not be
-running during the upgrade.**
+running during the upgrade.
 
-**Planning with Synospys Support should be made sufficiently ahead of
+Planning with Synospys Support should be made sufficiently ahead of
 time so that they can plan support during your upgrade. In addition,
 those teams using Black Duck need to plan their release schedules to
 will want to work around the schedule and put the downtime into their
-schedules. **
+schedules. 
 
 **Perform Upgrade, Day of Upgrade (Staging then Production)**
 -------------------------------------------------------------
 
-**The upgrades normally take enough time to bring down Black Duck,
+The upgrades normally take enough time to bring down Black Duck,
 restart Black Duck, and run through any Database Migration scripts.
 Upgrading from 2020.4.1 to 2020.6.1 is expecting to take under 2
-hours.**
+hours.
 
-**Remember that you should be doing all of these steps on the
+Remember that you should be doing all of these steps on the
 test/staging server to make sure that all the steps work for the current
-update prior to doing the upgrade on the production server!**
+update prior to doing the upgrade on the production server!
 
-### **Stop scanning and external connections **
+### Stop scanning and external connections 
 
-#### **Stop Scanning**
+#### Stop Scanning
 
-**The customer should terminate performing scans many hours before
+The customer should terminate performing scans many hours before
 beginning the upgrade installation. This is to allow the scans to
 complete prior to the upgrade while minimizing the large process that
-need to unwind and rollback during the Black Duck shutdown.**
+need to unwind and rollback during the Black Duck shutdown.
 
-> **Wait for the scan jobs to finish before terminating external
-> connections in the next step**
+> Wait for the scan jobs to finish before terminating external
+> connections in the next step
 >
-> **After the scan jobs are complete, the customer should terminate all
+> After the scan jobs are complete, the customer should terminate all
 > external queries, utilities, scripts, and SDK calls prior to starting
-> the actual upgrade.**
+> the actual upgrade.
 >
-> **You can verify this by doing the following psql command:**
+> You can verify this by doing the following psql command:
 
-**psql -h hub-stg-db -U blackduck -p 5432 -d bds\_hub -c "SELECT \* FROM
+psql -h hub-stg-db -U blackduck -p 5432 -d bds\_hub -c "SELECT \* FROM
 pg\_stat\_activity WHERE datname = \'bds\_hub\' and state =
-\'active\';"**
+\'active\';"
 
-**bds\_hub=\# SELECT \* FROM pg\_stat\_activity WHERE datname =
-\'bds\_hub\' and state = \'active\';**
+bds\_hub=\# SELECT \* FROM pg\_stat\_activity WHERE datname =
+\'bds\_hub\' and state = \'active\';
 
-**datid \| datname \| pid \| usesysid \| usename \| application\_name \|
-client\_addr \| client\_hostname \| client\_port \| backend\_start**
+datid \| datname \| pid \| usesysid \| usename \| application\_name \|
+client\_addr \| client\_hostname \| client\_port \| backend\_start
 
-**\| xact\_start \| query\_start \| state\_change \| wait\_event\_type
-\| wait\_event \| state \| ba**
+\| xact\_start \| query\_start \| state\_change \| wait\_event\_type
+\| wait\_event \| state \| ba
 
-**ckend\_xid \| backend\_xmin \| query**
+ckend\_xid \| backend\_xmin \| query
 
-**\-\-\-\-\-\--+\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--**
+\-\-\-\-\-\--+\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
-**\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\--**
+\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\--
 
-**\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--**
+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
-**16441 \| bds\_hub \| 8722 \| 16440 \| blackduck \| psql \|
-10.251.22.151 \| \| 35794 \| 2020-08-04 22:56:43.585215-**
+16441 \| bds\_hub \| 8722 \| 16440 \| blackduck \| psql \|
+10.251.22.151 \| \| 35794 \| 2020-08-04 22:56:43.585215-
 
-**04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
-\| 2020-08-04 22:56:59.671215-04 \| \| \| active \|**
+04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
+\| 2020-08-04 22:56:59.671215-04 \| \| \| active \|
 
-**\| 94647657 \| SELECT \* FROM pg\_stat\_activity WHERE datname =
-\'bds\_hub\' and state = \'active\';**
+\| 94647657 \| SELECT \* FROM pg\_stat\_activity WHERE datname =
+\'bds\_hub\' and state = \'active\';
 
-#### **Stop External Connections**
+#### Stop External Connections
 
-**Customer to ensure all Black Duck and PostgreSQL server activities are
+Customer to ensure all Black Duck and PostgreSQL server activities are
 as quiet as possible before starting upgrade. So, to that end, the
 customer should ensure that no external connections to the database will
 interfere with upgrade. This is because external database connections
-can block upgrade database actions.**
+can block upgrade database actions.
 
-**To ensure this:**
+To ensure this:
 
--   **Make backup of pg\_hba.conf file.**
+-   Make backup of pg\_hba.conf file.
 
--   **Edit pg\_hba.conf to permit connections only from
-    localhost/127.0.0.1 and the upgrading Black Duck server. **
+-   Edit pg\_hba.conf to permit connections only from
+    localhost/127.0.0.1 and the upgrading Black Duck server. 
 
--   **Set most "host" settings to "reject" or comment them out. **
+-   Set most "host" settings to "reject" or comment them out. 
 
 <!-- -->
 
--   **Restart PostgreSQL (to reload .conf changes, but to also
-    disconnect any currently present external connections). **
+-   Restart PostgreSQL (to reload .conf changes, but to also
+    disconnect any currently present external connections). 
 
-**NOTE: Customer may have other means available to effect this
-control.**
+NOTE: Customer may have other means available to effect this
+control.
 
-#### **Backup database**
+#### Backup database
 
--   **Customer to backup the database. **
+-   Customer to backup the database. 
 
--   **Customer to move Production database dump file to separate machine
-    if possible. **
+-   Customer to move Production database dump file to separate machine
+    if possible. 
 
--   **Customer to balance timing of Production backup with the reality
-    that subsequent scans will not be in the backup. **
+-   Customer to balance timing of Production backup with the reality
+    that subsequent scans will not be in the backup. 
 
--   **If not already done, backup external database with 2020.4.1
-    hub\_create\_data\_dump.sh**
+-   If not already done, backup external database with 2020.4.1
+    hub\_create\_data\_dump.sh
 
-### **Start the actual upgrade**
+### Start the actual upgrade
 
-#### **Bring down Black Duck Docker Application**
+#### Bring down Black Duck Docker Application
 
-**The following steps assume that any docker and/or PostgreSQL upgrades
+The following steps assume that any docker and/or PostgreSQL upgrades
 have been completed already or may be done sometime after the Black Duck
 upgrade (as in the case of newly supported versions of PostgreSQL). If
 Docker upgrades are occurring at the same time, then the steps mentioned
 above (e.g. stopping Docker, uninstalling, reinstalling) should be done
-in conjunction with the following steps. ???**
+in conjunction with the following steps. ???
 
-**Upon stopping Black Duck, be very patient and confirm applications
-have come to a complete halt before proceeding. **
+Upon stopping Black Duck, be very patient and confirm applications
+have come to a complete halt before proceeding. 
 
-**When bringing up the Black Duck application in Docker, the command to
+When bringing up the Black Duck application in Docker, the command to
 start includes the name of the docker stack. For the purposes of this
-document, we will call it "hub".**
+document, we will call it "hub".
 
-**List the Docker services if you don't know the name:**
+List the Docker services if you don't know the name:
 
-> **docker stack ls**
+> docker stack ls
 >
-> **NAME SERVICES**
+> NAME SERVICES
 >
-> **hub 10**
+> hub 10
 
-**Stop the Docker services associated with the existing Black Duck
-instance**
+Stop the Docker services associated with the existing Black Duck
+instance
 
-> **docker stack rm \<hub stack name\>**
+> docker stack rm \<hub stack name\>
 
-**In order to watch the Docker Services until they all shutdown, do the
-following:**
+In order to watch the Docker Services until they all shutdown, do the
+following:
 
-> **watch docker ps **
+> watch docker ps 
 
-#### **Start Black Duck with the new version of Black Duck**
+#### Start Black Duck with the new version of Black Duck
 
-**As part of the prep work, you will have already downloaded the new
+As part of the prep work, you will have already downloaded the new
 Orchestration files for the new release and updated them with the same
 changes you made in the previous release (and additional changes if
-required with this release).**
+required with this release).
 
-**Take a minute to make sure that these are the correct files for the
-server type (production vs staging) and that the changes are correct.**
+Take a minute to make sure that these are the correct files for the
+server type (production vs staging) and that the changes are correct.
 
-**This includes certs, secrets, external db mount, additional options,
-proxy, etc.**
+This includes certs, secrets, external db mount, additional options,
+proxy, etc.
 
-**Make sure the local directory is where the orchestration files are and
-start the Black Duck Migration YML file:**
+Make sure the local directory is where the orchestration files are and
+start the Black Duck Migration YML file:
 
-#### **Start the abbreviated Database Migration YML**
+#### Start the abbreviated Database Migration YML
 
-**You can start the Database Migration by typing**
+You can start the Database Migration by typing
 
-**docker stack deploy -c blackduck\_migrator-2020.6.1.yml -c
-docker-compose.local-overrides.migrator.yml hub**
+docker stack deploy -c blackduck\_migrator-2020.6.1.yml -c
+docker-compose.local-overrides.migrator.yml hub
 
-**Run the script (SynopsysMonitorDbActivity\_202007.bash) to see when
+Run the script (SynopsysMonitorDbActivity\_202007.bash) to see when
 the Database Migrations are done. In the output (see below), look at the
 "v\_hub script status". From top down are the latest Database Migration
 scripts that were run. Check the "version" column for the script \# and
 the success column to see if it successfully completed (t). Synopsys
 Support can tell you what the latest Database Migration script version
-that is run with the target release.**
+that is run with the target release.
 
-**v\_hub script status\...**
+v\_hub script status\...
 
-**now \| inet\_server\_addr \| cmd \| loop \| installed\_rank \| version
-\| description**
+now \| inet\_server\_addr \| cmd \| loop \| installed\_rank \| version
+\| description
 
-**\| type \| script \| checksum \| installed\_by \| insta**
+\| type \| script \| checksum \| installed\_by \| insta
 
-**lled\_on \| execution\_time \| success**
+lled\_on \| execution\_time \| success
 
-**\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--**
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
-**\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--**
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--
 
-**\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\--**
+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\--
 
-**2020-08-05 17:27:25.254976-04 \| 10.251.22.104 \|
+2020-08-05 17:27:25.254976-04 \| 10.251.22.104 \|
 v\_hub\_script\_status \| 1 \| 185 \| 2020.06.0.011 \| clear stale
-policies from central relea**
+policies from central relea
 
-**se \| SQL \|
+se \| SQL \|
 hub\_V2020\_06\_0\_011\_\_clear\_stale\_policies\_from\_central\_release.sql.vpp
-\| -1470604476 \| blackduck \| 2020-08-05 1**
+\| -1470604476 \| blackduck \| 2020-08-05 1
 
-**9:26:12.882272 \| 18 \| t**
+9:26:12.882272 \| 18 \| t
 
-#### **Monitor upgrade docker containers health.**
+#### Monitor upgrade docker containers health.
 
-**Verify that Black Duck starts up correctly. Once all the Upgrade
-docker containers are healthy, the upgrade installation is complete. **
+Verify that Black Duck starts up correctly. Once all the Upgrade
+docker containers are healthy, the upgrade installation is complete. 
 
-**You can monitor the services as follows:**
+You can monitor the services as follows:
 
-**watch docker ps**
+watch docker ps
 
-> **Restore database with 2020.4.1 hub\_db\_migrate.sh ??? **
+> Restore database with 2020.4.1 hub\_db\_migrate.sh ??? 
 
-#### **Monitor the Black Duck database during Database Migration**
+#### Monitor the Black Duck database during Database Migration
 
-**During large database table migration steps, the system may appear
-quiet or stuck for many hours. **
+During large database table migration steps, the system may appear
+quiet or stuck for many hours. 
 
-**To confirm progress, do the following:**
+To confirm progress, do the following:
 
-##### **Tail the container logs**
+##### Tail the container logs
 
-**for mcontainer in \$(docker ps -q) ; do docker ps \| grep \$mcontainer
-; docker logs \--tail 2 \$mcontainer \|& cut -c 1-150 ; done **
+for mcontainer in \$(docker ps -q) ; do docker ps \| grep \$mcontainer
+; docker logs \--tail 2 \$mcontainer \|& cut -c 1-150 ; done 
 
-##### **Check PostgreSQL activity**
+##### Check PostgreSQL activity
 
 **bash**
 
-**export PGPASSWORD='\<PSQL Database Password\>'**
+export PGPASSWORD='\<PSQL Database Password\>'
 
-**./SynopsysMonitorDbActivity\_202007.bash \>
-SynopsysMonitorDbActivity\_202007.out 2\>&1**
+./SynopsysMonitorDbActivity\_202007.bash \>
+SynopsysMonitorDbActivity\_202007.out 2\>&1
 
-#### **Start the official release of Black Duck**
+#### Start the official release of Black Duck
 
-**Once the Database Migration is complete, bring the Docker containers
-back down and start the official release:**
+Once the Database Migration is complete, bring the Docker containers
+back down and start the official release:
 
 **Stop Docker**
 
-**docker stack rm hub**
+docker stack rm hub
 
-**Local Database:**
+Local Database:
 
-**docker stack *deploy* -c docker-compose.yml -c
-docker-compose.local-overrides.yml \<stack name\>**
+docker stack *deploy* -c docker-compose.yml -c
+docker-compose.local-overrides.yml \<stack name\>
 
-**e.g. docker stack *deploy* -c docker-compose.yml -c
-docker-compose.local-overrides.yml hub**
+e.g. docker stack *deploy* -c docker-compose.yml -c
+docker-compose.local-overrides.yml hub
 
-**External Database:**
+External Database:
 
-**docker stack *deploy* -c docker-compose.externaldb.yml -c
-docker-compose.local-overrides.yml \<stack name\>**
+docker stack *deploy* -c docker-compose.externaldb.yml -c
+docker-compose.local-overrides.yml \<stack name\>
 
-**e.g. docker stack *deploy* -c docker-compose.externaldb.yml -c
-docker-compose.local-overrides.yml hub**
+e.g. docker stack *deploy* -c docker-compose.externaldb.yml -c
+docker-compose.local-overrides.yml hub
 
-#### **Monitor upgrade docker containers health.**
+#### Monitor upgrade docker containers health.
 
-**Verify that Black Duck starts up correctly. Once all the Upgrade
+Verify that Black Duck starts up correctly. Once all the Upgrade
 docker containers are healthy, the upgrade installation is complete.
 NOTE that the nginx service will show up and disappear until all of the
-other services are up and healthy and then it will startup correctly.**
+other services are up and healthy and then it will startup correctly.
 
-**You can monitor the services as follows:**
+You can monitor the services as follows:
 
-**watch docker ps**
+watch docker ps
 
-#### **Start Additional Services**
+#### Start Additional Services
 
-**If your target configuration has multiple instances of services (e.g.
-3 jobrunner services and 3 scan services, you need to start those.**
+If your target configuration has multiple instances of services (e.g.
+3 jobrunner services and 3 scan services, you need to start those.
 
 #### docker service scale hub\_jobrunner=3
 
@@ -1728,90 +1730,90 @@ other services are up and healthy and then it will startup correctly.**
 
 #### 
 
-**Confirm with output of commands in step 2.2.7.6.1. above. Ooops.???**
+Confirm with output of commands in step 2.2.7.6.1. above. Ooops.???
 
-#### **Vacuum audit\_event table **
+#### Vacuum audit\_event table 
 
-**When the migration script is finished and If Customer has not done
+When the migration script is finished and If Customer has not done
 "vacuum full analyze" prior to the upgrade, Synopsys strongly recommends
 that you run the VACUUM command on the audit\_event table to optimize
 PostgreSQL performance. See "Installing Black Duck using Docker Swarm",
 Chapter 6: "Upgrading Black Duck", "Migration script to purge unused
-rows in the audit event table" (Page 55). **
+rows in the audit event table" (Page 55). 
 
 **Post-Upgrade Steps**
 ----------------------
 
 ### 
 
-### **Run upgrade-validation tests.**
+### Run upgrade-validation tests.
 
-**Customer run the tests required to verify that the existing projects
-and process were not impacted unexpectedly by the upgrade.**
+Customer run the tests required to verify that the existing projects
+and process were not impacted unexpectedly by the upgrade.
 
-### **Re-run benchmark tests. **
+### Re-run benchmark tests. 
 
-**Customer run the benchmark tests that they ran prior to the upgrade
-(see above)**
+Customer run the benchmark tests that they ran prior to the upgrade
+(see above)
 
-**For example, sysbench:**
+For example, sysbench:
 
-**date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
+date ; date \--utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio \--file-test-mode=rndrw \--threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).\*/\" ; done**
+\"\\(read\\\|writ\\).\*/\" ; done
 
-### **Announce upgrade completion to stakeholders**
+### Announce upgrade completion to stakeholders
 
-**When the upgrade is successfully complete, Customer will update their
+When the upgrade is successfully complete, Customer will update their
 internal customers, as well as the Synopsys Salesforce Community Case,
-with the appropriate status to provide an "all clear".**
+with the appropriate status to provide an "all clear".
 
 **Contingency: Fallback Steps**
 ===============================
 
-**We need to talk about these.???**
+We need to talk about these.???
 
-1.  **If at any point in the migrations, an unrecoverable error occurs,
+1.  If at any point in the migrations, an unrecoverable error occurs,
     the plan is to fallback to version the previous version (for this
-    example, 2020.4.1). **
+    example, 2020.4.1). 
 
-2.  **In order to fall back to 2020.4.1, first remove the volumes.**
+2.  In order to fall back to 2020.4.1, first remove the volumes.
 
-    1.  **Start up 2020.4.1 and THEN Run 'docker volume prune' after
-        verifying no other volumes are in use. **
+    1.  Start up 2020.4.1 and THEN Run 'docker volume prune' after
+        verifying no other volumes are in use. 
 
-    2.  **Alternatively, 'docker volume ls' to list and docker volume rm
-        \<volume name\> each related volume. **
+    2.  Alternatively, 'docker volume ls' to list and docker volume rm
+        \<volume name\> each related volume. 
 
-3.  **Using the restore commands to re-establish the 2020.4.1 backup
-    taken during upgrade steps**
+3.  Using the restore commands to re-establish the 2020.4.1 backup
+    taken during upgrade steps
 
-    3.  **Expect about \_\_\_\_ hours to fallback to 2020.4.1.**
+    3.  Expect about \_\_\_\_ hours to fallback to 2020.4.1.
 
 **Restore steps, during Fallback ????**
 ---------------------------------------
 
-1.  **To restore the PostgreSQL data during a fallback **
+1.  To restore the PostgreSQL data during a fallback 
 
-2.  **Use the docker-compose.dbmigrate.yml file located in the
+2.  Use the docker-compose.dbmigrate.yml file located in the
     docker-swarm directory. That starts the containers and volumes
-    needed to migrate the database. **
+    needed to migrate the database. 
 
-> **docker stack deploy -c docker-compose.dbmigrate.yml hub **
+> docker stack deploy -c docker-compose.dbmigrate.yml hub 
 
-1.  **Note that there are some versions of Docker where if the images
+1.  Note that there are some versions of Docker where if the images
     live in a private repository, docker stack will not pull them unless
-    the following flag is added to the above command: **
+    the following flag is added to the above command: 
 
-> **\--with-registry-auth **
+> \--with-registry-auth 
 
-3.  **After the DB container has started, run the migration script
+3.  After the DB container has started, run the migration script
     located in the docker-swarm directory. This script restores the data
-    from the existing database dump file. **
+    from the existing database dump file. 
 
-    2.  **This has a duration on the order of hours, so perform it in a
+    2.  This has a duration on the order of hours, so perform it in a
         screen multiplexer like screen or tmux, or as a detached
-        background process.**
+        background process.
 
-> **./bin/hub\_db\_migrate.sh \<path to dump file\>**
+> ./bin/hub\_db\_migrate.sh \<path to dump file\>
