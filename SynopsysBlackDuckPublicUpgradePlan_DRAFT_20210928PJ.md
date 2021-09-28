@@ -131,23 +131,23 @@ This document is provided as-is, without warranty or liability.
 1.  Customer: 
 
 2.  Case(s): 
-- Prior related cases for reference: 
+    - Prior related cases for reference: 
 
 3.  Customer: 
-- Name:
-- email:
-- phone:
-- timezone:
+    - Name:
+    - email:
+    - phone:
+    - timezone:
 
 4.  Synopsys Support Staff member(s): 
-- Name(s):  
-- email(s):
-- phone(s):
-- timezone(s):
+    - Name(s):  
+    - email(s):
+    - phone(s):
+    - timezone(s):
 
 5.  Support links: 
-- website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
-- email:  software-integrity-support@synopsys.com
+    - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
+    - email:  software-integrity-support@synopsys.com
 
 **Introduction**
 ================
@@ -156,28 +156,28 @@ This document is provided as-is, without warranty or liability.
 ---------------------------
 
 1.  This document is a Draft, informal, test, work in progress.
-- last updated September 28, 2021. 
-- Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
+    - last updated September 28, 2021. 
+    - Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
 
 2.  Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
 
 3.  This document has been reviewed by:
--  
--  
+    -  
+    -  
 
 **Upgrade Schedule**
 --------------------
 
 1.  Staging: 
-- Date: 
-- From version:
-- To version:
+    - Date: 
+    - From version:
+    - To version:
 
 2.  Production:
-- Only after successful completion of the upgrade on Staging, and
+    - Only after successful completion of the upgrade on Staging, and
     resolution of any findings from that upgrade, Customer is currently
     expected to schedule upgrading Production on 
-- Date:
+    - Date:
 
 **Background Information**
 --------------------------
@@ -204,7 +204,7 @@ This document is provided as-is, without warranty or liability.
     environment did not run into the same issues with the Database
     Migration scripts that the Production server did.
 
-    1. During a recent upgrade event, Customer docker container
+    - During a recent upgrade event, Customer docker container
         memory, cpu, and replica settings were misconfigured and had to
         be fixed under a P1 Case. 
 
