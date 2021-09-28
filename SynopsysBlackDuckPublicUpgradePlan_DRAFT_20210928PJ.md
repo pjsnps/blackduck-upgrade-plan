@@ -1,4 +1,6 @@
-**Contents** {#contents .TOCHeading}
+This document is provided as-is, without warranty or liability.
+
+**Contents**
 ============
 
 [**Contacts 2**](#contacts)
