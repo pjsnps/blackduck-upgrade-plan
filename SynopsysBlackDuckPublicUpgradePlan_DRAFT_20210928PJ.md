@@ -709,7 +709,7 @@ real    0m30.055s
 user    0m5.440s
 sys     0m13.697s
 ```
-### Pgbench
+### pgbench
 
 pgbench is a simple program for running benchmark tests on
 PostgreSQL.
@@ -722,53 +722,38 @@ database if you have tables having these names!
 If pgbench is not installed on the server (yum list installed \| grep
 pgbench), you can install it as root by running:
 
+```
 sudo su -
-
 yum install postgresql-contrib
-
-It will be dropped into /bin or /usr/bin/pgbench
+```
 
 To run pgbench, run the following as yourself:
 
 Example:
+```
+date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432 -d bds\_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2\> /dev/null
+```    
 
--   date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432
-    -d bds\_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2\> /dev/null
-    
-
-> Example output:
->
+Example output:
+```
 > Fri Jul 24 13:50:59 EDT 2020
->
 > sup-pjalajas-hub.dc1.lan
->
 > pghost: sup-pjalajas-2 pgport: 55436 nclients: 200 nxacts: 1000
 > dbName: bds\_hub
->
 > transaction type: TPC-B (sort of)
->
 > scaling factor: 1
->
 > query mode: prepared
->
 > number of clients: 200
->
 > number of threads: 100
->
 > number of transactions per client: 1000
->
 > number of transactions actually processed: 200000/200000
->
 > tps = 439.798734 (including connections establishing)
->
 > tps = 440.029375 (excluding connections establishing)
->
-> real 7m34.812s
->
-> user 0m23.666s
->
-> sys 0m49.548s
 
+> real 7m34.812s
+> user 0m23.666s
+> sys 0m49.548s
+```
 ### pg\_test\_fsync
 
 pg\_test\_fsync is intended to give you a reasonable idea of what the
