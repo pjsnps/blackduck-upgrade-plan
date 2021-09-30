@@ -543,7 +543,7 @@ sysbench provides benchmarking capabilities for Linux. sysbench
 supports testing CPU, memory, file I/O, mutex performance, and even
 [MySQL](https://wiki.gentoo.org/wiki/MySQL) benchmarking.
 
-If sysbench is not installed on the server (yum list installed \| grep
+If sysbench is not installed on the server (yum list installed | grep
 sysbench), you can install it as root by running:
 
 ```
@@ -555,7 +555,7 @@ To run sysbench, run the following as root:
 ```
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
-fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
+fileio --file-test-mode=rndrw --threads=\$mthreads run | grep -e
 "\(read|writ\).*/" ; done
 ```
 ```
@@ -599,7 +599,7 @@ pgbench_branches, pgbench_history, and pgbench_tellers, destroying
 any existing tables of these names. Be very careful to use another
 database if you have tables having these names!
 
-If pgbench is not installed on the server (yum list installed \| grep
+If pgbench is not installed on the server (yum list installed | grep
 pgbench), you can install it as root by running:
 
 ```
@@ -993,7 +993,7 @@ commands:
 ```
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\l+" 
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\dt+ st.*"
-\| less
+| less
 df -hPT
 ```
 
@@ -1022,12 +1022,12 @@ ORDER BY
 
 The results look like:
 ```
-relation \| total_size
+relation | total_size
 --------------------------------------------+------------
-scan_file \| 59 GB
-scan_composite_leaf \| 40 GB
-scan_composite_element \| 7639 MB
-scan_match_node \| 835 MB
+scan_file | 59 GB
+scan_composite_leaf | 40 GB
+scan_composite_element | 7639 MB
+scan_match_node | 835 MB
 ```
 
 > For vacuuming, ensure available disk space is at least the 1.2 *
@@ -1066,7 +1066,7 @@ desc;
 
 Look for "VACUUM" in the results
 ```
-      runtime         \|  pid   \| datname  \| usename  \|
+      runtime         |  pid   | datname  | usename  |
 \
                                                       query
 ------------------------+--------+----------+----------+-----------------------------------\
@@ -1076,15 +1076,15 @@ Look for "VACUUM" in the results
 -------------------------------------------------------------------------------------------\
 -------------------------------------------------------------------------------------------\
 ---------------------------------------------------------\
- 2 days 04:31:37.696708 \|  39364 \| repmgr   \| repmgr   \|  INSERT
+ 2 days 04:31:37.696708 |  39364 | repmgr   | repmgr   |  INSERT
 INTO repmgr.events (\
         node_id,              event,              successful,          
    details\
     )       VALUES (\$1, \$2, \$3, \$4)    RETURNING event_timestamp\
- 2 days 04:23:14.553972 \|  42093 \| bds_hub  \| postgres \|
+ 2 days 04:23:14.553972 |  42093 | bds_hub  | postgres |
 VACUUM(FULL, ANALYZE, VERBOSE)  st\
 .scan_file\
- 00:00:03.262079        \|  37681 \| repmgr   \| repmgr   \| INSERT INTO
+ 00:00:03.262079        |  37681 | repmgr   | repmgr   | INSERT INTO
 repmgr.monitoring_hist\
 ory            (primary_node_id,             standby_node_id,      
       last_monitor_time\
@@ -1163,7 +1163,7 @@ person.
 
 Once they are on the target server, you can load them into docker:
 
-ls \| while read image; do docker load -i \$image; done 
+ls | while read image; do docker load -i \$image; done 
 
 ### Download Orchestration Files
 
@@ -1255,19 +1255,19 @@ bds_hub=\# SELECT * FROM pg_stat_activity WHERE datname =
 'bds_hub' and state = 'active';
 ```
 ```
-datid \| datname \| pid \| usesysid \| usename \| application_name \|
-client_addr \| client_hostname \| client_port \| backend_start
-\| xact_start \| query_start \| state_change \| wait_event_type
-\| wait_event \| state \| ba
-ckend_xid \| backend_xmin \| query
+datid | datname | pid | usesysid | usename | application_name |
+client_addr | client_hostname | client_port | backend_start
+| xact_start | query_start | state_change | wait_event_type
+| wait_event | state | ba
+ckend_xid | backend_xmin | query
 -------+---------+------+----------+-----------+------------------+---------------+-----------------+-------------+----------------------------
 ---+-------------------------------+-------------------------------+-------------------------------+-----------------+------------+--------+---
 ----------+--------------+--------------------------------------------------------------------------------
-16441 \| bds_hub \| 8722 \| 16440 \| blackduck \| psql \|
-10.251.22.151 \| \| 35794 \| 2020-08-04 22:56:43.585215-
-04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
-\| 2020-08-04 22:56:59.671215-04 \| \| \| active \|
-\| 94647657 \| SELECT * FROM pg_stat_activity WHERE datname =
+16441 | bds_hub | 8722 | 16440 | blackduck | psql |
+10.251.22.151 | | 35794 | 2020-08-04 22:56:43.585215-
+04 | 2020-08-04 22:56:59.671193-04 | 2020-08-04 22:56:59.671193-04
+| 2020-08-04 22:56:59.671215-04 | | | active |
+| 94647657 | SELECT * FROM pg_stat_activity WHERE datname =
 'bds_hub' and state = 'active';
 ```
 #### Stop External Connections
@@ -1376,18 +1376,18 @@ that is run with the target release.
 
 ```
 v_hub script status...
-now \| inet_server_addr \| cmd \| loop \| installed_rank \| version
-\| description
-\| type \| script \| checksum \| installed_by \| insta
-lled_on \| execution_time \| success
+now | inet_server_addr | cmd | loop | installed_rank | version
+| description
+| type | script | checksum | installed_by | insta
+lled_on | execution_time | success
 -------------------------------+------------------+---------------------+------+----------------+---------------+----------------------------------------
 -----------------+------+-------------------------------------------------------------------------------------+-------------+--------------+-------------
 ---------------+----------------+---------
-2020-08-05 17:27:25.254976-04 \| 10.251.22.104 \|
-v_hub_script_status \| 1 \| 185 \| 2020.06.0.011 \| clear stale policies from central release \| SQL \|
+2020-08-05 17:27:25.254976-04 | 10.251.22.104 |
+v_hub_script_status | 1 | 185 | 2020.06.0.011 | clear stale policies from central release | SQL |
 hub_V2020_06_0_011__clear_stale_policies_from_central_release.sql.vpp
-\| -1470604476 \| blackduck \| 2020-08-05 1
-9:26:12.882272 \| 18 \| t
+| -1470604476 | blackduck | 2020-08-05 1
+9:26:12.882272 | 18 | t
 ```
 
 #### Monitor upgrade docker containers health.
@@ -1410,8 +1410,8 @@ To confirm progress, do the following:
 
 ##### Tail the container logs
 
-> for mcontainer in \$(docker ps -q) ; do docker ps \| grep \$mcontainer
-; docker logs --tail 2 \$mcontainer \|& cut -c 1-150 ; done 
+> for mcontainer in \$(docker ps -q) ; do docker ps | grep \$mcontainer
+; docker logs --tail 2 \$mcontainer |& cut -c 1-150 ; done 
 
 ##### Check PostgreSQL activity
 
@@ -1498,7 +1498,7 @@ For example, sysbench:
 
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
-fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
+fileio --file-test-mode=rndrw --threads=\$mthreads run | grep -e
 "\(read|writ\).*/" ; done
 
 ### Announce upgrade completion to stakeholders
