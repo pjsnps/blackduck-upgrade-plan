@@ -556,7 +556,7 @@ To run sysbench, run the following as root:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).\*/\" ; done
+\"\\(read\\\|writ\\).*/\" ; done
 ```
 ```
 Mon Jul 27 11:17:08 EDT 2020
@@ -671,11 +671,11 @@ date --utc ; hostname -f ; pg_test_fsync
 > Compare open_sync with different write sizes:
 > (This is designed to compare the cost of writing 16kB
 > in different write open_sync sizes.)
->          1 \* 16kB open_sync write         595.042 ops/sec
->          2 \*  8kB open_sync writes        229.368 ops/sec
->          4 \*  4kB open_sync writes        121.647 ops/sec
->          8 \*  2kB open_sync writes         83.208 ops/sec
->         16 \*  1kB open_sync writes         39.609 ops/sec
+>          1 * 16kB open_sync write         595.042 ops/sec
+>          2 *  8kB open_sync writes        229.368 ops/sec
+>          4 *  4kB open_sync writes        121.647 ops/sec
+>          8 *  2kB open_sync writes         83.208 ops/sec
+>         16 *  1kB open_sync writes         39.609 ops/sec
 > Test if fsync on non-write file descriptor is honored:
 > (If the times are similar, fsync() can sync data written
 > on a different descriptor.)
@@ -992,7 +992,7 @@ You can find the table sizes by using the \\l+ and \\dt+ psql
 commands:
 ```
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\l+\" 
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\dt+ st.\*\"
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\dt+ st.*\"
 \| less
 df -hPT
 ```
@@ -1030,9 +1030,9 @@ scan_composite_element \| 7639 MB
 scan_match_node \| 835 MB
 ```
 
-> For vacuuming, ensure available disk space is at least the 1.2 \*
+> For vacuuming, ensure available disk space is at least the 1.2 *
 > the size of the largest database table. If you are planning on
-> vacuuming tables in parallel, you should have 1.5\* the total database
+> vacuuming tables in parallel, you should have 1.5* the total database
 > size in available disk space.
 >
 > Refer to the "Installing Black Duck using Docker Swarm" document,
@@ -1248,10 +1248,10 @@ need to unwind and rollback during the Black Duck shutdown.
 >
 > You can verify this by doing the following psql command:
 ```
-psql -h hub-stg-db -U blackduck -p 5432 -d bds_hub -c "SELECT \* FROM
+psql -h hub-stg-db -U blackduck -p 5432 -d bds_hub -c "SELECT * FROM
 pg_stat_activity WHERE datname = \'bds_hub\' and state =
 \'active\';"
-bds_hub=\# SELECT \* FROM pg_stat_activity WHERE datname =
+bds_hub=\# SELECT * FROM pg_stat_activity WHERE datname =
 \'bds_hub\' and state = \'active\';
 ```
 ```
@@ -1267,7 +1267,7 @@ ckend_xid \| backend_xmin \| query
 10.251.22.151 \| \| 35794 \| 2020-08-04 22:56:43.585215-
 04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
 \| 2020-08-04 22:56:59.671215-04 \| \| \| active \|
-\| 94647657 \| SELECT \* FROM pg_stat_activity WHERE datname =
+\| 94647657 \| SELECT * FROM pg_stat_activity WHERE datname =
 \'bds_hub\' and state = \'active\';
 ```
 #### Stop External Connections
@@ -1499,7 +1499,7 @@ For example, sysbench:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).\*/\" ; done
+\"\\(read\\\|writ\\).*/\" ; done
 
 ### Announce upgrade completion to stakeholders
 
