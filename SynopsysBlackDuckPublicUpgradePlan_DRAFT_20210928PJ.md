@@ -395,7 +395,7 @@ You can create a SalesForce case by going to
 username and password. If you don't have one, request one from your
 sales and/or support contact.
 
-Select Support -\> Create a Support case.
+Select Support -> Create a Support case.
 
 The case should be set to *P3 -- Medium*. Should any issues be
 encountered during the upgrade, the Customer will update the priority of
@@ -452,7 +452,7 @@ to the upgrade:
 
 ### System_check.sh
 
-(.../hub/hub_docker/hub_\<version\>/docker-swarm/bin/system_check.sh)
+(.../hub/hub_docker/hub_<version>/docker-swarm/bin/system_check.sh)
 
 Run on Black Duck Server and Database Server. Check to see if there
 are any issues that need to be dealt with prior to the upgrades
@@ -494,10 +494,10 @@ filename change?
 
 bash
 
-export PGPASSWORD='\<PSQL Database Password\>'
+export PGPASSWORD='<PSQL Database Password>'
 
-./SynopsysMonitorDbActivity_202007.bash \>
-SynopsysMonitorDbActivity_202007.out 2\>&1
+./SynopsysMonitorDbActivity_202007.bash >
+SynopsysMonitorDbActivity_202007.out 2>&1
 
 **Resolving Performance and Networking Issues**
 -----------------------------------------------
@@ -611,7 +611,7 @@ To run pgbench, run the following as yourself:
 
 Example:
 ```
-date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432 -d bds_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2\> /dev/null
+date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432 -d bds_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2> /dev/null
 ```    
 
 Example output:
@@ -871,7 +871,7 @@ They don't need to be kept longer than 10 days.
 As such, a psql command should be run periodically to clean up the
 Audit events:
 
-delete from st.audit_event where event_timestamp \< now() - interval
+delete from st.audit_event where event_timestamp < now() - interval
 '10 days';
 
 **Database Cleanup**
@@ -954,8 +954,8 @@ available. So, to "upgrade", the old Docker installation would have to
 be uninstalled and the new Docker installation would have to be
 installed.
 
-\<Need to test in order to verify that images and cert secrets don't
-have to be reinstalled\>
+<Need to test in order to verify that images and cert secrets don't
+have to be reinstalled>
 
 #### PostgreSQL Upgrades
 
@@ -1014,7 +1014,7 @@ WHERE
         'pg_catalog',
         'information_schema'
     )
-AND C .relkind \<\> 'i'
+AND C .relkind <> 'i'
 AND nspname !\~ '\^pg_toast'
 ORDER BY
     pg_total_relation_size (C .oid) DESC;
@@ -1055,13 +1055,13 @@ scan_match_node | 835 MB
 Make sure that any monitoring software (e.g. Zenoss) has been
 terminated.
 
-\<Fill in Steps\>
+<Fill in Steps>
 
 Monitor the vacuum to see if it is still going
 
 select current_timestamp - query_start as
 runtime,pid,datname,usename,query from pg_stat_activity where query !=
-'\<IDLE\>' and query not in ('COMMIT','ROLLBACK')order by 1
+'<IDLE>' and query not in ('COMMIT','ROLLBACK')order by 1
 desc;
 
 Look for "VACUUM" in the results
@@ -1146,8 +1146,8 @@ storage. The new images will take up more space in docker.
 
 ### Check Storage
 
-\<blah blah check storage. Add in comment on pruning containers,
-volumes, and system/images?\> /opt/docker/..... copy and paste here.
+<blah blah check storage. Add in comment on pruning containers,
+volumes, and system/images?> /opt/docker/..... copy and paste here.
 ???
 
 **'docker volume prune'**
@@ -1336,7 +1336,7 @@ List the Docker services if you don't know the name:
 Stop the Docker services associated with the existing Black Duck
 instance
 
-> docker stack rm \<hub stack name\>
+> docker stack rm <hub stack name>
 
 In order to watch the Docker Services until they all shutdown, do the
 following:
@@ -1417,9 +1417,9 @@ To confirm progress, do the following:
 
 **bash**
 
-export PGPASSWORD='\<PSQL Database Password\>'
+export PGPASSWORD='<PSQL Database Password>'
 
-> ./SynopsysMonitorDbActivity_202007.bash \> SynopsysMonitorDbActivity_202007.out 2\>&1
+> ./SynopsysMonitorDbActivity_202007.bash > SynopsysMonitorDbActivity_202007.out 2>&1
 
 #### Start the official release of Black Duck
 
@@ -1433,14 +1433,14 @@ back down and start the official release:
 Local Database:
 
 > docker stack *deploy* -c docker-compose.yml -c
-> docker-compose.local-overrides.yml \<stack name\>
+> docker-compose.local-overrides.yml <stack name>
 
 e.g.:
 > docker stack *deploy* -c docker-compose.yml -c docker-compose.local-overrides.yml hub
 
 External Database:
 
-> docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml \<stack name\>
+> docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml <stack name>
 
 e.g. 
 > docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml hub
@@ -1522,7 +1522,7 @@ We need to talk about these.???
         verifying no other volumes are in use. 
 
     2.  Alternatively, 'docker volume ls' to list and docker volume rm
-        \<volume name\> each related volume. 
+        <volume name> each related volume. 
 
 3.  Using the restore commands to re-establish the 2020.4.1 backup
     taken during upgrade steps
@@ -1554,4 +1554,4 @@ We need to talk about these.???
         screen multiplexer like screen or tmux, or as a detached
         background process.
 
-> ./bin/hub_db_migrate.sh \<path to dump file\>
+> ./bin/hub_db_migrate.sh <path to dump file>
