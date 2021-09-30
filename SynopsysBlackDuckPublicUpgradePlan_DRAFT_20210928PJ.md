@@ -556,7 +556,7 @@ To run sysbench, run the following as root:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).*/\" ; done
+"\\(read\\\|writ\\).*/" ; done
 ```
 ```
 Mon Jul 27 11:17:08 EDT 2020
@@ -746,8 +746,8 @@ You must make sure this file is larger than the amount of RAM you have
 on your system to avoid the whole file being cached in memory.
 
 ```
-time sh -c \"dd if=/dev/zero of=\[PATH\] bs=\[BLOCK_SIZE\]k
-count=\[LOOPS\] && sync\"
+time sh -c "dd if=/dev/zero of=\[PATH\] bs=\[BLOCK_SIZE\]k
+count=\[LOOPS\] && sync"
 ```
 
 A break down of the command is as follows:
@@ -769,8 +769,8 @@ A break down of the command is as follows:
 Example:
 
 ```
-time sh -c \"dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k
-count=2000000 && sync\"
+time sh -c "dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k
+count=2000000 && sync"
 2000000+0 records in
 2000000+0 records out
 8192000000 bytes transferred in 159.062003 secs (51501929 bytes/sec)
@@ -889,7 +889,7 @@ objects.
 #### vacuumlo
 
 vacuumlo is a simple utility program that will remove any
-\"orphaned\" large objects from a PostgreSQL database. An orphaned
+"orphaned" large objects from a PostgreSQL database. An orphaned
 large object (LO) is considered to be any LO whose OID does not appear
 in any oid or lo data column of the database.
 
@@ -991,8 +991,8 @@ buffer).
 You can find the table sizes by using the \\l+ and \\dt+ psql
 commands:
 ```
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\l+\" 
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\dt+ st.*\"
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\\l+" 
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\\dt+ st.*"
 \| less
 df -hPT
 ```
@@ -1002,10 +1002,10 @@ might to help to save the script in a file and run it using the -f
 option.
 ```
 SELECT
-    relname AS \"relation\",
+    relname AS "relation",
     pg_size_pretty (
         pg_total_relation_size (C .oid)
-    ) AS \"total_size\"
+    ) AS "total_size"
 FROM
     pg_class C
 LEFT JOIN pg_namespace N ON (N.oid = C .relnamespace)
@@ -1499,7 +1499,7 @@ For example, sysbench:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-\"\\(read\\\|writ\\).*/\" ; done
+"\\(read\\\|writ\\).*/" ; done
 
 ### Announce upgrade completion to stakeholders
 
