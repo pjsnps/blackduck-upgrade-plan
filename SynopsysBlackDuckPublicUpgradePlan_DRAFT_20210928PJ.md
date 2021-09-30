@@ -300,9 +300,9 @@ This section provides a brief overview of the upgrade plan.
 
         20.  Optional, upgrade PostgreSQL
 
-            3.  Bring down docker stack
+             1.  Bring down docker stack
 
-            4.  Upgrade PostgeSQL
+             2.  Upgrade PostgeSQL
 
         21.  Deploy Black Duck with 2020.6.1 Production deployment .yml
             files
