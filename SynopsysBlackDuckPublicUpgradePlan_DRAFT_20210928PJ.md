@@ -163,7 +163,7 @@ This section provides a brief overview of the upgrade plan.
         12.  Bring down docker stack
 
         13.  If not already done, backup external database with
-            ~~2020.4.1~~ prior-version hub_create_data_dump.sh
+             pre-upgrade-version of hub_create_data_dump.sh
 
         14.  Optional: upgrade OS, kernel 
 
@@ -173,7 +173,7 @@ This section provides a brief overview of the upgrade plan.
 
         17.  Deploy docker migration stack
 
-        18.  Restore database with ~~2020.4.1~~ prior-version
+        18.  Restore database with pre-upgrade-version of
             hub_db_migrate.sh
 
         19.  Vacuum audit_event table
@@ -184,7 +184,7 @@ This section provides a brief overview of the upgrade plan.
 
              2.  Upgrade PostgeSQL
 
-        21.  Deploy Black Duck with 2020.6.1 Production deployment .yml
+        21.  Deploy Black Duck with target version of Production deployment .yml
             files
 
     8.  Post-Upgrade Steps
@@ -817,7 +817,7 @@ to be done in each release.
 
 ### bdio Database
 
-The BDIO Database was removed as part of the 2020.2.0 upgrade (???).
+The BDIO Database was removed as part of the 2020.2.0 upgrade (TODO: confirm).
 One of the Database Migration scripts removed that database. Should your
 database be greater than 1 TB, there may be timeout issues when running
 that script. Make sure you either test that migration with a copy of the
@@ -839,7 +839,7 @@ Database Migration script to remove that database should be quick.
 
 ### bds_hub, postgresql, template0, and template1 Database
 
-These databases are still valid as of the 2020.6.1 release.
+These databases are still valid as of the 2020.6.1 release.  (TODO:  update/confirm)
 
 **Trimming the Notification and audit_event logs**
 ---------------------------------------------------
@@ -960,9 +960,9 @@ have to be reinstalled>
 #### PostgreSQL Upgrades
 
 Work with your Database Administrators to upgrade your Postgresql
-instance. 9.6.x is currently supported in both the container and
+instance. 9.6.x was previously supported in both the container and
 external databases. 11.7.x is supported in the external databases as of
-Black Duck 2020.6. But, since 11.7.x is not supported until Black Duck
+Black Duck 2020.6. But, since 11.7.x was not supported until Black Duck
 2020.6.x, you need to upgrade Black Duck to at least 2020.6.0 before
 upgrading Postgresql.
 
@@ -975,8 +975,8 @@ scans and project-versions that are created and deleted, Synopsys
 recommends periodic Full Vacuums. These will clean up the unused space
 that autovacuums will not.
 
-You should also do a Full Vacuum prior to an upgrade if you haven't
-done one recently.
+You should also do a Full Vacuum prior to an upgrade if you have not done a full vacuum 
+recently.
 
 NOTE: It takes about 24 hours to Auto Vacuum 1 TB of space.
 
@@ -993,7 +993,6 @@ commands:
 ```
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\l+" 
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\dt+ st.*"
-| less
 df -hPT
 ```
 
@@ -1030,25 +1029,25 @@ scan_composite_element | 7639 MB
 scan_match_node | 835 MB
 ```
 
-> For vacuuming, ensure available disk space is at least the 1.2 *
-> the size of the largest database table. If you are planning on
-> vacuuming tables in parallel, you should have 1.5* the total database
-> size in available disk space.
->
-> Refer to the "Installing Black Duck using Docker Swarm" document,
-> Chapter 6: "Upgrading Black Duck", "Upgrading from an existing Docker
-> architecture" section.
->
-> The data migration will temporarily require an additional free disk
-> space at approximately 2.5 times your original database volume. Add in
-> stuff on pg_dump being to a different partition. Pg 61 of the install
-> guide 6.1
->
-> pg 61 install guide: The data migration will temporarily require an
-> additional free disk space at approximately 2.5 times youroriginal
-> database volume size to hold the database dump and the new database
-> volume. As a rule-of-thumb, if the volume upon which your database
-> resides is at least 60% free, there should be enough diskspace. ????
+For vacuuming, ensure available disk space is at least the 1.2 *
+the size of the largest database table. If you are planning on
+vacuuming tables in parallel, you should have 1.5* the total database
+size in available disk space.
+
+Refer to the "Installing Black Duck using Docker Swarm" document,
+ Chapter 6: "Upgrading Black Duck", "Upgrading from an existing Docker
+ architecture" section.
+
+ The data migration will temporarily require an additional free disk
+ space at approximately 2.5 times your original database volume. Add in
+ stuff on pg_dump being to a different partition. Pg 61 of the install
+ guide 6.1
+
+ pg 61 install guide: The data migration will temporarily require an
+ additional free disk space at approximately 2.5 times youroriginal
+ database volume size to hold the database dump and the new database
+ volume. As a rule-of-thumb, if the volume upon which your database
+ resides is at least 60% free, there should be enough diskspace. ????
 
 #### Perform Full Vacuum
 
@@ -1182,7 +1181,7 @@ This may take a while so be careful with the updates to these files.
 If Synopsys Support is providing updated YML files, then they will be
 dropped on the Synopsys sharefile or in the Support case
 
-### blackduck_migrator-2020.6.1.yml
+### blackduck_migrator yaml file 
 
 This is similar to docker-compose.yml and
 docker-compose.externaldb.yml. It starts up the required services.
@@ -1223,7 +1222,7 @@ schedules.
 
 The upgrades normally take enough time to bring down Black Duck,
 restart Black Duck, and run through any Database Migration scripts.
-Upgrading from 2020.4.1 to 2020.6.1 is expecting to take under 2
+Upgrading from __________ to ___________ is expecting to take under __________
 hours.
 
 Remember that you should be doing all of these steps on the
@@ -1305,7 +1304,7 @@ control.
 -   Customer to balance timing of Production backup with the reality
     that subsequent scans will not be in the backup. 
 
--   If not already done, backup external database with 2020.4.1
+-   If not already done, backup external database with pre-upgrade-version of  
     hub_create_data_dump.sh
 
 ### Start the actual upgrade
@@ -1363,8 +1362,7 @@ start the Black Duck Migration YML file:
 
 You can start the Database Migration by typing
 
-docker stack deploy -c blackduck_migrator-2020.6.1.yml -c
-docker-compose.local-overrides.migrator.yml hub
+docker stack deploy -c blackduck_migrator-<target-upgrade-version>.yml -c docker-compose.local-overrides.migrator.yml hub
 
 Run the script (SynopsysMonitorDbActivity_202007.bash) to see when
 the Database Migrations are done. In the output (see below), look at the
@@ -1399,7 +1397,7 @@ You can monitor the services as follows:
 
 > watch docker ps
 
-____Restore database with 2020.4.1 hub_db_migrate.sh ??? 
+Restore database with pre-upgrade version of hub_db_migrate.sh (TODO: confirm)
 
 #### Monitor the Black Duck database during Database Migration
 
@@ -1510,24 +1508,23 @@ with the appropriate status to provide an "all clear".
 **Contingency: Fallback Steps**
 ===============================
 
-We need to talk about these.???
+We need to talk about these.  (TODO:  needs work)
 
 1.  If at any point in the migrations, an unrecoverable error occurs,
-    the plan is to fallback to version the previous version (for this
-    example, 2020.4.1). 
+    the plan is to fallback to version the previous version.
 
-2.  In order to fall back to 2020.4.1, first remove the volumes.
+2.  In order to fall back to the pre-upgrade version, first remove the volumes.
 
-    1.  Start up 2020.4.1 and THEN Run 'docker volume prune' after
+    1.  Start up pre-upgrade version, and THEN Run 'docker volume prune' after
         verifying no other volumes are in use. 
 
     2.  Alternatively, 'docker volume ls' to list and docker volume rm
         <volume name> each related volume. 
 
-3.  Using the restore commands to re-establish the 2020.4.1 backup
+3.  Using the restore commands to re-establish the pre-upgrade version of the backup
     taken during upgrade steps
 
-    3.  Expect about ____ hours to fallback to 2020.4.1.
+    3.  Expect about _________ hours to fallback to the pre-upgrade version.
 
 **Restore steps, during Fallback ????**
 ---------------------------------------
