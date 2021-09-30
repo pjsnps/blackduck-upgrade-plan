@@ -41,13 +41,13 @@ This document is provided as-is, without warranty or liability.
 
 [**Sage**](#sage)
 
-[**System\_check.sh**](#system_check.sh)
+[**System_check.sh**](#system_check.sh)
 
 [**Sar**](#sar)
 
 [**Zenoss**](#zenoss)
 
-[**SynopsysGatherServerSpecs\_202007.bash**](#synopsysgatherserverspecs_202007.bash)
+[**SynopsysGatherServerSpecs_202007.bash**](#synopsysgatherserverspecs_202007.bash)
 
 [**Resolving Performance Issues**](#resolving-performance-issues)
 
@@ -55,7 +55,7 @@ This document is provided as-is, without warranty or liability.
 
 [**Pgbench**](#pgbench)
 
-[**pg\_test\_fsync:**](#pg_test_fsync)
+[**pg_test_fsync:**](#pg_test_fsync)
 
 [**bonnie++:**](#bonnie)
 
@@ -67,15 +67,15 @@ This document is provided as-is, without warranty or liability.
 
 [**bdio Database**](#bdio-database)
 
-[**bds\_hub\_report Database**](#bds_hub_report-database)
+[**bds_hub_report Database**](#bds_hub_report-database)
 
-[**bds\_hub, postgresql, template0, and template1 Database**](#bds_hub-postgresql-template0-and-template1-database)
+[**bds_hub, postgresql, template0, and template1 Database**](#bds_hub-postgresql-template0-and-template1-database)
 
-[**Trimming the Notification and audit\_event logs**](#trimming-the-notification-and-audit_event-logs)
+[**Trimming the Notification and audit_event logs**](#trimming-the-notification-and-audit_event-logs)
 
 [**Notification Logs**](#notification-logs)
 
-[**Audit\_Events**](#audit_events)
+[**Audit_Events**](#audit_events)
 
 [**Database Cleanup**](#database-cleanup)
 
@@ -103,7 +103,7 @@ This document is provided as-is, without warranty or liability.
 
 [**Download Orchestration Files**](#download-orchestration-files)
 
-[**blackduck\_migrator-2020.6.1.yml**](#blackduck_migrator-2020.6.1.yml)
+[**blackduck_migrator-2020.6.1.yml**](#blackduck_migrator-2020.6.1.yml)
 
 [**Schedule upgrade**](#schedule-upgrade)
 
@@ -213,7 +213,7 @@ This document is provided as-is, without warranty or liability.
         memory, cpu, and replica settings were misconfigured and had to
         be fixed under a P1 Case. 
 
-3.  Customer Production bds\_hub database was recently 2.3 TB.
+3.  Customer Production bds_hub database was recently 2.3 TB.
 
 4.  The upgrade is planned to be performed using a simplified Upgrade
     Docker stack implemented by deploying new Synopsys-supplied
@@ -222,102 +222,102 @@ This document is provided as-is, without warranty or liability.
 
 5.  Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
 
-6.  The upgrade is expected to take about \_\_\_\_\_ hours. 
+6.  The upgrade is expected to take about _____ hours. 
 
-    - If Fallback is required, an additional \_\_\_\_ hours would be
+    - If Fallback is required, an additional ____ hours would be
         required.
 
 **Overview**
 ============
 
-**This section provides a brief overview of the upgrade plan.**
+This section provides a brief overview of the upgrade plan.
 
 1.  **Planning**
 
-    1.  **Identify upgrade and production requirements**
+    1.  Identify upgrade and production requirements
 
-    2.  **Write post-upgrade validation test plan**
+    2.  Write post-upgrade validation test plan
 
-    3.  **Inventory database connections**
+    3.  Inventory database connections
 
-    4.  **Schedule Staging upgrade**
+    4.  Schedule Staging upgrade
 
-    5.  **Open Synopsys SalesForce Case**
+    5.  Open Synopsys SalesForce Case
 
 2.  **First, In Staging**
 
-    6.  **Prepare Environment**
+    6.  **Prepare Environment
 
-        1.  **Test and resolve performance issues**
+        1.  Test and resolve performance issues
 
-            1.  **Implement guidance from Best Practices, Sage,
-                system\_check.sh, sar, Zenoss **
+            1.  Implement guidance from Best Practices, Sage,
+                system_check.sh, sar, Zenoss 
 
-            2.  **Customer IT team to test and resolve issues**
+            2.  Customer IT team to test and resolve issues
 
-                1.  **Consider: dd, pgbench, sysbench, bonnie++**
+                1.  Consider: dd, pgbench, sysbench, bonnie++
 
-        2.  **Remove unused data; delete, truncate/drop, cull, configure
-            settings**
+        2.  Remove unused data; delete, truncate/drop, cull, configure
+            settings
 
-        3.  **Vacuum analyze full bds\_hub**
+        3.  Vacuum analyze full bds_hub
 
-        4.  **Run PostgreSQL tuning utility**
+        4.  Run PostgreSQL tuning utility
 
-        5.  **Backup database**
+        5.  Backup database
 
-        6.  **Create Production-like Staging environment**
+        6.  Create Production-like Staging environment
 
-        7.  **Ensure disk space for db vacuum, migration**
+        7.  Ensure disk space for db vacuum, migration
 
-        8.  **Check memory**
+        8.  Check memory
 
-        9.  **Download upgrade-related files**
+        9.  Download upgrade-related files
 
-        10. **Schedule Staging upgrade**
+        10.  Schedule Staging upgrade
 
-    7.  **Perform Upgrade**
+    7.  Perform Upgrade
 
-        11. **Stop scanning and external connections**
+        11.  Stop scanning and external connections
 
-        12. **Bring down docker stack**
+        12.  Bring down docker stack
 
-        13. **If not already done, backup external database with
-            ~~2020.4.1~~ prior-version hub\_create\_data\_dump.sh**
+        13.  If not already done, backup external database with
+            ~~2020.4.1~~ prior-version hub_create_data_dump.sh
 
-        14. **Optional: upgrade OS, kernel **
+        14.  Optional: upgrade OS, kernel 
 
-        15. **Optional: upgrade Docker with yum**
+        15.  Optional: upgrade Docker with yum
 
-        16. **Optional: satisfy other requirements, objectives. **
+        16.  Optional: satisfy other requirements, objectives. 
 
-        17. **Deploy docker migration stack**
+        17.  Deploy docker migration stack
 
-        18. **Restore database with ~~2020.4.1~~ prior-version
-            hub\_db\_migrate.sh**
+        18.  Restore database with ~~2020.4.1~~ prior-version
+            hub_db_migrate.sh
 
-        19. **Vacuum audit\_event table**
+        19.  Vacuum audit_event table
 
-        20. **Optional, upgrade PostgreSQL**
+        20.  Optional, upgrade PostgreSQL
 
-            3.  **Bring down docker stack**
+            3.  Bring down docker stack
 
-            4.  **Upgrade PostgeSQL**
+            4.  Upgrade PostgeSQL
 
-        21. **Deploy Black Duck with 2020.6.1 Production deployment .yml
-            files**
+        21.  Deploy Black Duck with 2020.6.1 Production deployment .yml
+            files
 
-    8.  **Post-Upgrade Steps**
+    8.  Post-Upgrade Steps
 
-        22. **Run upgrade-validation tests**
+        22.  Run upgrade-validation tests
 
-        23. **Re-run benchmark tests**
+        23.  Re-run benchmark tests
 
-        24. **Announce upgrade completion to stakeholders**
+        24.  Announce upgrade completion to stakeholders
 
-3.  **Then, In Production**
+3.  Then, In Production
 
-    9.  **Schedule and repeat "In Staging" steps as above**
+    9.  Schedule and repeat "In Staging" steps as above
 
 **Upgrade planning**
 ====================
