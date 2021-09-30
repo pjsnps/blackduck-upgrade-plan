@@ -698,18 +698,18 @@ can be performed per second.
 ```
 > Fri Jul 24 20:53:01 UTC 2020
 > sup-pjalajas-hub.dc1.lan
-> Writing a byte at a time\...done
-> Writing intelligently\...done
-> Rewriting\...done
-> Reading a byte at a time\...done
-> Reading intelligently\...done
-> start 'em\...done\...done\...done\...done\...done\...
-> Create files in sequential order\...done.
-> Stat files in sequential order\...done.
-> Delete files in sequential order\...done.
-> Create files in random order\...done.
-> Stat files in random order\...done.
-> Delete files in random order\...done.
+> Writing a byte at a time...done
+> Writing intelligently...done
+> Rewriting...done
+> Reading a byte at a time...done
+> Reading intelligently...done
+> start 'em...done...done...done...done...done...
+> Create files in sequential order...done.
+> Stat files in sequential order...done.
+> Delete files in sequential order...done.
+> Create files in random order...done.
+> Stat files in random order...done.
+> Delete files in random order...done.
 > Version  1.97       ------Sequential Output------
 > --Sequential Input- --Random-
 > Concurrency   1     -Per Chr- --Block-- -Rewrite- -Per Chr-
@@ -1375,7 +1375,7 @@ Support can tell you what the latest Database Migration script version
 that is run with the target release.
 
 ```
-v_hub script status\...
+v_hub script status...
 now \| inet_server_addr \| cmd \| loop \| installed_rank \| version
 \| description
 \| type \| script \| checksum \| installed_by \| insta
