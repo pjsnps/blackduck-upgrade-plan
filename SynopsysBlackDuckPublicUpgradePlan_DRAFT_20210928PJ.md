@@ -450,9 +450,9 @@ to the upgrade:
 
 -   Project Versions with No Scans
 
-### System\_check.sh
+### System_check.sh
 
-(.../hub/hub\_docker/hub\_\<version\>/docker-swarm/bin/system\_check.sh)
+(.../hub/hub_docker/hub_\<version\>/docker-swarm/bin/system_check.sh)
 
 Run on Black Duck Server and Database Server. Check to see if there
 are any issues that need to be dealt with prior to the upgrades
@@ -479,7 +479,7 @@ month.
 
 Not sure what this gives us.
 
-### SynopsysGatherServerSpecs\_202007.bash
+### SynopsysGatherServerSpecs_202007.bash
 
 TODO: Pete to test and update this script if needed.This captures a
 lot of system data including top, cpu, mem, application versions, etc.
@@ -496,15 +496,15 @@ bash
 
 export PGPASSWORD='\<PSQL Database Password\>'
 
-./SynopsysMonitorDbActivity\_202007.bash \>
-SynopsysMonitorDbActivity\_202007.out 2\>&1
+./SynopsysMonitorDbActivity_202007.bash \>
+SynopsysMonitorDbActivity_202007.out 2\>&1
 
 **Resolving Performance and Networking Issues**
 -----------------------------------------------
 TODO:  add networking, proxy, firewall and other related improvements here
 
 Using the output of the sar/ksar command and the
-SynopsysGatherServerSpecs\_202007.bash script (and possibly the Zenoss
+SynopsysGatherServerSpecs_202007.bash script (and possibly the Zenoss
 output), determine if you have any Performance issues.
 
 This could potentially include memory, network performance between
@@ -594,8 +594,8 @@ sys     0m13.697s
 pgbench is a simple program for running benchmark tests on
 PostgreSQL.
 
-Caution: pgbench -i creates four tables pgbench\_accounts,
-pgbench\_branches, pgbench\_history, and pgbench\_tellers, destroying
+Caution: pgbench -i creates four tables pgbench_accounts,
+pgbench_branches, pgbench_history, and pgbench_tellers, destroying
 any existing tables of these names. Be very careful to use another
 database if you have tables having these names!
 
@@ -611,7 +611,7 @@ To run pgbench, run the following as yourself:
 
 Example:
 ```
-date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432 -d bds\_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2\> /dev/null
+date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432 -d bds_hub -s 10000 -c 200 -j 100 -M prepared -t 1000 2\> /dev/null
 ```    
 
 Example output:
@@ -619,7 +619,7 @@ Example output:
 > Fri Jul 24 13:50:59 EDT 2020
 > sup-pjalajas-hub.dc1.lan
 > pghost: sup-pjalajas-2 pgport: 55436 nclients: 200 nxacts: 1000
-> dbName: bds\_hub
+> dbName: bds_hub
 > transaction type: TPC-B (sort of)
 > scaling factor: 1
 > query mode: prepared
@@ -634,48 +634,48 @@ Example output:
 > user 0m23.666s
 > sys 0m49.548s
 ```
-### pg\_test\_fsync
+### pg_test_fsync
 
-pg\_test\_fsync is intended to give you a reasonable idea of what the
+pg_test_fsync is intended to give you a reasonable idea of what the
 fastest
-[wal\_sync\_method](https://www.postgresql.org/docs/current/runtime-config-wal.html#GUC-WAL-SYNC-METHOD)
+[wal_sync_method](https://www.postgresql.org/docs/current/runtime-config-wal.html#GUC-WAL-SYNC-METHOD)
 is on your specific system, as well as supplying diagnostic information
 in the event of an identified I/O problem.
 
 ```
-date \--utc ; hostname -f ; pg\_test\_fsync
+date \--utc ; hostname -f ; pg_test_fsync
 ```
 
 ```
 > Fri Jul 24 19:56:41 UTC 2020
 > sup-pjalajas-hub.dc1.lan
 > 2 seconds per test
-> O\_DIRECT supported on this platform for open\_datasync and
-> open\_sync.
+> O_DIRECT supported on this platform for open_datasync and
+> open_sync.
 > Compare file sync methods using one 8kB write:
-> (in wal\_sync\_method preference order, except fdatasync
+> (in wal_sync_method preference order, except fdatasync
 > is Linux\'s default)
->         open\_datasync                    1828.665 ops/sec
+>         open_datasync                    1828.665 ops/sec
 >         fdatasync                        1839.337 ops/sec
 >         fsync                             538.328 ops/sec
->         fsync\_writethrough                            n/a
->         open\_sync                         442.936 ops/sec
+>         fsync_writethrough                            n/a
+>         open_sync                         442.936 ops/sec
 > Compare file sync methods using two 8kB writes:
-> (in wal\_sync\_method preference order, except fdatasync
+> (in wal_sync_method preference order, except fdatasync
 > is Linux\'s default)
->         open\_datasync                     945.146 ops/sec
+>         open_datasync                     945.146 ops/sec
 >         fdatasync                        1461.665 ops/sec
 >         fsync                             531.997 ops/sec
->         fsync\_writethrough                            n/a
->         open\_sync                         330.452 ops/sec
-> Compare open\_sync with different write sizes:
+>         fsync_writethrough                            n/a
+>         open_sync                         330.452 ops/sec
+> Compare open_sync with different write sizes:
 > (This is designed to compare the cost of writing 16kB
-> in different write open\_sync sizes.)
->          1 \* 16kB open\_sync write         595.042 ops/sec
->          2 \*  8kB open\_sync writes        229.368 ops/sec
->          4 \*  4kB open\_sync writes        121.647 ops/sec
->          8 \*  2kB open\_sync writes         83.208 ops/sec
->         16 \*  1kB open\_sync writes         39.609 ops/sec
+> in different write open_sync sizes.)
+>          1 \* 16kB open_sync write         595.042 ops/sec
+>          2 \*  8kB open_sync writes        229.368 ops/sec
+>          4 \*  4kB open_sync writes        121.647 ops/sec
+>          8 \*  2kB open_sync writes         83.208 ops/sec
+>         16 \*  1kB open_sync writes         39.609 ops/sec
 > Test if fsync on non-write file descriptor is honored:
 > (If the times are similar, fsync() can sync data written
 > on a different descriptor.)
@@ -746,7 +746,7 @@ You must make sure this file is larger than the amount of RAM you have
 on your system to avoid the whole file being cached in memory.
 
 ```
-time sh -c \"dd if=/dev/zero of=\[PATH\] bs=\[BLOCK\_SIZE\]k
+time sh -c \"dd if=/dev/zero of=\[PATH\] bs=\[BLOCK_SIZE\]k
 count=\[LOOPS\] && sync\"
 ```
 
@@ -824,24 +824,24 @@ that script. Make sure you either test that migration with a copy of the
 production database or make sure Synopsys Support is present during the
 upgrade or both.
 
-### bds\_hub\_report Database
+### bds_hub_report Database
 
 In Black Duck version 2019.10.0, to make it easier for users to
 quickly create, use, back up, and restore the reporting database, the
-tables from the separate reporting database (bds\_hub\_report) have been
+tables from the separate reporting database (bds_hub_report) have been
 moved to the *reporting* schema, with periodically updated materialized
-views, in the Black Duck database, bds\_hub.
+views, in the Black Duck database, bds_hub.
 
-So, as part of the 2020.6.0 release, the bds\_hub\_report database was
+So, as part of the 2020.6.0 release, the bds_hub_report database was
 removed as part of the Database Migration scripts. If the Customer has
-not generated any reports using the bds\_hub\_report database, the
+not generated any reports using the bds_hub_report database, the
 Database Migration script to remove that database should be quick.
 
-### bds\_hub, postgresql, template0, and template1 Database
+### bds_hub, postgresql, template0, and template1 Database
 
 These databases are still valid as of the 2020.6.1 release.
 
-**Trimming the Notification and audit\_event logs**
+**Trimming the Notification and audit_event logs**
 ---------------------------------------------------
 
 Depending on the activity on the Black Duck server, the number of
@@ -859,9 +859,9 @@ In the blackduck-config.env file, the Customer can indicate how long
 the notifications logs should be retained, by default that duration is
 30 days:
 
-BLACKDUCK\_HUB\_NOTIFICATIONS\_DELETE\_DAYS=30
+BLACKDUCK_HUB_NOTIFICATIONS_DELETE_DAYS=30
 
-### Audit\_Events
+### Audit_Events
 
 There is no automatic cleanup of Audit Events as of 2020.6.1. These
 events are required for a few days but other logging has now been added
@@ -871,7 +871,7 @@ They don't need to be kept longer than 10 days.
 As such, a psql command should be run periodically to clean up the
 Audit events:
 
-delete from st.audit\_event where event\_timestamp \< now() - interval
+delete from st.audit_event where event_timestamp \< now() - interval
 \'10 days\';
 
 **Database Cleanup**
@@ -895,7 +895,7 @@ in any oid or lo data column of the database.
 
 Example:
 
-Vacuumlo bds\_hub (????)
+Vacuumlo bds_hub (????)
 
 ### Run PostgreSQL tuning utility
 
@@ -991,8 +991,8 @@ buffer).
 You can find the table sizes by using the \\l+ and \\dt+ psql
 commands:
 ```
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\l+\" 
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds\_hub -c \"\\dt+ st.\*\"
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\l+\" 
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c \"\\dt+ st.\*\"
 \| less
 df -hPT
 ```
@@ -1003,31 +1003,31 @@ option.
 ```
 SELECT
     relname AS \"relation\",
-    pg\_size\_pretty (
-        pg\_total\_relation\_size (C .oid)
-    ) AS \"total\_size\"
+    pg_size_pretty (
+        pg_total_relation_size (C .oid)
+    ) AS \"total_size\"
 FROM
-    pg\_class C
-LEFT JOIN pg\_namespace N ON (N.oid = C .relnamespace)
+    pg_class C
+LEFT JOIN pg_namespace N ON (N.oid = C .relnamespace)
 WHERE
     nspname NOT IN (
-        \'pg\_catalog\',
-        \'information\_schema\'
+        \'pg_catalog\',
+        \'information_schema\'
     )
 AND C .relkind \<\> \'i\'
-AND nspname !\~ \'\^pg\_toast\'
+AND nspname !\~ \'\^pg_toast\'
 ORDER BY
-    pg\_total\_relation\_size (C .oid) DESC;
+    pg_total_relation_size (C .oid) DESC;
 ```
 
 The results look like:
 ```
-relation \| total\_size
+relation \| total_size
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--
-scan\_file \| 59 GB
-scan\_composite\_leaf \| 40 GB
-scan\_composite\_element \| 7639 MB
-scan\_match\_node \| 835 MB
+scan_file \| 59 GB
+scan_composite_leaf \| 40 GB
+scan_composite_element \| 7639 MB
+scan_match_node \| 835 MB
 ```
 
 > For vacuuming, ensure available disk space is at least the 1.2 \*
@@ -1041,7 +1041,7 @@ scan\_match\_node \| 835 MB
 >
 > The data migration will temporarily require an additional free disk
 > space at approximately 2.5 times your original database volume. Add in
-> stuff on pg\_dump being to a different partition. Pg 61 of the install
+> stuff on pg_dump being to a different partition. Pg 61 of the install
 > guide 6.1
 >
 > pg 61 install guide: The data migration will temporarily require an
@@ -1059,8 +1059,8 @@ terminated.
 
 Monitor the vacuum to see if it is still going
 
-select current\_timestamp - query\_start as
-runtime,pid,datname,usename,query from pg\_stat\_activity where query !=
+select current_timestamp - query_start as
+runtime,pid,datname,usename,query from pg_stat_activity where query !=
 \'\<IDLE\>\' and query not in (\'COMMIT\',\'ROLLBACK\')order by 1
 desc;
 
@@ -1078,19 +1078,19 @@ Look for "VACUUM" in the results
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--\
  2 days 04:31:37.696708 \|  39364 \| repmgr   \| repmgr   \|  INSERT
 INTO repmgr.events (\
-        node\_id,              event,              successful,          
+        node_id,              event,              successful,          
    details\
-    )       VALUES (\$1, \$2, \$3, \$4)    RETURNING event\_timestamp\
- 2 days 04:23:14.553972 \|  42093 \| bds\_hub  \| postgres \|
+    )       VALUES (\$1, \$2, \$3, \$4)    RETURNING event_timestamp\
+ 2 days 04:23:14.553972 \|  42093 \| bds_hub  \| postgres \|
 VACUUM(FULL, ANALYZE, VERBOSE)  st\
-.scan\_file\
+.scan_file\
  00:00:03.262079        \|  37681 \| repmgr   \| repmgr   \| INSERT INTO
-repmgr.monitoring\_hist\
-ory            (primary\_node\_id,             standby\_node\_id,      
-      last\_monitor\_time\
-,             last\_apply\_time,            
-last\_wal\_primary\_location,             last\_wal\_\
-standby\_location,             replication\_lag,             apply\_lag
+repmgr.monitoring_hist\
+ory            (primary_node_id,             standby_node_id,      
+      last_monitor_time\
+,             last_apply_time,            
+last_wal_primary_location,             last_wal_\
+standby_location,             replication_lag,             apply_lag
 )      VALUES(1,\
        2,             \'2020-08-10 21:12:41.657707-04\'::TIMESTAMP WITH
 TIME ZONE,\
@@ -1182,7 +1182,7 @@ This may take a while so be careful with the updates to these files.
 If Synopsys Support is providing updated YML files, then they will be
 dropped on the Synopsys sharefile or in the Support case
 
-### blackduck\_migrator-2020.6.1.yml
+### blackduck_migrator-2020.6.1.yml
 
 This is similar to docker-compose.yml and
 docker-compose.externaldb.yml. It starts up the required services.
@@ -1201,7 +1201,7 @@ to 2.
 Test scripts may be provided by Synopsys to help with monitoring
 upgrades.
 
-For instance, SynopsysMonitorDbActivity\_202007.bash is used to
+For instance, SynopsysMonitorDbActivity_202007.bash is used to
 monitor PostgreSQL activity at the database/table level. It is to be
 used if the upgrade processing seems to have stalled (presumably due to
 a very large database table upgrade/migration).
@@ -1248,27 +1248,27 @@ need to unwind and rollback during the Black Duck shutdown.
 >
 > You can verify this by doing the following psql command:
 ```
-psql -h hub-stg-db -U blackduck -p 5432 -d bds\_hub -c "SELECT \* FROM
-pg\_stat\_activity WHERE datname = \'bds\_hub\' and state =
+psql -h hub-stg-db -U blackduck -p 5432 -d bds_hub -c "SELECT \* FROM
+pg_stat_activity WHERE datname = \'bds_hub\' and state =
 \'active\';"
-bds\_hub=\# SELECT \* FROM pg\_stat\_activity WHERE datname =
-\'bds\_hub\' and state = \'active\';
+bds_hub=\# SELECT \* FROM pg_stat_activity WHERE datname =
+\'bds_hub\' and state = \'active\';
 ```
 ```
-datid \| datname \| pid \| usesysid \| usename \| application\_name \|
-client\_addr \| client\_hostname \| client\_port \| backend\_start
-\| xact\_start \| query\_start \| state\_change \| wait\_event\_type
-\| wait\_event \| state \| ba
-ckend\_xid \| backend\_xmin \| query
+datid \| datname \| pid \| usesysid \| usename \| application_name \|
+client_addr \| client_hostname \| client_port \| backend_start
+\| xact_start \| query_start \| state_change \| wait_event_type
+\| wait_event \| state \| ba
+ckend_xid \| backend_xmin \| query
 \-\-\-\-\-\--+\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 \-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\--+\-\--
 \-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
-16441 \| bds\_hub \| 8722 \| 16440 \| blackduck \| psql \|
+16441 \| bds_hub \| 8722 \| 16440 \| blackduck \| psql \|
 10.251.22.151 \| \| 35794 \| 2020-08-04 22:56:43.585215-
 04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
 \| 2020-08-04 22:56:59.671215-04 \| \| \| active \|
-\| 94647657 \| SELECT \* FROM pg\_stat\_activity WHERE datname =
-\'bds\_hub\' and state = \'active\';
+\| 94647657 \| SELECT \* FROM pg_stat_activity WHERE datname =
+\'bds_hub\' and state = \'active\';
 ```
 #### Stop External Connections
 
@@ -1280,9 +1280,9 @@ can block upgrade database actions.
 
 To ensure this:
 
--   Make backup of pg\_hba.conf file.
+-   Make backup of pg_hba.conf file.
 
--   Edit pg\_hba.conf to permit connections only from
+-   Edit pg_hba.conf to permit connections only from
     localhost/127.0.0.1 and the upgrading Black Duck server. 
 
 -   Set most "host" settings to "reject" or comment them out. 
@@ -1306,7 +1306,7 @@ control.
     that subsequent scans will not be in the backup. 
 
 -   If not already done, backup external database with 2020.4.1
-    hub\_create\_data\_dump.sh
+    hub_create_data_dump.sh
 
 ### Start the actual upgrade
 
@@ -1363,29 +1363,29 @@ start the Black Duck Migration YML file:
 
 You can start the Database Migration by typing
 
-docker stack deploy -c blackduck\_migrator-2020.6.1.yml -c
+docker stack deploy -c blackduck_migrator-2020.6.1.yml -c
 docker-compose.local-overrides.migrator.yml hub
 
-Run the script (SynopsysMonitorDbActivity\_202007.bash) to see when
+Run the script (SynopsysMonitorDbActivity_202007.bash) to see when
 the Database Migrations are done. In the output (see below), look at the
-"v\_hub script status". From top down are the latest Database Migration
+"v_hub script status". From top down are the latest Database Migration
 scripts that were run. Check the "version" column for the script \# and
 the success column to see if it successfully completed (t). Synopsys
 Support can tell you what the latest Database Migration script version
 that is run with the target release.
 
 ```
-v\_hub script status\...
-now \| inet\_server\_addr \| cmd \| loop \| installed\_rank \| version
+v_hub script status\...
+now \| inet_server_addr \| cmd \| loop \| installed_rank \| version
 \| description
-\| type \| script \| checksum \| installed\_by \| insta
-lled\_on \| execution\_time \| success
+\| type \| script \| checksum \| installed_by \| insta
+lled_on \| execution_time \| success
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\--
 \-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--+\-\-\-\-\-\-\-\--
 2020-08-05 17:27:25.254976-04 \| 10.251.22.104 \|
-v\_hub\_script\_status \| 1 \| 185 \| 2020.06.0.011 \| clear stale policies from central release \| SQL \|
-hub\_V2020\_06\_0\_011\_\_clear\_stale\_policies\_from\_central\_release.sql.vpp
+v_hub_script_status \| 1 \| 185 \| 2020.06.0.011 \| clear stale policies from central release \| SQL \|
+hub_V2020_06_0_011__clear_stale_policies_from_central_release.sql.vpp
 \| -1470604476 \| blackduck \| 2020-08-05 1
 9:26:12.882272 \| 18 \| t
 ```
@@ -1399,7 +1399,7 @@ You can monitor the services as follows:
 
 > watch docker ps
 
-____Restore database with 2020.4.1 hub\_db\_migrate.sh ??? 
+____Restore database with 2020.4.1 hub_db_migrate.sh ??? 
 
 #### Monitor the Black Duck database during Database Migration
 
@@ -1419,7 +1419,7 @@ To confirm progress, do the following:
 
 export PGPASSWORD='\<PSQL Database Password\>'
 
-> ./SynopsysMonitorDbActivity\_202007.bash \> SynopsysMonitorDbActivity\_202007.out 2\>&1
+> ./SynopsysMonitorDbActivity_202007.bash \> SynopsysMonitorDbActivity_202007.out 2\>&1
 
 #### Start the official release of Black Duck
 
@@ -1462,19 +1462,19 @@ If your target configuration has multiple instances of services (e.g.
 3 jobrunner services and 3 scan services, you need to start those.
 TODO:  better to put replices in .yml service block.
 
-#### docker service scale hub\_jobrunner=3
+#### docker service scale hub_jobrunner=3
 
-#### docker service scale hub\_scan=3
+#### docker service scale hub_scan=3
 
 #### 
 
 Confirm with output of commands in step 2.2.7.6.1. above. Ooops.???
 
-#### Vacuum audit\_event table 
+#### Vacuum audit_event table 
 
 When the migration script is finished and If Customer has not done
 "vacuum full analyze" prior to the upgrade, Synopsys strongly recommends
-that you run the VACUUM command on the audit\_event table to optimize
+that you run the VACUUM command on the audit_event table to optimize
 PostgreSQL performance. See "Installing Black Duck using Docker Swarm",
 Chapter 6: "Upgrading Black Duck", "Migration script to purge unused
 rows in the audit event table" (Page 55). 
@@ -1527,7 +1527,7 @@ We need to talk about these.???
 3.  Using the restore commands to re-establish the 2020.4.1 backup
     taken during upgrade steps
 
-    3.  Expect about \_\_\_\_ hours to fallback to 2020.4.1.
+    3.  Expect about ____ hours to fallback to 2020.4.1.
 
 **Restore steps, during Fallback ????**
 ---------------------------------------
@@ -1554,4 +1554,4 @@ We need to talk about these.???
         screen multiplexer like screen or tmux, or as a detached
         background process.
 
-> ./bin/hub\_db\_migrate.sh \<path to dump file\>
+> ./bin/hub_db_migrate.sh \<path to dump file\>
