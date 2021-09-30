@@ -654,7 +654,7 @@ date --utc ; hostname -f ; pg_test_fsync
 > open_sync.
 > Compare file sync methods using one 8kB write:
 > (in wal_sync_method preference order, except fdatasync
-> is Linux\'s default)
+> is Linux's default)
 >         open_datasync                    1828.665 ops/sec
 >         fdatasync                        1839.337 ops/sec
 >         fsync                             538.328 ops/sec
@@ -662,7 +662,7 @@ date --utc ; hostname -f ; pg_test_fsync
 >         open_sync                         442.936 ops/sec
 > Compare file sync methods using two 8kB writes:
 > (in wal_sync_method preference order, except fdatasync
-> is Linux\'s default)
+> is Linux's default)
 >         open_datasync                     945.146 ops/sec
 >         fdatasync                        1461.665 ops/sec
 >         fsync                             531.997 ops/sec
@@ -681,7 +681,7 @@ date --utc ; hostname -f ; pg_test_fsync
 > on a different descriptor.)
 >         write, fsync, close               633.979 ops/sec
 >         write, close, fsync               486.340 ops/sec
-> Non-Sync\'ed 8kB writes:
+> Non-Sync'ed 8kB writes:
 >         write                           244921.142 ops/sec
 ```
 
@@ -703,7 +703,7 @@ can be performed per second.
 > Rewriting\...done
 > Reading a byte at a time\...done
 > Reading intelligently\...done
-> start \'em\...done\...done\...done\...done\...done\...
+> start 'em\...done\...done\...done\...done\...done\...
 > Create files in sequential order\...done.
 > Stat files in sequential order\...done.
 > Delete files in sequential order\...done.
@@ -872,7 +872,7 @@ As such, a psql command should be run periodically to clean up the
 Audit events:
 
 delete from st.audit_event where event_timestamp \< now() - interval
-\'10 days\';
+'10 days';
 
 **Database Cleanup**
 --------------------
@@ -907,7 +907,7 @@ upon request from Synopsys support.
 #### Pgtune
 
 pgtune takes the wimpy default postgresql.conf and expands the
-database server to be as powerful as the hardware it\'s being deployed
+database server to be as powerful as the hardware it's being deployed
 on. It is available from <https://github.com/gregs1104/pgtune/>.
 
 Example: 
@@ -1011,11 +1011,11 @@ FROM
 LEFT JOIN pg_namespace N ON (N.oid = C .relnamespace)
 WHERE
     nspname NOT IN (
-        \'pg_catalog\',
-        \'information_schema\'
+        'pg_catalog',
+        'information_schema'
     )
-AND C .relkind \<\> \'i\'
-AND nspname !\~ \'\^pg_toast\'
+AND C .relkind \<\> 'i'
+AND nspname !\~ '\^pg_toast'
 ORDER BY
     pg_total_relation_size (C .oid) DESC;
 ```
@@ -1061,7 +1061,7 @@ Monitor the vacuum to see if it is still going
 
 select current_timestamp - query_start as
 runtime,pid,datname,usename,query from pg_stat_activity where query !=
-\'\<IDLE\>\' and query not in (\'COMMIT\',\'ROLLBACK\')order by 1
+'\<IDLE\>' and query not in ('COMMIT','ROLLBACK')order by 1
 desc;
 
 Look for "VACUUM" in the results
@@ -1092,11 +1092,11 @@ ory            (primary_node_id,             standby_node_id,     
 last_wal_primary_location,             last_wal_\
 standby_location,             replication_lag,             apply_lag
 )      VALUES(1,\
-       2,             \'2020-08-10 21:12:41.657707-04\'::TIMESTAMP WITH
+       2,             '2020-08-10 21:12:41.657707-04'::TIMESTAMP WITH
 TIME ZONE,\
-  \'2020-08-10 21:12:36.640652-04\'::TIMESTAMP WITH TIME ZONE,          
-  \'6B5E/18FC058\',\
-          \'6B5E/18FC058\',             0,             0)
+  '2020-08-10 21:12:36.640652-04'::TIMESTAMP WITH TIME ZONE,          
+  '6B5E/18FC058',\
+          '6B5E/18FC058',             0,             0)
 ```
 **Duplicating Production Database in Staging Environment**
 ----------------------------------------------------------
@@ -1249,10 +1249,10 @@ need to unwind and rollback during the Black Duck shutdown.
 > You can verify this by doing the following psql command:
 ```
 psql -h hub-stg-db -U blackduck -p 5432 -d bds_hub -c "SELECT * FROM
-pg_stat_activity WHERE datname = \'bds_hub\' and state =
-\'active\';"
+pg_stat_activity WHERE datname = 'bds_hub' and state =
+'active';"
 bds_hub=\# SELECT * FROM pg_stat_activity WHERE datname =
-\'bds_hub\' and state = \'active\';
+'bds_hub' and state = 'active';
 ```
 ```
 datid \| datname \| pid \| usesysid \| usename \| application_name \|
@@ -1268,7 +1268,7 @@ ckend_xid \| backend_xmin \| query
 04 \| 2020-08-04 22:56:59.671193-04 \| 2020-08-04 22:56:59.671193-04
 \| 2020-08-04 22:56:59.671215-04 \| \| \| active \|
 \| 94647657 \| SELECT * FROM pg_stat_activity WHERE datname =
-\'bds_hub\' and state = \'active\';
+'bds_hub' and state = 'active';
 ```
 #### Stop External Connections
 
