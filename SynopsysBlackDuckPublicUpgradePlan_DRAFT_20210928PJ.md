@@ -556,7 +556,7 @@ To run sysbench, run the following as root:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-"\\(read\\\|writ\\).*/" ; done
+"\(read\\|writ\).*/" ; done
 ```
 ```
 Mon Jul 27 11:17:08 EDT 2020
@@ -988,11 +988,11 @@ deletes the temp table. As such, it is recommended that the storage
 holding the database has 150% of the size of the largest table (100% +
 buffer).
 
-You can find the table sizes by using the \\l+ and \\dt+ psql
+You can find the table sizes by using the \l+ and \dt+ psql
 commands:
 ```
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\\l+" 
-psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\\dt+ st.*"
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\l+" 
+psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\dt+ st.*"
 \| less
 df -hPT
 ```
@@ -1499,7 +1499,7 @@ For example, sysbench:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-"\\(read\\\|writ\\).*/" ; done
+"\(read\\|writ\).*/" ; done
 
 ### Announce upgrade completion to stakeholders
 
