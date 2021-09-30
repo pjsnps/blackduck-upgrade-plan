@@ -556,7 +556,7 @@ To run sysbench, run the following as root:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-"\(read\\|writ\).*/" ; done
+"\(read|writ\).*/" ; done
 ```
 ```
 Mon Jul 27 11:17:08 EDT 2020
@@ -1499,7 +1499,7 @@ For example, sysbench:
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run \| grep -e
-"\(read\\|writ\).*/" ; done
+"\(read|writ\).*/" ; done
 
 ### Announce upgrade completion to stakeholders
 
