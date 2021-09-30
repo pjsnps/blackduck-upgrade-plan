@@ -746,8 +746,8 @@ You must make sure this file is larger than the amount of RAM you have
 on your system to avoid the whole file being cached in memory.
 
 ```
-time sh -c "dd if=/dev/zero of=\[PATH\] bs=\[BLOCK_SIZE\]k
-count=\[LOOPS\] && sync"
+time sh -c "dd if=/dev/zero of=[PATH] bs=[BLOCK_SIZE]k
+count=[LOOPS] && sync"
 ```
 
 A break down of the command is as follows:
