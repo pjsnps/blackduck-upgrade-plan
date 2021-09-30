@@ -1,5 +1,7 @@
 This document is provided as-is, without warranty or liability.
 
+This is document is intended to help Black Duck customer-performed upgrades go smoothly.  It is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
+
 **Contents**
 ============
 
@@ -36,7 +38,7 @@ TBD
 ---------------------------
 
 1.  This document is a Draft, informal, test, work in progress.
-    - last updated September 28, 2021. 
+    - last updated ~~September 28, 2021~~ September 30, 2021. 
     - Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
 
 2.  Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
@@ -62,24 +64,26 @@ TBD
 **Background Information**
 --------------------------
 
+Customer to prepare private documentation of the following system information:
+
 1.  Customer Black Duck instances: 
 
-    1.  Run in Docker compose stack. 
-        - Number of container replicas:
-        - HUB_MAX_MEMORY
-        - Resource reservations and limits
-            - ram
-            - cpu
+    1.  Running in Docker compose stack or kubernetes helm (TODO: fixme?). 
+        - Document the follow for each Black Duck container/service:
+            - Number of container replicas:
+            - HUB_MAX_MEMORY
+            - Resource reservations and limits
+                - ram
+                - cpu
 
-    2.  Database is external. 
+    2.  Database is in container or external. 
 
-    2.  Includes Synopsys Alert.
-        - Alert database in external database.
+    2.  Does installation include Synopsys Alert.
+        - Alert database in container or external database.
 
-    3.  Database disks are connected over iSCSI over 2-NIC mpath
-        ethernet elsewhere in the same datacenter. 
+    3.  How are database disks connected? Example: over iSCSI over 2-NIC mpath ethernet elsewhere in the same datacenter. 
 
-    1.  Customer investigating Synopsys-reported infrastructure
+    1.  Andy Synopsys-reported infrastructure
         performance issues with their internal sysadmins, including possible proxy/firewall issues. 
 
 2.  Customer has Staging and Production environments. Production
@@ -89,11 +93,11 @@ TBD
     environment did not run into the same issues with the Database
     Migration scripts that the Production server did.
 
-    - During a recent upgrade event, Customer docker container
-        memory, cpu, and replica settings were misconfigured and had to
-        be fixed under a P1 Case. 
+    - During a recent upgrade event, have Customer docker container
+        memory, cpu, and replica settings been reported misconfigured and had to
+        be fixed under a P1 Case? 
 
-3.  Customer Production bds_hub database was recently 2.3 TB.
+3.  Customer Production bds_hub database was recently __________ TB.
 
 4.  The upgrade is planned to be performed using a simplified Upgrade
     Docker stack implemented by deploying new Synopsys-supplied
@@ -102,9 +106,9 @@ TBD
 
 5.  Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
 
-6.  The upgrade is expected to take about _____ hours. 
+6.  The upgrade is expected to take about __________ hours. 
 
-    - If Fallback is required, an additional ____ hours would be
+    - If Fallback is required, an additional __________ hours would be
         required.
 
 **Overview**
@@ -162,8 +166,7 @@ This section provides a brief overview of the upgrade plan.
 
         12.  Bring down docker stack
 
-        13.  If not already done, backup external database with
-             pre-upgrade-version of hub_create_data_dump.sh
+        13.  If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
 
         14.  Optional: upgrade OS, kernel 
 
@@ -173,8 +176,7 @@ This section provides a brief overview of the upgrade plan.
 
         17.  Deploy docker migration stack
 
-        18.  Restore database with pre-upgrade-version of
-            hub_db_migrate.sh
+        18.  Restore database with pre-upgrade-version of hub_db_migrate.sh
 
         19.  Vacuum audit_event table
 
@@ -184,8 +186,7 @@ This section provides a brief overview of the upgrade plan.
 
              2.  Upgrade PostgeSQL
 
-        21.  Deploy Black Duck with target version of Production deployment .yml
-            files
+        21.  Deploy Black Duck with target version of Production deployment .yml files
 
     8.  Post-Upgrade Steps
 
@@ -198,6 +199,8 @@ This section provides a brief overview of the upgrade plan.
 3.  Then, In Production
 
     9.  Schedule and repeat "In Staging" steps as above
+
+
 
 **Upgrade planning**
 ====================
@@ -286,8 +289,7 @@ plans.
         docker-compose.externaldb.yml or docker-compose.yml, and
         docker-compose.local-overrides.yml on the Black Duck server)?
 
-    -   CPUs sufficient for the server (Check documentation and the
-        same files as the RAM check)?
+    -   CPUs sufficient for the server (Check documentation and the same files as the RAM check)?
 
     -   Check Storage (df -hl on the Black Duck server)
 
@@ -296,6 +298,8 @@ plans.
 
 -   Customer needs to determine if any upgrades need to occur and if
     they should be done prior to the Black Duck upgrade.
+
+
 
 **Write post-upgrade validation test plan**
 -------------------------------------------
@@ -392,7 +396,7 @@ requesting help.
 
 You can create a SalesForce case by going to
 <https://community.synopsys.com> and logging in with your Community site
-username and password. If you don't have one, request one from your
+username and password. If you do not have one, request one from your
 sales and/or support contact.
 
 Select Support -> Create a Support case.
@@ -403,12 +407,16 @@ that case to *P1 -- Critical*. Customer will then call Synopsys at
 800-873-7793 to have the on-call Technical Support Engineer (TSE)
 engaged.
 
+
+
 **Pre-Upgrade Activities**
 ==========================
 
 Prior to the target upgrade (be it test/staging or production), the
 following activities must be performed to make sure that the server(s)
 is(are) ready.
+
+
 
 **Performance and Networking Issues**
 ----------------------
@@ -450,22 +458,20 @@ to the upgrade:
 
 -   Project Versions with No Scans
 
-### System_check.sh
+### system_check.sh
 
 (.../hub/hub_docker/hub_<version>/docker-swarm/bin/system_check.sh)
 
 Run on Black Duck Server and Database Server. Check to see if there
 are any issues that need to be dealt with prior to the upgrades
 
-### Sar
+### sar
 
 Check out the iowait values on the Database Server. 
 
-06:00:01 PM CPU %user %nice %system %iowait %steal %idle
-
-06:10:01 PM all 2.04 0.00 1.12 0.02 0.00 96.83
-
-06:20:01 PM all 2.21 0.00 1.02 0.02 0.00 96.76
+> 06:00:01 PM CPU %user %nice %system %iowait %steal %idle
+> 06:10:01 PM all 2.04 0.00 1.12 0.02 0.00 96.83
+> 06:20:01 PM all 2.21 0.00 1.02 0.02 0.00 96.76
 
 Should there be any issues, then you need to talk to your server,
 network, and database admins to see what you can do to remove any
@@ -475,29 +481,33 @@ NOTE: Should you need to look at the SAR results from the other day,
 go to /var/log/sa and type "sar -f sa\#\#" where \#\# is the day of the
 month.
 
-### Zenoss
+### Other Customer monitoring tools, such as zenoss?
 
-Not sure what this gives us.
+Customer to document plans to use any such monitoring tools.
 
 ### SynopsysGatherServerSpecs_202007.bash
 
-TODO: Pete to test and update this script if needed.This captures a
+TODO: Pete to test and update this script if needed.
+
+This captures a
 lot of system data including top, cpu, mem, application versions, etc.
 It has several psql queries that need to be modified for your setup. The
 end of the script does latency testing that may need to be configured if
-there are any partitions you don't wish tested.
+there are any partitions you do not wish tested.
 
 Synopsys can provide the script:
 
-TODO:is this is a different script, needs own header, or did the
-filename change?
+TODO:is this is a different script, needs own header, or did the filename change?
 
-bash
+> bash
 
-export PGPASSWORD='<PSQL Database Password>'
+> export PGPASSWORD='<PSQL Database Password>'
+TODO: should use ~/.pgpass
 
-./SynopsysMonitorDbActivity_202007.bash >
-SynopsysMonitorDbActivity_202007.out 2>&1
+> ./SynopsysMonitorDbActivity_202007.bash > SynopsysMonitorDbActivity_202007.out 2>&1
+
+
+
 
 **Resolving Performance and Networking Issues**
 -----------------------------------------------
@@ -536,6 +546,11 @@ Some of the following benchmarking tools (e.g. dd, pgbench, sysbench,
 or bonnie++) may be used to collect a performance baseline for
 comparison with a separate run after the upgrade, in both Staging and
 Production.
+
+TODO: Is this stack of commands and descriptions too much for this doc?
+
+
+
 
 ### sysbench
 
@@ -589,6 +604,9 @@ real    0m30.055s
 user    0m5.440s
 sys     0m13.697s
 ```
+
+
+
 ### pgbench
 
 pgbench is a simple program for running benchmark tests on
@@ -616,24 +634,28 @@ date ; hostname ; time pgbench -h hub-stg-db -U blackduck -p 5432 -d bds_hub -s 
 
 Example output:
 ```
-> Fri Jul 24 13:50:59 EDT 2020
-> sup-pjalajas-hub.dc1.lan
-> pghost: sup-pjalajas-2 pgport: 55436 nclients: 200 nxacts: 1000
-> dbName: bds_hub
-> transaction type: TPC-B (sort of)
-> scaling factor: 1
-> query mode: prepared
-> number of clients: 200
-> number of threads: 100
-> number of transactions per client: 1000
-> number of transactions actually processed: 200000/200000
-> tps = 439.798734 (including connections establishing)
-> tps = 440.029375 (excluding connections establishing)
+Fri Jul 24 13:50:59 EDT 2020
+sup-pjalajas-hub.dc1.lan
+pghost: sup-pjalajas-2 pgport: 55436 nclients: 200 nxacts: 1000
+dbName: bds_hub
+transaction type: TPC-B (sort of)
+scaling factor: 1
+query mode: prepared
+number of clients: 200
+number of threads: 100
+number of transactions per client: 1000
+number of transactions actually processed: 200000/200000
+tps = 439.798734 (including connections establishing)
+tps = 440.029375 (excluding connections establishing)
 
-> real 7m34.812s
-> user 0m23.666s
-> sys 0m49.548s
+real 7m34.812s
+user 0m23.666s
+sys 0m49.548s
 ```
+
+
+
+
 ### pg_test_fsync
 
 pg_test_fsync is intended to give you a reasonable idea of what the
@@ -647,43 +669,46 @@ date --utc ; hostname -f ; pg_test_fsync
 ```
 
 ```
-> Fri Jul 24 19:56:41 UTC 2020
-> sup-pjalajas-hub.dc1.lan
-> 2 seconds per test
-> O_DIRECT supported on this platform for open_datasync and
-> open_sync.
-> Compare file sync methods using one 8kB write:
-> (in wal_sync_method preference order, except fdatasync
-> is Linux's default)
->         open_datasync                    1828.665 ops/sec
->         fdatasync                        1839.337 ops/sec
->         fsync                             538.328 ops/sec
->         fsync_writethrough                            n/a
->         open_sync                         442.936 ops/sec
-> Compare file sync methods using two 8kB writes:
-> (in wal_sync_method preference order, except fdatasync
-> is Linux's default)
->         open_datasync                     945.146 ops/sec
->         fdatasync                        1461.665 ops/sec
->         fsync                             531.997 ops/sec
->         fsync_writethrough                            n/a
->         open_sync                         330.452 ops/sec
-> Compare open_sync with different write sizes:
-> (This is designed to compare the cost of writing 16kB
-> in different write open_sync sizes.)
->          1 * 16kB open_sync write         595.042 ops/sec
->          2 *  8kB open_sync writes        229.368 ops/sec
->          4 *  4kB open_sync writes        121.647 ops/sec
->          8 *  2kB open_sync writes         83.208 ops/sec
->         16 *  1kB open_sync writes         39.609 ops/sec
-> Test if fsync on non-write file descriptor is honored:
-> (If the times are similar, fsync() can sync data written
-> on a different descriptor.)
->         write, fsync, close               633.979 ops/sec
->         write, close, fsync               486.340 ops/sec
-> Non-Sync'ed 8kB writes:
->         write                           244921.142 ops/sec
+Fri Jul 24 19:56:41 UTC 2020
+sup-pjalajas-hub.dc1.lan
+2 seconds per test
+O_DIRECT supported on this platform for open_datasync and
+open_sync.
+Compare file sync methods using one 8kB write:
+(in wal_sync_method preference order, except fdatasync
+is Linux's default)
+        open_datasync                    1828.665 ops/sec
+        fdatasync                        1839.337 ops/sec
+        fsync                             538.328 ops/sec
+        fsync_writethrough                            n/a
+        open_sync                         442.936 ops/sec
+Compare file sync methods using two 8kB writes:
+(in wal_sync_method preference order, except fdatasync
+is Linux's default)
+        open_datasync                     945.146 ops/sec
+        fdatasync                        1461.665 ops/sec
+        fsync                             531.997 ops/sec
+        fsync_writethrough                            n/a
+        open_sync                         330.452 ops/sec
+Compare open_sync with different write sizes:
+(This is designed to compare the cost of writing 16kB
+in different write open_sync sizes.)
+         1 * 16kB open_sync write         595.042 ops/sec
+         2 *  8kB open_sync writes        229.368 ops/sec
+         4 *  4kB open_sync writes        121.647 ops/sec
+         8 *  2kB open_sync writes         83.208 ops/sec
+        16 *  1kB open_sync writes         39.609 ops/sec
+Test if fsync on non-write file descriptor is honored:
+(If the times are similar, fsync() can sync data written
+on a different descriptor.)
+        write, fsync, close               633.979 ops/sec
+        write, close, fsync               486.340 ops/sec
+Non-Synced 8kB writes:
+        write                           244921.142 ops/sec
 ```
+
+
+
 
 ### bonnie++
 
@@ -692,62 +717,65 @@ respect to data read and write speed, the number of seeks that can be
 performed per second, and the number of file metadata operations that
 can be performed per second.
 ```
--   date --utc ; hostname -f ; time bonnie++ \# need 2 x RAM to be
-    free on disk 
+-   date --utc ; hostname -f ; time bonnie++ # need 2 x RAM to be free on disk 
 ```
 ```
-> Fri Jul 24 20:53:01 UTC 2020
-> sup-pjalajas-hub.dc1.lan
-> Writing a byte at a time...done
-> Writing intelligently...done
-> Rewriting...done
-> Reading a byte at a time...done
-> Reading intelligently...done
-> start 'em...done...done...done...done...done...
-> Create files in sequential order...done.
-> Stat files in sequential order...done.
-> Delete files in sequential order...done.
-> Create files in random order...done.
-> Stat files in random order...done.
-> Delete files in random order...done.
-> Version  1.97       ------Sequential Output------
-> --Sequential Input- --Random-
-> Concurrency   1     -Per Chr- --Block-- -Rewrite- -Per Chr-
-> --Block-- --Seeks--
-> Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec
-> %CP  /sec %CP
-> sup-pjalajas 80112M   668  99 993827  96 553909  59  1411  99
-> 1341920  79  8210 150
-> Latency             20730us   98013us    1412ms    8035us  
-> 41587us   15082us
-> Version  1.97       ------Sequential Create------
-> --------Random Create--------
-> sup-pjalajas-hub.dc -Create-- --Read--- -Delete-- -Create--
-> --Read--- -Delete--
->               files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec
-> %CP  /sec %CP
->                  16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++
-> +++ +++++ +++
-> Latency              1262us    6290us     660us    3386us    
-> 228us     626us
-> 1.97,1.97,sup-pjalajas-hub.dc1.lan,1,1595640930,80112M,,668,99,993827,96,553909,59,1411,99,1341920,79,8210,150,16,,,,,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,20730us,98013us,1412ms,8035us,41587us,15082us,1262us,6290us,660us,3386us,228us,626us
->
-> real    5m9.032s
-> user    0m56.024s
-> sys     2m53.775s
+Fri Jul 24 20:53:01 UTC 2020
+sup-pjalajas-hub.dc1.lan
+Writing a byte at a time...done
+Writing intelligently...done
+Rewriting...done
+Reading a byte at a time...done
+Reading intelligently...done
+start em...done...done...done...done...done...
+Create files in sequential order...done.
+Stat files in sequential order...done.
+Delete files in sequential order...done.
+Create files in random order...done.
+Stat files in random order...done.
+Delete files in random order...done.
+Version  1.97       ------Sequential Output------
+--Sequential Input- --Random-
+Concurrency   1     -Per Chr- --Block-- -Rewrite- -Per Chr-
+--Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec
+%CP  /sec %CP
+sup-pjalajas 80112M   668  99 993827  96 553909  59  1411  99
+1341920  79  8210 150
+Latency             20730us   98013us    1412ms    8035us  
+41587us   15082us
+Version  1.97       ------Sequential Create------
+--------Random Create--------
+sup-pjalajas-hub.dc -Create-- --Read--- -Delete-- -Create--
+--Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec
+%CP  /sec %CP
+                 16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++
++++ +++++ +++
+Latency              1262us    6290us     660us    3386us    
+228us     626us
+1.97,1.97,sup-pjalajas-hub.dc1.lan,1,1595640930,80112M,,668,99,993827,96,553909,59,1411,99,1341920,79,8210,150,16,,,,,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,20730us,98013us,1412ms,8035us,41587us,15082us,1262us,6290us,660us,3386us,228us,626us
+
+real    5m9.032s
+user    0m56.024s
+sys     2m53.775s
 ```
+
+
+
+
+
 
 ### dd
 
 You can use dd to create a large file as quickly as possible to
-see how long it takes. It's a very basic test and not very customisable
+see how long it takes. It is a very basic test and not very customisable
 however it will give you a sense of the performance of the file system.
 You must make sure this file is larger than the amount of RAM you have
 on your system to avoid the whole file being cached in memory.
 
 ```
-time sh -c "dd if=/dev/zero of=[PATH] bs=[BLOCK_SIZE]k
-count=[LOOPS] && sync"
+time sh -c "dd if=/dev/zero of=[PATH] bs=[BLOCK_SIZE]k count=[LOOPS] && sync"
 ```
 
 A break down of the command is as follows:
@@ -769,8 +797,7 @@ A break down of the command is as follows:
 Example:
 
 ```
-time sh -c "dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k
-count=2000000 && sync"
+time sh -c "dd if=/dev/zero of=/mnt/mount1/test.tmp bs=4k count=2000000 && sync"
 2000000+0 records in
 2000000+0 records out
 8192000000 bytes transferred in 159.062003 secs (51501929 bytes/sec)
@@ -779,6 +806,9 @@ real 2m41.618s
 user 0m0.630s
 sys 0m14.998s
 ```
+
+
+
 
 **Cleaning up Black Duck Projects and Scans**
 ---------------------------------------------
@@ -796,6 +826,9 @@ was manually generated without indicating a target project and version,
 or a project-version linked to the scans may have been deleted
 (resulting in an unmapped scan). These should be removed prior to a full
 vacuum and/or an application upgrade.
+
+
+
 
 **Cleaning up Databases**
 -------------------------
@@ -841,6 +874,10 @@ Database Migration script to remove that database should be quick.
 
 These databases are still valid as of the 2020.6.1 release.  (TODO:  update/confirm)
 
+
+
+
+
 **Trimming the Notification and audit_event logs**
 ---------------------------------------------------
 
@@ -858,21 +895,25 @@ around for a bit.
 In the blackduck-config.env file, the Customer can indicate how long
 the notifications logs should be retained, by default that duration is
 30 days:
-
+```
 BLACKDUCK_HUB_NOTIFICATIONS_DELETE_DAYS=30
-
+```
 ### Audit_Events
 
 There is no automatic cleanup of Audit Events as of 2020.6.1. These
 events are required for a few days but other logging has now been added
 to the Black Duck tool so these Events are no longer needed as logging.
-They don't need to be kept longer than 10 days.
+They do not need to be kept longer than 10 days.
 
 As such, a psql command should be run periodically to clean up the
 Audit events:
+```
+delete from st.audit_event where event_timestamp < now() - interval '10 days';
+```
 
-delete from st.audit_event where event_timestamp < now() - interval
-'10 days';
+
+
+
 
 **Database Cleanup**
 --------------------
@@ -895,7 +936,11 @@ in any oid or lo data column of the database.
 
 Example:
 
-Vacuumlo bds_hub (????)
+```
+vacuumlo bds_hub (TODO:  Verify)
+```
+
+
 
 ### Run PostgreSQL tuning utility
 
@@ -907,19 +952,21 @@ upon request from Synopsys support.
 #### Pgtune
 
 pgtune takes the wimpy default postgresql.conf and expands the
-database server to be as powerful as the hardware it's being deployed
+database server to be as powerful as the hardware it is being deployed
 on. It is available from <https://github.com/gregs1104/pgtune/>.
 
 Example: 
 
-> date ; hostname ; pgtune --type OLTP --connections=800 -i
-> /tmp/postgresql.conf -o /tmp/postgresql.conf.pgtune
->
-> diff /tmp/postgresql.conf /tmp/postgresql.conf.pgtune
+```
+date ; hostname ; pgtune --type OLTP --connections=800 -i /tmp/postgresql.conf -o /tmp/postgresql.conf.pgtune
+diff /tmp/postgresql.conf /tmp/postgresql.conf.pgtune
+```
 
 If this has been done as part of the database server setup, then this
 does not need to be redone unless the server configuration has changed
 (e.g. memory, cores, storage)
+
+
 
 ### Upgrade O/S, Kernel, Docker, Postgresql
 
@@ -937,6 +984,8 @@ be upgraded before you can upgrade the O/S, Kernel, Docker, or
 PostgreSQL. This is because the current version may not support the new
 version until after the upgrade.
 
+
+
 #### O/S and/or Kernel upgrade
 
 Working with your server admins for the downtime required to upgrade
@@ -946,6 +995,8 @@ will no longer be supporting the version you are using.
 
 Work with your system admins to perform the upgrade.
 
+
+
 #### Docker Upgrades
 
 At this point, it looks like there is no "upgrade" per se. The
@@ -954,8 +1005,9 @@ available. So, to "upgrade", the old Docker installation would have to
 be uninstalled and the new Docker installation would have to be
 installed.
 
-<Need to test in order to verify that images and cert secrets don't
-have to be reinstalled>
+<Need to test in order to verify that images and cert secrets do not have to be reinstalled>
+
+
 
 #### PostgreSQL Upgrades
 
@@ -966,7 +1018,7 @@ Black Duck 2020.6. But, since 11.7.x was not supported until Black Duck
 2020.6.x, you need to upgrade Black Duck to at least 2020.6.0 before
 upgrading Postgresql.
 
-### 
+
 
 ### Full Vacuum of Database
 
@@ -980,6 +1032,7 @@ recently.
 
 NOTE: It takes about 24 hours to Auto Vacuum 1 TB of space.
 
+
 #### Make sure the database pgdata partition has enough space
 
 A Full Vacuum copies the table being vacuumed to a new table name. It
@@ -990,6 +1043,7 @@ buffer).
 
 You can find the table sizes by using the \l+ and \dt+ psql
 commands:
+
 ```
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\l+" 
 psql -h 127.0.0.1 -p 55436 -U blackduck -d bds_hub -c "\dt+ st.*"
@@ -999,6 +1053,7 @@ df -hPT
 You can also get a sorted list by running the following. NOTE: It
 might to help to save the script in a file and run it using the -f
 option.
+
 ```
 SELECT
     relname AS "relation",
@@ -1054,7 +1109,7 @@ Refer to the "Installing Black Duck using Docker Swarm" document,
 Make sure that any monitoring software (e.g. Zenoss) has been
 terminated.
 
-<Fill in Steps>
+<TODO:  Fill in Steps>
 
 Monitor the vacuum to see if it is still going
 
@@ -1064,6 +1119,7 @@ runtime,pid,datname,usename,query from pg_stat_activity where query !=
 desc;
 
 Look for "VACUUM" in the results
+
 ```
       runtime         |  pid   | datname  | usename  |
 
@@ -1097,6 +1153,9 @@ TIME ZONE,
   '6B5E/18FC058',
           '6B5E/18FC058',             0,             0)
 ```
+
+
+
 **Duplicating Production Database in Staging Environment**
 ----------------------------------------------------------
 
@@ -1115,6 +1174,8 @@ environment. This is easier with an external database.
 If the production database is going to be duplicated in the
 staging/test environment, then the following steps must be performed.
 
+
+
 **Duplicating Production Environment in Staging Environment**
 -------------------------------------------------------------
 
@@ -1123,6 +1184,12 @@ database in the test/staging environment, the same should be done with
 the hardware (CPU Cores, RAM, storage access (iSCSI vs NFS), storage
 type (spinning disk vs flash), and amount of storage. The versions of
 Linux, Docker, and PostgreSQL should also be the same.
+
+
+
+
+
+
 
 **Perform Black Duck Upgrade**
 ==============================
@@ -1141,15 +1208,19 @@ sufficient RAM and storage for the upgrade. Changes to orchestration,
 additions of services, etc may result in more usage or RAM and/or
 storage. The new images will take up more space in docker. 
 
-> free -g
-
+```
+free -g
+```
 ### Check Storage
 
-<blah blah check storage. Add in comment on pruning containers,
-volumes, and system/images?> /opt/docker/..... copy and paste here.
-???
+<TODO:  elaborate.   check storage. Add in comment on pruning containers,
+volumes, and system/images?> /opt/docker/..... copy and paste here.>
 
-**'docker volume prune'**
+```
+docker volume prune TODO: elaborate
+```
+
+
 
 ### Download upgrade images
 
@@ -1162,7 +1233,10 @@ person.
 
 Once they are on the target server, you can load them into docker:
 
+```
 ls | while read image; do docker load -i \$image; done 
+```
+
 
 ### Download Orchestration Files
 
@@ -1181,6 +1255,7 @@ This may take a while so be careful with the updates to these files.
 If Synopsys Support is providing updated YML files, then they will be
 dropped on the Synopsys sharefile or in the Support case
 
+
 ### blackduck_migrator yaml file 
 
 This is similar to docker-compose.yml and
@@ -1195,6 +1270,8 @@ using up 69 GB of RAM and 8 cores. For example, if you have 8 cores and
 32 GB of RAM, you may want to reduce the \# of cores used by "services"
 to 2.
 
+
+
 **Upgrade Monitoring Scripts**
 
 Test scripts may be provided by Synopsys to help with monitoring
@@ -1204,6 +1281,8 @@ For instance, SynopsysMonitorDbActivity_202007.bash is used to
 monitor PostgreSQL activity at the database/table level. It is to be
 used if the upgrade processing seems to have stalled (presumably due to
 a very large database table upgrade/migration).
+
+
 
 ### Schedule upgrade
 
@@ -1217,6 +1296,10 @@ those teams using Black Duck need to plan their release schedules to
 will want to work around the schedule and put the downtime into their
 schedules. 
 
+
+
+
+
 **Perform Upgrade, Day of Upgrade (Staging then Production)**
 -------------------------------------------------------------
 
@@ -1229,6 +1312,7 @@ Remember that you should be doing all of these steps on the
 test/staging server to make sure that all the steps work for the current
 update prior to doing the upgrade on the production server!
 
+
 ### Stop scanning and external connections 
 
 #### Stop Scanning
@@ -1238,20 +1322,19 @@ beginning the upgrade installation. This is to allow the scans to
 complete prior to the upgrade while minimizing the large process that
 need to unwind and rollback during the Black Duck shutdown.
 
-> Wait for the scan jobs to finish before terminating external
-> connections in the next step
->
-> After the scan jobs are complete, the customer should terminate all
-> external queries, utilities, scripts, and SDK calls prior to starting
-> the actual upgrade.
->
-> You can verify this by doing the following psql command:
+Wait for the scan jobs to finish before terminating external
+connections in the next step
+
+After the scan jobs are complete, the customer should terminate all
+external queries, utilities, scripts, and SDK calls prior to starting
+the actual upgrade.
+
+You can verify this by doing the following psql command:
+
 ```
-psql -h hub-stg-db -U blackduck -p 5432 -d bds_hub -c "SELECT * FROM
-pg_stat_activity WHERE datname = 'bds_hub' and state =
-'active';"
-bds_hub=\# SELECT * FROM pg_stat_activity WHERE datname =
-'bds_hub' and state = 'active';
+psql -h hub-stg-db -U blackduck -p 5432 -d bds_hub -c "SELECT * FROM pg_stat_activity WHERE datname = 'bds_hub' and state = 'active';"
+
+bds_hub=\# SELECT * FROM pg_stat_activity WHERE datname = 'bds_hub' and state = 'active';
 ```
 ```
 datid | datname | pid | usesysid | usename | application_name |
@@ -1269,6 +1352,8 @@ ckend_xid | backend_xmin | query
 | 94647657 | SELECT * FROM pg_stat_activity WHERE datname =
 'bds_hub' and state = 'active';
 ```
+
+
 #### Stop External Connections
 
 Customer to ensure all Black Duck and PostgreSQL server activities are
@@ -1286,13 +1371,13 @@ To ensure this:
 
 -   Set most "host" settings to "reject" or comment them out. 
 
-<!-- -->
-
 -   Restart PostgreSQL (to reload .conf changes, but to also
     disconnect any currently present external connections). 
 
 NOTE: Customer may have other means available to effect this
 control.
+
+
 
 #### Backup database
 
@@ -1306,6 +1391,8 @@ control.
 
 -   If not already done, backup external database with pre-upgrade-version of  
     hub_create_data_dump.sh
+
+
 
 ### Start the actual upgrade
 
@@ -1325,22 +1412,25 @@ When bringing up the Black Duck application in Docker, the command to
 start includes the name of the docker stack. For the purposes of this
 document, we will call it "hub".
 
-List the Docker services if you don't know the name:
+List the Docker services if you do not know the name:
 ```
-> docker stack ls
-> NAME SERVICES
-> hub 10
+docker stack ls
+NAME SERVICES
+hub 10
 ```
 
 Stop the Docker services associated with the existing Black Duck
 instance
 
-> docker stack rm <hub stack name>
+```
+docker stack rm <hub stack name>
+```
 
 In order to watch the Docker Services until they all shutdown, do the
 following:
-
-> watch docker ps 
+```
+watch docker ps 
+```
 
 #### Start Black Duck with the new version of Black Duck
 
@@ -1358,11 +1448,14 @@ proxy, etc.
 Make sure the local directory is where the orchestration files are and
 start the Black Duck Migration YML file:
 
+
 #### Start the abbreviated Database Migration YML
 
 You can start the Database Migration by typing
 
+```
 docker stack deploy -c blackduck_migrator-<target-upgrade-version>.yml -c docker-compose.local-overrides.migrator.yml hub
+```
 
 Run the script (SynopsysMonitorDbActivity_202007.bash) to see when
 the Database Migrations are done. In the output (see below), look at the
@@ -1388,6 +1481,7 @@ hub_V2020_06_0_011__clear_stale_policies_from_central_release.sql.vpp
 9:26:12.882272 | 18 | t
 ```
 
+
 #### Monitor upgrade docker containers health.
 
 Verify that Black Duck starts up correctly. Once all the Upgrade
@@ -1395,9 +1489,12 @@ docker containers are healthy, the upgrade installation is complete.
 
 You can monitor the services as follows:
 
-> watch docker ps
+```
+watch docker ps
+```
 
 Restore database with pre-upgrade version of hub_db_migrate.sh (TODO: confirm)
+
 
 #### Monitor the Black Duck database during Database Migration
 
@@ -1406,18 +1503,24 @@ quiet or stuck for many hours.
 
 To confirm progress, do the following:
 
+
 ##### Tail the container logs
 
-> for mcontainer in \$(docker ps -q) ; do docker ps | grep \$mcontainer
-; docker logs --tail 2 \$mcontainer |& cut -c 1-150 ; done 
+```
+for mcontainer in \$(docker ps -q) ; do docker ps | grep \$mcontainer ; docker logs --tail 2 \$mcontainer |& cut -c 1-150 ; done 
+```
+
 
 ##### Check PostgreSQL activity
 
-**bash**
-
+```
 export PGPASSWORD='<PSQL Database Password>'
 
-> ./SynopsysMonitorDbActivity_202007.bash > SynopsysMonitorDbActivity_202007.out 2>&1
+./SynopsysMonitorDbActivity_202007.bash > SynopsysMonitorDbActivity_202007.out 2>&1
+```
+
+
+
 
 #### Start the official release of Black Duck
 
@@ -1426,22 +1529,34 @@ back down and start the official release:
 
 **Stop Docker**
 
-> docker stack rm hub
+```
+docker stack rm hub
+```
 
 Local Database:
 
-> docker stack *deploy* -c docker-compose.yml -c
-> docker-compose.local-overrides.yml <stack name>
+```
+docker stack *deploy* -c docker-compose.yml -c docker-compose.local-overrides.yml <stack name>
+```
 
 e.g.:
-> docker stack *deploy* -c docker-compose.yml -c docker-compose.local-overrides.yml hub
+```
+docker stack *deploy* -c docker-compose.yml -c docker-compose.local-overrides.yml hub
+```
+
 
 External Database:
 
-> docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml <stack name>
+```
+docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml <stack name>
+```
 
 e.g. 
-> docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml hub
+```
+docker stack *deploy* -c docker-compose.externaldb.yml -c docker-compose.local-overrides.yml hub
+```
+
+
 
 #### Monitor upgrade docker containers health.
 
@@ -1452,7 +1567,9 @@ other services are up and healthy and then it will startup correctly.
 
 You can monitor the services as follows:
 
-> watch docker ps
+```
+watch docker ps
+```
 
 #### Start Additional Services
 
@@ -1477,6 +1594,12 @@ PostgreSQL performance. See "Installing Black Duck using Docker Swarm",
 Chapter 6: "Upgrading Black Duck", "Migration script to purge unused
 rows in the audit event table" (Page 55). 
 
+
+
+
+
+
+
 **Post-Upgrade Steps**
 ----------------------
 
@@ -1494,16 +1617,23 @@ Customer run the benchmark tests that they ran prior to the upgrade
 
 For example, sysbench:
 
+```
 date ; date --utc ; hostname -f ; pwd ; whoami ; nproc ; free -g ;
 time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run | grep -e
 "\(read|writ\).*/" ; done
+```
+
 
 ### Announce upgrade completion to stakeholders
 
 When the upgrade is successfully complete, Customer will update their
 internal customers, as well as the Synopsys Salesforce Community Case,
 with the appropriate status to provide an "all clear".
+
+
+
+
 
 **Contingency: Fallback Steps**
 ===============================
@@ -1526,8 +1656,13 @@ We need to talk about these.  (TODO:  needs work)
 
     3.  Expect about _________ hours to fallback to the pre-upgrade version.
 
-**Restore steps, during Fallback ????**
+
+
+
+**Restore steps, during Fallback**
 ---------------------------------------
+
+TODO:  augment this section
 
 1.  To restore the PostgreSQL data during a fallback 
 
@@ -1535,7 +1670,9 @@ We need to talk about these.  (TODO:  needs work)
     docker-swarm directory. That starts the containers and volumes
     needed to migrate the database. 
 
-> docker stack deploy -c docker-compose.dbmigrate.yml hub 
+```
+docker stack deploy -c docker-compose.dbmigrate.yml hub 
+```
 
 1.  Note that there are some versions of Docker where if the images
     live in a private repository, docker stack will not pull them unless
@@ -1551,4 +1688,6 @@ We need to talk about these.  (TODO:  needs work)
         screen multiplexer like screen or tmux, or as a detached
         background process.
 
-> ./bin/hub_db_migrate.sh <path to dump file>
+```
+./bin/hub_db_migrate.sh <path to dump file>
+```
