@@ -1,1 +1,2 @@
-~$
+*[0-9]\~
+pandoc.out.html
