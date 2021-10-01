@@ -7,7 +7,7 @@ This document is only for on-premise installations; hosted/SaaS Black Duck insta
 **Contents**
 ============
 
-TODO
+TODO: create TOC
 
 **Contacts**
 ============
@@ -44,7 +44,7 @@ TODO
     - last updated  October 1, 2021, pjalajas. 
     - Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
 
-1. TODO:  search this documement for "TODO" and resolve them.
+1. TODO:  search this documement for "TODO" and __________ and consider them.
 
 1. Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
 
@@ -410,8 +410,8 @@ plans.
 **Write post-upgrade validation test plan**
 -------------------------------------------
 
-Customer is required to have a Production-mimicing set of major stress and regression tests that
-are run when upgrading Black Duck. This set of regression tests might include
+Customer is required to have a set of major stress and regression tests, that very closely mimic Production load, that
+are run in Staging, prior to upgrading Black Duck in Production. This set of regression tests might include
 verifying that the same projects are visible, that the results
 of key BOMs of project-versions are OK, that admins can access license
 management, policy management, or other sections.
@@ -521,8 +521,7 @@ engaged.
 ==========================
 
 Prior to the target upgrade (be it test/staging or production), the
-following activities must be performed to make sure that the server(s)
-is(are) ready.
+following activities must be performed to make sure that the environment is ready. 
 
 
 
