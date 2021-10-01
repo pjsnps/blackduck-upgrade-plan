@@ -77,19 +77,19 @@ Customer to prepare private documentation of the following system information:
     1.  From that release archive, Customer to review release documentation:
 
 ```shell
-        find hub-2021.8.3/ | grep -e en_US.*pdf -e md
+find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
-        hub-2021.8.3/docker-swarm/README.md
-        hub-2021.8.3/docs/en_US/getting_started.pdf
-        hub-2021.8.3/docs/en_US/install_kubernetes.pdf
-        hub-2021.8.3/docs/en_US/install_openshift.pdf
-        hub-2021.8.3/docs/en_US/install_swarm.pdf
-        hub-2021.8.3/docs/en_US/release_notes.pdf
-        hub-2021.8.3/Important_Upgrade_Announcement.md
-        hub-2021.8.3/kubernetes/blackduck/README.md
-        hub-2021.8.3/kubernetes/README.md
-        hub-2021.8.3/README.containers.md
-        hub-2021.8.3/README.md
+hub-2021.8.3/docker-swarm/README.md
+hub-2021.8.3/docs/en_US/getting_started.pdf
+hub-2021.8.3/docs/en_US/install_kubernetes.pdf
+hub-2021.8.3/docs/en_US/install_openshift.pdf
+hub-2021.8.3/docs/en_US/install_swarm.pdf
+hub-2021.8.3/docs/en_US/release_notes.pdf
+hub-2021.8.3/Important_Upgrade_Announcement.md
+hub-2021.8.3/kubernetes/blackduck/README.md
+hub-2021.8.3/kubernetes/README.md
+hub-2021.8.3/README.containers.md
+hub-2021.8.3/README.md
 ```
 
     1. Customer to run 
@@ -102,7 +102,7 @@ Customer to prepare private documentation of the following system information:
     1.  Customer to decide whether to use docker swarm kubernetes.
     1.  Customer to work with Black Duck Support team to configure container services.
 
-```
+```shell
 	$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
 	    image: blackducksoftware/blackduck-postgres:9.6-1.1
 		limits: {memory: 3072M}
