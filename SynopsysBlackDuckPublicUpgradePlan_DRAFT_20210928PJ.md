@@ -76,29 +76,27 @@ Customer to prepare private documentation of the following system information:
         - https://github.com/blackducksoftware/hub/releases
     1.  From that release archive, Customer to review release documentation:
 
-```shell
-find hub-2021.8.3/ | grep -e en_US.*pdf -e md
+	```shell
+	find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
-hub-2021.8.3/docker-swarm/README.md
-hub-2021.8.3/docs/en_US/getting_started.pdf
-hub-2021.8.3/docs/en_US/install_kubernetes.pdf
-hub-2021.8.3/docs/en_US/install_openshift.pdf
-hub-2021.8.3/docs/en_US/install_swarm.pdf
-hub-2021.8.3/docs/en_US/release_notes.pdf
-hub-2021.8.3/Important_Upgrade_Announcement.md
-hub-2021.8.3/kubernetes/blackduck/README.md
-hub-2021.8.3/kubernetes/README.md
-hub-2021.8.3/README.containers.md
-hub-2021.8.3/README.md
-```
+	hub-2021.8.3/docker-swarm/README.md
+	hub-2021.8.3/docs/en_US/getting_started.pdf
+	hub-2021.8.3/docs/en_US/install_kubernetes.pdf
+	hub-2021.8.3/docs/en_US/install_openshift.pdf
+	hub-2021.8.3/docs/en_US/install_swarm.pdf
+	hub-2021.8.3/docs/en_US/release_notes.pdf
+	hub-2021.8.3/Important_Upgrade_Announcement.md
+	hub-2021.8.3/kubernetes/blackduck/README.md
+	hub-2021.8.3/kubernetes/README.md
+	hub-2021.8.3/README.containers.md
+	hub-2021.8.3/README.md
+	```
 
     1. Customer to run 
 
-
-```shell
-./docker-swarm/bin/system_check.sh
-```
-
+	```shell
+	./docker-swarm/bin/system_check.sh
+	```
     1.  Customer to decide whether to use docker swarm kubernetes.
     1.  Customer to work with Black Duck Support team to configure container services.
 
