@@ -3,44 +3,44 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [**Notices**](#notices)
-- [**Contacts**](#contacts)
-- [**Introduction**](#introduction)
-  - [**Status of This Document**](#status-of-this-document)
-  - [**Upgrade Schedule**](#upgrade-schedule)
-  - [**Background Information**](#background-information)
-- [**Overview**](#overview)
-- [**Plan the Upgrade**](#plan-the-upgrade)
-  - [**Determining Upgrade and production requirements**](#determining-upgrade-and-production-requirements)
-    - [**Documentation**](#documentation)
-    - [**Checklist**](#checklist)
-  - [**Write post-upgrade validation test plan**](#write-post-upgrade-validation-test-plan)
-    - [**Checklist**](#checklist-1)
-  - [**Document Database/API Connections**](#document-databaseapi-connections)
-  - [**Scheduling Upgrades**](#scheduling-upgrades)
-    - [**Opening a Synopsys SalesForce Request**](#opening-a-synopsys-salesforce-request)
-- [**Perform Pre-Upgrade Activities**](#perform-pre-upgrade-activities)
-  - [**Performance and Networking Issues**](#performance-and-networking-issues)
+- [Contacts](#contacts)
+- [Introduction](#introduction)
+  - [Status of This Document](#status-of-this-document)
+  - [Upgrade Schedule](#upgrade-schedule)
+  - [Background Information](#background-information)
+- [Overview](#overview)
+- [Plan the Upgrade](#plan-the-upgrade)
+  - [Determining Upgrade and production requirements](#determining-upgrade-and-production-requirements)
+    - [Documentation](#documentation)
+    - [Checklist](#checklist)
+  - [Write post-upgrade validation test plan](#write-post-upgrade-validation-test-plan)
+    - [Checklist](#checklist-1)
+  - [Document Database/API Connections](#document-databaseapi-connections)
+  - [Scheduling Upgrades](#scheduling-upgrades)
+    - [Opening a Synopsys SalesForce Request](#opening-a-synopsys-salesforce-request)
+- [Perform Pre-Upgrade Activities](#perform-pre-upgrade-activities)
+  - [Performance and Networking Issues](#performance-and-networking-issues)
     - [Best Practices](#best-practices)
     - [Sage](#sage)
     - [system_check.sh](#system_checksh)
     - [sar](#sar)
     - [Other Customer monitoring tools, such as zenoss?](#other-customer-monitoring-tools-such-as-zenoss)
     - [SynopsysGatherServerSpecs_202007.bash](#synopsysgatherserverspecs_202007bash)
-  - [**Resolving Performance and Networking Issues**](#resolving-performance-and-networking-issues)
+  - [Resolving Performance and Networking Issues](#resolving-performance-and-networking-issues)
     - [sysbench](#sysbench)
     - [pgbench](#pgbench)
     - [pg_test_fsync](#pg_test_fsync)
     - [bonnie++](#bonnie)
     - [dd](#dd)
-  - [**Cleaning up Black Duck Projects and Scans**](#cleaning-up-black-duck-projects-and-scans)
-  - [**Cleaning up Databases**](#cleaning-up-databases)
+  - [Cleaning up Black Duck Projects and Scans](#cleaning-up-black-duck-projects-and-scans)
+  - [Cleaning up Databases](#cleaning-up-databases)
     - [bdio Database](#bdio-database)
     - [bds_hub_report Database](#bds_hub_report-database)
     - [bds_hub, postgresql, template0, and template1 Database](#bds_hub-postgresql-template0-and-template1-database)
-  - [**Trimming the Notification and audit_event logs**](#trimming-the-notification-and-audit_event-logs)
+  - [Trimming the Notification and audit_event logs](#trimming-the-notification-and-audit_event-logs)
     - [Notification Logs](#notification-logs)
     - [Audit_Events](#audit_events)
-  - [**Database Cleanup**](#database-cleanup)
+  - [Database Cleanup](#database-cleanup)
     - [Remove any orphaned large objects](#remove-any-orphaned-large-objects)
       - [vacuumlo](#vacuumlo)
     - [Run PostgreSQL tuning utility](#run-postgresql-tuning-utility)
@@ -52,11 +52,11 @@
     - [Full Vacuum of Database](#full-vacuum-of-database)
       - [Make sure the database pgdata partition has enough space](#make-sure-the-database-pgdata-partition-has-enough-space)
       - [Perform Full Vacuum](#perform-full-vacuum)
-  - [**Duplicating Production Database in Staging Environment**](#duplicating-production-database-in-staging-environment)
+  - [Duplicating Production Database in Staging Environment](#duplicating-production-database-in-staging-environment)
     - [Production Database Replication](#production-database-replication)
-  - [**Duplicating Production Environment in Staging Environment**](#duplicating-production-environment-in-staging-environment)
-- [**Perform Black Duck Upgrade**](#perform-black-duck-upgrade)
-  - [**Perform Pre-upgrade steps**](#perform-pre-upgrade-steps)
+  - [Duplicating Production Environment in Staging Environment](#duplicating-production-environment-in-staging-environment)
+- [Perform Black Duck Upgrade](#perform-black-duck-upgrade)
+  - [Perform Pre-upgrade steps](#perform-pre-upgrade-steps)
     - [Check Memory](#check-memory)
     - [Check Storage](#check-storage)
     - [Download upgrade images](#download-upgrade-images)
@@ -64,7 +64,7 @@
       - [Updated YML Files](#updated-yml-files)
     - [blackduck_migrator yaml file](#blackduck_migrator-yaml-file)
     - [Schedule upgrade](#schedule-upgrade)
-  - [**Perform Upgrade, Day of Upgrade (Staging then Production)**](#perform-upgrade-day-of-upgrade-staging-then-production)
+  - [Perform Upgrade, Day of Upgrade (Staging then Production)](#perform-upgrade-day-of-upgrade-staging-then-production)
     - [Stop scanning and external connections](#stop-scanning-and-external-connections)
       - [Stop Scanning](#stop-scanning)
       - [Stop External Connections](#stop-external-connections)
@@ -81,12 +81,12 @@
       - [Monitor upgrade docker containers health.](#monitor-upgrade-docker-containers-health-1)
       - [Docker service replicas](#docker-service-replicas)
       - [Vacuum audit_event table](#vacuum-audit_event-table)
-  - [**Perform Post-Upgrade Steps**](#perform-post-upgrade-steps)
+  - [Perform Post-Upgrade Steps](#perform-post-upgrade-steps)
     - [Run upgrade-validation tests.](#run-upgrade-validation-tests)
     - [Re-run benchmark tests.](#re-run-benchmark-tests)
     - [Announce upgrade completion to stakeholders](#announce-upgrade-completion-to-stakeholders)
-- [**Contingency: Fallback Steps**](#contingency-fallback%C2%A0steps)
-  - [**Restore steps, during Fallback**](#restore-steps-during-fallback)
+- [Contingency: Fallback Steps](#contingency-fallback%C2%A0steps)
+  - [Restore steps, during Fallback](#restore-steps-during-fallback)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -99,7 +99,7 @@ This document is intended to be used by very large (databases on the order of 1 
 
 This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
 
-**Contacts**
+Contacts
 ============
 
 1. Customer: 
@@ -124,10 +124,10 @@ This document is only for on-premise installations; hosted/SaaS Black Duck insta
     - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
     - email:  software-integrity-support@synopsys.com
 
-**Introduction**
+Introduction
 ================
 
-**Status of This Document**
+Status of This Document
 ---------------------------
 
 1. This document is a Draft, informal, test, work in progress.
@@ -142,7 +142,7 @@ This document is only for on-premise installations; hosted/SaaS Black Duck insta
     -  
     -  
 
-**Upgrade Schedule**
+Upgrade Schedule
 --------------------
 
 1. Staging: 
@@ -156,7 +156,7 @@ This document is only for on-premise installations; hosted/SaaS Black Duck insta
     expected to schedule upgrading Production on 
     - Date:
 
-**Background Information**
+Background Information
 --------------------------
 
 Customer to prepare private documentation of the following system information:
@@ -303,12 +303,12 @@ Resources to consider include:
     - If Fallback is required, an additional __________ hours would be
         required.
 
-**Overview**
+Overview
 ============
 
 This section provides a brief overview of the upgrade plan.
 
-1. **Planning**
+1. Planning
 
     1. Identify upgrade and production requirements
 
@@ -320,7 +320,7 @@ This section provides a brief overview of the upgrade plan.
 
     1. Open Synopsys SalesForce Case
 
-1. **First, In Staging**
+1. First, In Staging
 
     1. Prepare Environment
         1. Create Production-like Staging environment
@@ -393,7 +393,7 @@ This section provides a brief overview of the upgrade plan.
 
 
 
-**Plan the Upgrade**
+Plan the Upgrade
 ====================
 
 Planning for an upgrade should occur days or weeks prior to an
@@ -401,14 +401,14 @@ upgrade. This is not about actually changing everything. It is only
 about planning on what to do prior to the Black Duck upgrade.
 
 
-**Determining Upgrade and production requirements**
+Determining Upgrade and production requirements
 ---------------------------------------------------
 
 In this section, the areas that need to be checked prior to upgrading
 Black Duck are described. This includes server setup (RAM, CPUs, Storage), O/S
 versions, and application versions.
 
-### **Documentation**
+### Documentation
 
 Synopsys provides the following documents to help with the
 determination of what the RAM and CPUs that should be available to the
@@ -442,7 +442,7 @@ primary documents or ask Black Duck Support.
 
 In particular, Chapter 6 of the Installing Black Duck using Docker
 Swarm (Upgrading Black Duck) should be reviewed. This document indicates
-the supported **versions** of the target operating system, kernel, java,
+the supported versions of the target operating system, kernel, java,
 docker, and PostgreSQL. NOTE: since certain versions of PostgreSQL are
 supported in certain versions, the Black Duck server must be at that
 minimum version prior to upgrading PostgreSQL. 
@@ -457,14 +457,14 @@ For example, as part of the 2020.6.0 release, the following are
 supported (please refer to your Install Guide for the actual versions
 for your release):
 
-  |**O/S or Application**|**Version**|
+  |O/S or Application|Version|
   |----------------------|-----------| 
   |Red Hat Linux|7.3|
   |Docker|Community 19.03|
   |PostgreSQL (external database)|9.6.x or 11.7|
 
 
-### **Checklist**
+### Checklist
 
 Depending on how many projects and versions of those projects your
 organization is planning on supporting, it is important to make sure
@@ -497,7 +497,7 @@ plans.
 
 
 
-**Write post-upgrade validation test plan**
+Write post-upgrade validation test plan
 -------------------------------------------
 
 Customer is required to have a set of major stress and regression tests, that very closely mimic Production load, that
@@ -522,7 +522,7 @@ In this section, the areas that need to be checked prior to upgrading
 Black Duck are listed. This includes server setup (RAM, CPUs, Storage), O/S
 versions, and application versions.
 
-### **Checklist**
+### Checklist
 
 -   Review Regression Tests to see if changes in functionality impact
     the test cases.
@@ -548,7 +548,7 @@ versions, and application versions.
 
 
 
-**Document Database/API Connections**
+Document Database/API Connections
 -------------------------------------
 
 It is important for the Customer know unequivocally what connections are made, by Customer users, between the various
@@ -578,7 +578,7 @@ upgrade (guidance provided below) including:
 
 
 
-**Scheduling Upgrades**
+Scheduling Upgrades
 -----------------------
 
 If Synopsys Support is required, then the customer should schedule the
@@ -590,7 +590,7 @@ Support help.
 Should the customer require Synopsys support, they should open a case
 requesting help.
 
-### **Opening a Synopsys SalesForce Request**
+### Opening a Synopsys SalesForce Request
 
 You can create a SalesForce case by going to
 <https://community.synopsys.com> and logging in with your Community site
@@ -607,7 +607,7 @@ engaged.
 
 
 
-**Perform Pre-Upgrade Activities**
+Perform Pre-Upgrade Activities
 ==========================
 
 Prior to the target upgrade (be it test/staging or production), the
@@ -615,7 +615,7 @@ following activities must be performed to make sure that the environment is read
 
 
 
-**Performance and Networking Issues**
+Performance and Networking Issues
 ----------------------
 
 TODO:  be sure to elaborate on resolving networking issues, such as proxies, firewalls, tls certificates, etc, etc.
@@ -694,7 +694,7 @@ This optional ad hoc script captures a
 lot of system data including top, cpu, mem, application versions, etc.
 It has several psql queries that need to be modified for your setup. The
 end of the script does latency testing that may need to be configured if
-there are any partitions you do **not** wish tested.
+there are any partitions you do not wish tested.
 
 Synopsys can provide the script:
 
@@ -709,7 +709,7 @@ TODO: should use ~/.pgpass
 
 
 
-**Resolving Performance and Networking Issues**
+Resolving Performance and Networking Issues
 -----------------------------------------------
 TODO:  add networking, proxy, firewall and other related improvements here
 
@@ -1011,7 +1011,7 @@ sys 0m14.998s
 
 
 
-**Cleaning up Black Duck Projects and Scans**
+Cleaning up Black Duck Projects and Scans
 ---------------------------------------------
 
 Using the output of the Sage script, you can determine what scans,
@@ -1031,7 +1031,7 @@ vacuum and/or an application upgrade.
 
 
 
-**Cleaning up Databases**
+Cleaning up Databases
 -------------------------
 
 From time-to-time, Databases used by Black Duck become obsolete. If an
@@ -1083,7 +1083,7 @@ These databases are still valid as of the 2020.6.1 release.  (TODO:  update/conf
 
 
 
-**Trimming the Notification and audit_event logs**
+Trimming the Notification and audit_event logs
 ---------------------------------------------------
 
 Depending on the activity on the Black Duck server, the number of
@@ -1124,7 +1124,7 @@ delete from st.audit_event where event_timestamp < now() - interval '10 days';
 
 
 
-**Database Cleanup**
+Database Cleanup
 --------------------
 
 ### Remove any orphaned large objects
@@ -1365,7 +1365,7 @@ TIME ZONE,
 
 
 
-**Duplicating Production Database in Staging Environment**
+Duplicating Production Database in Staging Environment
 ----------------------------------------------------------
 
 Sometimes issues arise due to scale. Unless you have created a test
@@ -1385,7 +1385,7 @@ staging/test environment, then the following steps must be performed.
 
 
 
-**Duplicating Production Environment in Staging Environment**
+Duplicating Production Environment in Staging Environment
 -------------------------------------------------------------
 
 Just as with the creation of a similar/exact copy of the production
@@ -1400,14 +1400,14 @@ Linux, Docker, and PostgreSQL should also be the same.
 
 
 
-**Perform Black Duck Upgrade**
+Perform Black Duck Upgrade
 ==============================
 
 Once you environment is where you want it, you need to actually
 perform the upgrade. The steps are the same for staging as for
 production
 
-**Perform Pre-upgrade steps**
+Perform Pre-upgrade steps
 ---------------------
 
 ### Check Memory
@@ -1481,7 +1481,7 @@ to 2.
 
 
 
-**Upgrade Monitoring Scripts**
+Upgrade Monitoring Scripts
 
 Test scripts may be provided by Synopsys to help with monitoring
 upgrades.
@@ -1509,7 +1509,7 @@ schedules.
 
 
 
-**Perform Upgrade, Day of Upgrade (Staging then Production)**
+Perform Upgrade, Day of Upgrade (Staging then Production)
 -------------------------------------------------------------
 
 The upgrades normally take enough time to bring down Black Duck,
@@ -1736,7 +1736,7 @@ export PGPASSWORD='<PSQL Database Password>'
 Once the Database Migration is complete, bring the Docker containers
 back down and start the official release:
 
-**Stop Docker**
+Stop Docker
 
 ```
 docker stack rm hub
@@ -1806,7 +1806,7 @@ rows in the audit event table".
 
 
 
-**Perform Post-Upgrade Steps**
+Perform Post-Upgrade Steps
 ----------------------
 
 ### Run upgrade-validation tests.
@@ -1840,7 +1840,7 @@ with the appropriate status to provide an "all clear".
 
 
 
-**Contingency: Fallback Steps**
+Contingency: Fallback Steps
 ===============================
 
 We need to talk about these.  (TODO:  needs work)
@@ -1864,7 +1864,7 @@ We need to talk about these.  (TODO:  needs work)
 
 
 
-**Restore steps, during Fallback**
+Restore steps, during Fallback
 ---------------------------------------
 
 TODO:  augment this section
