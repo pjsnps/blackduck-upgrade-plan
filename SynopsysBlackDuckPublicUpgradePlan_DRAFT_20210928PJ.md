@@ -397,7 +397,7 @@ This section provides a brief overview of the upgrade plan.
 
 
 
-**Upgrade planning**
+**Plan the Upgrade **
 ====================
 
 Planning for an upgrade should occur days or weeks prior to an
@@ -611,7 +611,7 @@ engaged.
 
 
 
-**Pre-Upgrade Activities**
+**Perform Pre-Upgrade Activities**
 ==========================
 
 Prior to the target upgrade (be it test/staging or production), the
@@ -1784,19 +1784,16 @@ You can monitor the services as follows:
 watch docker ps
 ```
 
-#### Start Additional Services
+#### Docker service replicas
 
-If your target configuration has multiple instances of services (e.g.
-3 jobrunner services and 3 scan services, you need to start those.
-TODO:  better to put replices in .yml service block.
+TODO:  move this replicas section to better location?
 
-#### docker service scale hub_jobrunner=3
+Ask Black Duck Support if your installation would benefit from using multiple Docker replicas
+for one or more of the Black Duck Docker servers (scan, jobrunner, etc). 
+If so, they will instruction you on how to implement that, both in terms of instantiating the replicas, but also 
+in terms of also reducing the memory and cpu configuration of each of those services/containers. 
 
-#### docker service scale hub_scan=3
 
-#### 
-
-Confirm with output of commands in step 2.2.7.6.1. above. Ooops.???
 
 #### Vacuum audit_event table 
 
@@ -1805,7 +1802,7 @@ When the migration script is finished and If Customer has not done
 that you run the VACUUM command on the audit_event table to optimize
 PostgreSQL performance. See "Installing Black Duck using Docker Swarm",
 Chapter 6: "Upgrading Black Duck", "Migration script to purge unused
-rows in the audit event table" (Page 55). 
+rows in the audit event table". 
 
 
 
@@ -1813,15 +1810,14 @@ rows in the audit event table" (Page 55).
 
 
 
-**Post-Upgrade Steps**
+**Perform Post-Upgrade Steps**
 ----------------------
-
-### 
 
 ### Run upgrade-validation tests.
 
 Customer run the tests required to verify that the existing projects
 and process were not impacted unexpectedly by the upgrade.
+
 
 ### Re-run benchmark tests. 
 
