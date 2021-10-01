@@ -76,7 +76,7 @@ Customer to prepare private documentation of the following system information:
         - https://github.com/blackducksoftware/hub/releases
     1.  From that release archive, Customer to review release documentation:
 
-```
+```shell
         find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
         hub-2021.8.3/docker-swarm/README.md
@@ -95,7 +95,7 @@ Customer to prepare private documentation of the following system information:
     1. Customer to run 
 
 
-```
+```shell
 ./docker-swarm/bin/system_check.sh
 ```
 
