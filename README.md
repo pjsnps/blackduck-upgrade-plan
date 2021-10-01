@@ -10,14 +10,16 @@ Example usage for beginners:
      - cd blackduck-upgrade-plan/
      -   git checkout pjsnps-patch-1 # keeping on a branch until this is proven worthy                                      
      -   vi SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md 
-     -   pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
      -   doctoc SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md # replace toc
+     -   pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
      -   git commit -a -m "short message"  # commit to your local store
      -   git push  # push your change up to github
      -   \# check it in your browser:  https://github.com/pjsnps/blackduck-upgrade-plan/blob/pjsnps-patch-1/SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
      -   \# next time you edit
      -   git pull  # get any changes others might have made
      -   vi SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md                                                                 
+     -   doctoc SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md # replace toc
+     -   pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
      -   git push
 
  Markdown syntax:  https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
