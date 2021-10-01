@@ -9,7 +9,7 @@
   - [**Upgrade Schedule**](#upgrade-schedule)
   - [**Background Information**](#background-information)
 - [**Overview**](#overview)
-- [**Plan the Upgrade **](#plan-the-upgrade-)
+- [**Plan the Upgrade**](#plan-the-upgrade)
   - [**Determining Upgrade and production requirements**](#determining-upgrade-and-production-requirements)
     - [**Documentation**](#documentation)
     - [**Checklist**](#checklist)
@@ -56,7 +56,7 @@
     - [Production Database Replication](#production-database-replication)
   - [**Duplicating Production Environment in Staging Environment**](#duplicating-production-environment-in-staging-environment)
 - [**Perform Black Duck Upgrade**](#perform-black-duck-upgrade)
-  - [**Pre-upgrade steps**](#pre-upgrade-steps)
+  - [**Perform Pre-upgrade steps**](#perform-pre-upgrade-steps)
     - [Check Memory](#check-memory)
     - [Check Storage](#check-storage)
     - [Download upgrade images](#download-upgrade-images)
@@ -393,7 +393,7 @@ This section provides a brief overview of the upgrade plan.
 
 
 
-**Plan the Upgrade **
+**Plan the Upgrade**
 ====================
 
 Planning for an upgrade should occur days or weeks prior to an
@@ -1407,7 +1407,7 @@ Once you environment is where you want it, you need to actually
 perform the upgrade. The steps are the same for staging as for
 production
 
-**Pre-upgrade steps**
+**Perform Pre-upgrade steps**
 ---------------------
 
 ### Check Memory
