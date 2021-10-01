@@ -94,18 +94,14 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
+**Notices**
+============
 This document is provided as-is, without warranty or liability.
 
 This document is intended to be used by very large (databases on the order of 1 TB) enterprise Black Duck customers to help their Black Duck upgrades go smoothly.  
 
 This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
-
-**Table of Contents**
-============
-
-TODO: create TOC
-* auto-gen TOC:
-{:toc}
 
 **Contacts**
 ============
