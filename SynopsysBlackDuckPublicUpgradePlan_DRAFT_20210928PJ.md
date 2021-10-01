@@ -100,78 +100,78 @@ Customer to prepare private documentation of the following system information:
     1.  Customer to decide whether to use docker swarm kubernetes.
     1.  Customer to work with Black Duck Support team to configure container services.
 
-```shell
-	$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
-	    image: blackducksoftware/blackduck-postgres:9.6-1.1
-		limits: {memory: 3072M}
-		reservations: {cpus: '1', memory: 3072M}
+	```shell
+		$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
+		    image: blackducksoftware/blackduck-postgres:9.6-1.1
+			limits: {memory: 3072M}
+			reservations: {cpus: '1', memory: 3072M}
 
-	    image: blackducksoftware/blackduck-authentication:2021.8.3
-	       HUB_MAX_MEMORY: 512m
-		limits: {cpus: '1', memory: 1024M}
-		reservations: {memory: 1024M}
+		    image: blackducksoftware/blackduck-authentication:2021.8.3
+		       HUB_MAX_MEMORY: 512m
+			limits: {cpus: '1', memory: 1024M}
+			reservations: {memory: 1024M}
 
-	    image: blackducksoftware/blackduck-webapp:2021.8.3
-	      HUB_MAX_MEMORY: 2048m
-		limits: {cpus: '1', memory: 2560M}
-		reservations: {cpus: '1', memory: 2560M}
+		    image: blackducksoftware/blackduck-webapp:2021.8.3
+		      HUB_MAX_MEMORY: 2048m
+			limits: {cpus: '1', memory: 2560M}
+			reservations: {cpus: '1', memory: 2560M}
 
-	    image: blackducksoftware/blackduck-scan:2021.8.3
-	      HUB_MAX_MEMORY: 2048m
-		limits: {cpus: '1', memory: 2560M}
-		reservations: {cpus: '1', memory: 2560M}
+		    image: blackducksoftware/blackduck-scan:2021.8.3
+		      HUB_MAX_MEMORY: 2048m
+			limits: {cpus: '1', memory: 2560M}
+			reservations: {cpus: '1', memory: 2560M}
 
-	    image: blackducksoftware/blackduck-jobrunner:2021.8.3
-	       HUB_MAX_MEMORY: 4096m
-		limits: {cpus: '1', memory: 4608M}
-		reservations: {cpus: '1', memory: 4608M}
+		    image: blackducksoftware/blackduck-jobrunner:2021.8.3
+		       HUB_MAX_MEMORY: 4096m
+			limits: {cpus: '1', memory: 4608M}
+			reservations: {cpus: '1', memory: 4608M}
 
-	    image: blackducksoftware/blackduck-cfssl:1.0.3
-		limits: {memory: 640M}
-		reservations: {memory: 640M}
+		    image: blackducksoftware/blackduck-cfssl:1.0.3
+			limits: {memory: 640M}
+			reservations: {memory: 640M}
 
-	    image: blackducksoftware/blackduck-logstash:1.0.10
-		limits: {memory: 1024M}
-		reservations: {memory: 1024M}
+		    image: blackducksoftware/blackduck-logstash:1.0.10
+			limits: {memory: 1024M}
+			reservations: {memory: 1024M}
 
-	    image: blackducksoftware/blackduck-registration:2021.8.3
-		limits: {memory: 640M}
-		reservations: {memory: 640M}
+		    image: blackducksoftware/blackduck-registration:2021.8.3
+			limits: {memory: 640M}
+			reservations: {memory: 640M}
 
-	    image: blackducksoftware/blackduck-nginx:2.0.6
-		limits: {memory: 512M}
-		reservations: {memory: 512M}
+		    image: blackducksoftware/blackduck-nginx:2.0.6
+			limits: {memory: 512M}
+			reservations: {memory: 512M}
 
-	    image: blackducksoftware/blackduck-webui:2021.8.3
-		limits: {cpus: '1', memory: 640M}
-		reservations: {cpus: '0.5', memory: 640M}
+		    image: blackducksoftware/blackduck-webui:2021.8.3
+			limits: {cpus: '1', memory: 640M}
+			reservations: {cpus: '0.5', memory: 640M}
 
-	    image: blackducksoftware/blackduck-documentation:2021.8.3
-		limits: {memory: 512M}
-		reservations: {memory: 512M}
+		    image: blackducksoftware/blackduck-documentation:2021.8.3
+			limits: {memory: 512M}
+			reservations: {memory: 512M}
 
-	      image: blackducksoftware/blackduck-upload-cache:1.0.18
-		  limits: {memory: 512M}
-		  reservations: {memory: 512M}
+		      image: blackducksoftware/blackduck-upload-cache:1.0.18
+			  limits: {memory: 512M}
+			  reservations: {memory: 512M}
 
-	    image: blackducksoftware/blackduck-redis:2021.8.3
-		limits: {memory: 1024M}
-		reservations: {memory: 1024M}
+		    image: blackducksoftware/blackduck-redis:2021.8.3
+			limits: {memory: 1024M}
+			reservations: {memory: 1024M}
 
-	    image: blackducksoftware/blackduck-bomengine:2021.8.3
-	      HUB_MAX_MEMORY: 4096m
-		  limits: {memory: 4608M}
-		  reservations: {memory: 1536M}
+		    image: blackducksoftware/blackduck-bomengine:2021.8.3
+		      HUB_MAX_MEMORY: 4096m
+			  limits: {memory: 4608M}
+			  reservations: {memory: 1536M}
 
-	    image: blackducksoftware/blackduck-matchengine:2021.8.3
-		limits: { memory: 4608M, cpus: '1' }
-		reservations: { memory: 1536M, cpus: '1' }
-	      HUB_MAX_MEMORY: 4096m
+		    image: blackducksoftware/blackduck-matchengine:2021.8.3
+			limits: { memory: 4608M, cpus: '1' }
+			reservations: { memory: 1536M, cpus: '1' }
+		      HUB_MAX_MEMORY: 4096m
 
-	    image: blackducksoftware/rabbitmq:1.2.3
-		  limits: {memory: 1024M}
-		  reservations: {memory: 1024M}
-```
+		    image: blackducksoftware/rabbitmq:1.2.3
+			  limits: {memory: 1024M}
+			  reservations: {memory: 1024M}
+	```
 
 Resources to consider include: 
 
