@@ -652,9 +652,11 @@ are any issues that need to be dealt with prior to the upgrades
 
 Check out the iowait values on the Database Server. 
 
-> 06:00:01 PM CPU %user %nice %system %iowait %steal %idle
-> 06:10:01 PM all 2.04 0.00 1.12 0.02 0.00 96.83
-> 06:20:01 PM all 2.21 0.00 1.02 0.02 0.00 96.76
+```
+06:00:01 PM CPU %user %nice %system %iowait %steal %idle
+06:10:01 PM all 2.04 0.00 1.12 0.02 0.00 96.83
+06:20:01 PM all 2.21 0.00 1.02 0.02 0.00 96.76
+```
 
 Should there be any issues, then you need to talk to your server,
 network, and database admins to see what you can do to remove any
@@ -1856,7 +1858,9 @@ docker stack deploy -c docker-compose.dbmigrate.yml hub
     live in a private repository, docker stack will not pull them unless
     the following flag is added to the above command: 
 
-> --with-registry-auth 
+```
+--with-registry-auth 
+```
 
 1.  After the DB container has started, run the migration script
     located in the docker-swarm directory. This script restores the data
