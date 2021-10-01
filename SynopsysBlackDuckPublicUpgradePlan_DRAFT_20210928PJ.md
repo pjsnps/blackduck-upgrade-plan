@@ -91,16 +91,14 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-**Notices**
-============
+# Notices
 This document is provided as-is, without warranty or liability.
 
 This document is intended to be used by very large (databases on the order of 1 TB) enterprise Black Duck customers to help their Black Duck upgrades go smoothly.  
 
 This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
 
-Contacts
-============
+# Contacts
 
 1. Customer: 
 
@@ -124,11 +122,9 @@ Contacts
     - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
     - email:  software-integrity-support@synopsys.com
 
-Introduction
-================
+# Introduction
 
-Status of This Document
----------------------------
+## Status of This Document
 
 1. This document is a Draft, informal, test, work in progress.
     - last updated  October 1, 2021, pjalajas. 
@@ -142,8 +138,7 @@ Status of This Document
     -  
     -  
 
-Upgrade Schedule
---------------------
+## Upgrade Schedule
 
 1. Staging: 
     - Date: 
@@ -156,8 +151,7 @@ Upgrade Schedule
     expected to schedule upgrading Production on 
     - Date:
 
-Background Information
---------------------------
+## Background Information
 
 Customer to prepare private documentation of the following system information:
 
@@ -303,8 +297,7 @@ Resources to consider include:
     - If Fallback is required, an additional __________ hours would be
         required.
 
-Overview
-============
+# Overview
 
 This section provides a brief overview of the upgrade plan.
 
@@ -393,16 +386,14 @@ This section provides a brief overview of the upgrade plan.
 
 
 
-Plan the Upgrade
-====================
+# Plan the Upgrade
 
 Planning for an upgrade should occur days or weeks prior to an
 upgrade. This is not about actually changing everything. It is only
 about planning on what to do prior to the Black Duck upgrade.
 
 
-Determining Upgrade and production requirements
----------------------------------------------------
+## Determining Upgrade and production requirements
 
 In this section, the areas that need to be checked prior to upgrading
 Black Duck are described. This includes server setup (RAM, CPUs, Storage), O/S
@@ -497,8 +488,7 @@ plans.
 
 
 
-Write post-upgrade validation test plan
--------------------------------------------
+## Write post-upgrade validation test plan
 
 Customer is required to have a set of major stress and regression tests, that very closely mimic Production load, that
 are run in Staging, prior to upgrading Black Duck in Production. This set of regression tests might include
@@ -548,8 +538,7 @@ versions, and application versions.
 
 
 
-Document Database/API Connections
--------------------------------------
+## Document Database/API Connections
 
 It is important for the Customer know unequivocally what connections are made, by Customer users, between the various
 tools that may interact with the Black Duck Database and/or REST API.
@@ -578,8 +567,7 @@ upgrade (guidance provided below) including:
 
 
 
-Scheduling Upgrades
------------------------
+## Scheduling Upgrades
 
 If Synopsys Support is required, then the customer should schedule the
 start of an upgrade to occur during the morning of a normal business day
@@ -607,16 +595,14 @@ engaged.
 
 
 
-Perform Pre-Upgrade Activities
-==========================
+# Perform Pre-Upgrade Activities
 
 Prior to the target upgrade (be it test/staging or production), the
 following activities must be performed to make sure that the environment is ready. 
 
 
 
-Performance and Networking Issues
-----------------------
+## Performance and Networking Issues
 
 TODO:  be sure to elaborate on resolving networking issues, such as proxies, firewalls, tls certificates, etc, etc.
 
@@ -709,8 +695,7 @@ TODO: should use ~/.pgpass
 
 
 
-Resolving Performance and Networking Issues
------------------------------------------------
+## Resolving Performance and Networking Issues
 TODO:  add networking, proxy, firewall and other related improvements here
 
 Using the output of the sar/ksar command and the
@@ -1011,8 +996,7 @@ sys 0m14.998s
 
 
 
-Cleaning up Black Duck Projects and Scans
----------------------------------------------
+## Cleaning up Black Duck Projects and Scans
 
 Using the output of the Sage script, you can determine what scans,
 project-versions, and whole projects can be removed.
@@ -1031,8 +1015,7 @@ vacuum and/or an application upgrade.
 
 
 
-Cleaning up Databases
--------------------------
+## Cleaning up Databases
 
 From time-to-time, Databases used by Black Duck become obsolete. If an
 upcoming release requires the removal of a database as part of the
@@ -1083,8 +1066,7 @@ These databases are still valid as of the 2020.6.1 release.  (TODO:  update/conf
 
 
 
-Trimming the Notification and audit_event logs
----------------------------------------------------
+## Trimming the Notification and audit_event logs
 
 Depending on the activity on the Black Duck server, the number of
 records taken up by the logging could be in the millions. It is
@@ -1124,8 +1106,7 @@ delete from st.audit_event where event_timestamp < now() - interval '10 days';
 
 
 
-Database Cleanup
---------------------
+## Database Cleanup
 
 ### Remove any orphaned large objects
 
@@ -1365,8 +1346,7 @@ TIME ZONE,
 
 
 
-Duplicating Production Database in Staging Environment
-----------------------------------------------------------
+## Duplicating Production Database in Staging Environment
 
 Sometimes issues arise due to scale. Unless you have created a test
 database with the possible scaling issues of the production database,
@@ -1385,8 +1365,7 @@ staging/test environment, then the following steps must be performed.
 
 
 
-Duplicating Production Environment in Staging Environment
--------------------------------------------------------------
+## Duplicating Production Environment in Staging Environment
 
 Just as with the creation of a similar/exact copy of the production
 database in the test/staging environment, the same should be done with
@@ -1400,15 +1379,13 @@ Linux, Docker, and PostgreSQL should also be the same.
 
 
 
-Perform Black Duck Upgrade
-==============================
+# Perform Black Duck Upgrade
 
 Once you environment is where you want it, you need to actually
 perform the upgrade. The steps are the same for staging as for
 production
 
-Perform Pre-upgrade steps
----------------------
+## Perform Pre-upgrade steps
 
 ### Check Memory
 
@@ -1509,8 +1486,7 @@ schedules.
 
 
 
-Perform Upgrade, Day of Upgrade (Staging then Production)
--------------------------------------------------------------
+## Perform Upgrade, Day of Upgrade (Staging then Production)
 
 The upgrades normally take enough time to bring down Black Duck,
 restart Black Duck, and run through any Database Migration scripts.
@@ -1806,8 +1782,7 @@ rows in the audit event table".
 
 
 
-Perform Post-Upgrade Steps
-----------------------
+## Perform Post-Upgrade Steps
 
 ### Run upgrade-validation tests.
 
@@ -1840,8 +1815,7 @@ with the appropriate status to provide an "all clear".
 
 
 
-Contingency: Fallback Steps
-===============================
+# Contingency: Fallback Steps
 
 We need to talk about these.  (TODO:  needs work)
 
@@ -1864,8 +1838,7 @@ We need to talk about these.  (TODO:  needs work)
 
 
 
-Restore steps, during Fallback
----------------------------------------
+## Restore steps, during Fallback
 
 TODO:  augment this section
 
