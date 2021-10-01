@@ -71,10 +71,11 @@ TODO
 
 Customer to prepare private documentation of the following system information:
 
-1.Describe Customer Black Duck instances: 
+1. Describe Customer Black Duck instances: 
     1.  Customer to download desire upgrade target Black Duck release
         - https://github.com/blackducksoftware/hub/releases
     1.  From that release archive, Customer to review release documentation:
+
 ```
         find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
@@ -90,13 +91,17 @@ Customer to prepare private documentation of the following system information:
         hub-2021.8.3/README.containers.md
         hub-2021.8.3/README.md
 ```
+
     1. Customer to run 
+
 
 ```
 ./docker-swarm/bin/system_check.sh
 ```
+
     1.  Customer to decide whether to use docker swarm kubernetes.
     1.  Customer to work with Black Duck Support team to configure container services.
+
 ```
 	$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
 	    image: blackducksoftware/blackduck-postgres:9.6-1.1
