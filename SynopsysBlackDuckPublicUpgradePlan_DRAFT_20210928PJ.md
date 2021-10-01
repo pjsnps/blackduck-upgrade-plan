@@ -1,33 +1,36 @@
 This document is provided as-is, without warranty or liability.
 
-This is document is intended to help Black Duck customer-performed upgrades go smoothly.  It is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
+This document is intended to be used by very large (databases on the order of 1 TB) enterprise Black Duck customers to help their Black Duck upgrades go smoothly.  
+
+This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
 
 **Contents**
 ============
 
-TBD
+TODO
 
 **Contacts**
 ============
 
-1.  Customer: 
+1. Customer: 
 
-2.  Case(s): 
+1. Case(s): 
+    - Current SalesForce Case number:
     - Prior related cases for reference: 
 
-3.  Customer: 
+1. Customer: 
     - Name:
     - email:
     - phone:
     - timezone:
 
-4.  Synopsys Support Staff member(s): 
+1. Synopsys Support Staff member(s): 
     - Name(s):  
     - email(s):
     - phone(s):
     - timezone(s):
 
-5.  Support links: 
+1. Support links: 
     - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
     - email:  software-integrity-support@synopsys.com
 
@@ -37,25 +40,27 @@ TBD
 **Status of This Document**
 ---------------------------
 
-1.  This document is a Draft, informal, test, work in progress.
-    - last updated ~~September 28, 2021~~ September 30, 2021. 
+1. This document is a Draft, informal, test, work in progress.
+    - last updated  October 1, 2021, pjalajas. 
     - Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
 
-2.  Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
+1. TODO:  search this documement for "TODO" and resolve them.
 
-3.  This document has been reviewed by:
+1. Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
+
+1. This document has been reviewed by:
     -  
     -  
 
 **Upgrade Schedule**
 --------------------
 
-1.  Staging: 
+1. Staging: 
     - Date: 
     - From version:
     - To version:
 
-2.  Production:
+1. Production:
     - Only after successful completion of the upgrade on Staging, and
     resolution of any findings from that upgrade, Customer is currently
     expected to schedule upgrading Production on 
@@ -66,47 +71,141 @@ TBD
 
 Customer to prepare private documentation of the following system information:
 
-1.  Customer Black Duck instances: 
+1.Describe Customer Black Duck instances: 
+    1.  Customer to download desire upgrade target Black Duck release
+        - https://github.com/blackducksoftware/hub/releases
+    1.  From that release archive, Customer to review release documentation:
+```
+        find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
-    1.  Running in Docker compose stack or kubernetes helm (TODO: fixme?). 
-        - Document the follow for each Black Duck container/service:
-            - Number of container replicas:
-            - HUB_MAX_MEMORY
-            - Resource reservations and limits
-                - ram
-                - cpu
+        hub-2021.8.3/docker-swarm/README.md
+        hub-2021.8.3/docs/en_US/getting_started.pdf
+        hub-2021.8.3/docs/en_US/install_kubernetes.pdf
+        hub-2021.8.3/docs/en_US/install_openshift.pdf
+        hub-2021.8.3/docs/en_US/install_swarm.pdf
+        hub-2021.8.3/docs/en_US/release_notes.pdf
+        hub-2021.8.3/Important_Upgrade_Announcement.md
+        hub-2021.8.3/kubernetes/blackduck/README.md
+        hub-2021.8.3/kubernetes/README.md
+        hub-2021.8.3/README.containers.md
+        hub-2021.8.3/README.md
+```
+    1. Customer to run 
 
-    2.  Database is in container or external. 
+```
+./docker-swarm/bin/system_check.sh
+```
+    1.  Customer to decide whether to use docker swarm kubernetes.
+    1.  Customer to work with Black Duck Support team to configure container services.
+```
+	$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
+	    image: blackducksoftware/blackduck-postgres:9.6-1.1
+		limits: {memory: 3072M}
+		reservations: {cpus: '1', memory: 3072M}
 
-    2.  Does installation include Synopsys Alert.
-        - Alert database in container or external database.
+	    image: blackducksoftware/blackduck-authentication:2021.8.3
+	       HUB_MAX_MEMORY: 512m
+		limits: {cpus: '1', memory: 1024M}
+		reservations: {memory: 1024M}
 
-    3.  How are database disks connected? Example: over iSCSI over 2-NIC mpath ethernet elsewhere in the same datacenter. 
+	    image: blackducksoftware/blackduck-webapp:2021.8.3
+	      HUB_MAX_MEMORY: 2048m
+		limits: {cpus: '1', memory: 2560M}
+		reservations: {cpus: '1', memory: 2560M}
 
-    1.  Andy Synopsys-reported infrastructure
-        performance issues with their internal sysadmins, including possible proxy/firewall issues. 
+	    image: blackducksoftware/blackduck-scan:2021.8.3
+	      HUB_MAX_MEMORY: 2048m
+		limits: {cpus: '1', memory: 2560M}
+		reservations: {cpus: '1', memory: 2560M}
 
-2.  Customer has Staging and Production environments. Production
-    environment is highly secure, with limited access. During a recent
-    upgrade event, Staging underestimated Production upgrade task
-    durations. With the smaller database and footprint, the Staging
-    environment did not run into the same issues with the Database
-    Migration scripts that the Production server did.
+	    image: blackducksoftware/blackduck-jobrunner:2021.8.3
+	       HUB_MAX_MEMORY: 4096m
+		limits: {cpus: '1', memory: 4608M}
+		reservations: {cpus: '1', memory: 4608M}
 
-    - During a recent upgrade event, have Customer docker container
-        memory, cpu, and replica settings been reported misconfigured and had to
+	    image: blackducksoftware/blackduck-cfssl:1.0.3
+		limits: {memory: 640M}
+		reservations: {memory: 640M}
+
+	    image: blackducksoftware/blackduck-logstash:1.0.10
+		limits: {memory: 1024M}
+		reservations: {memory: 1024M}
+
+	    image: blackducksoftware/blackduck-registration:2021.8.3
+		limits: {memory: 640M}
+		reservations: {memory: 640M}
+
+	    image: blackducksoftware/blackduck-nginx:2.0.6
+		limits: {memory: 512M}
+		reservations: {memory: 512M}
+
+	    image: blackducksoftware/blackduck-webui:2021.8.3
+		limits: {cpus: '1', memory: 640M}
+		reservations: {cpus: '0.5', memory: 640M}
+
+	    image: blackducksoftware/blackduck-documentation:2021.8.3
+		limits: {memory: 512M}
+		reservations: {memory: 512M}
+
+	      image: blackducksoftware/blackduck-upload-cache:1.0.18
+		  limits: {memory: 512M}
+		  reservations: {memory: 512M}
+
+	    image: blackducksoftware/blackduck-redis:2021.8.3
+		limits: {memory: 1024M}
+		reservations: {memory: 1024M}
+
+	    image: blackducksoftware/blackduck-bomengine:2021.8.3
+	      HUB_MAX_MEMORY: 4096m
+		  limits: {memory: 4608M}
+		  reservations: {memory: 1536M}
+
+	    image: blackducksoftware/blackduck-matchengine:2021.8.3
+		limits: { memory: 4608M, cpus: '1' }
+		reservations: { memory: 1536M, cpus: '1' }
+	      HUB_MAX_MEMORY: 4096m
+
+	    image: blackducksoftware/rabbitmq:1.2.3
+		  limits: {memory: 1024M}
+		  reservations: {memory: 1024M}
+```
+
+Resources to consider include: 
+
+- Number of container replicas:
+- HUB_MAX_MEMORY
+- Resource reservations and limits
+    - ram
+    - cpu
+
+    1. Database: in container or external? 
+
+    1. Does installation include Synopsys Alert?
+        - Is Alert database in container or external database?
+
+    1. How are database disks connected?
+        - Example: over iSCSI over 2-NIC mpath ethernet elsewhere in the same datacenter. 
+
+    1. Any previously Synopsys-reported infrastructure performance issues with their internal sysadmins, including possible proxy/firewall issues?
+
+1. Customer has Staging and Production environments. 
+    - Does customer Staging exactly replicate Production in terms of size and networking configuration?
+    - Does customer environment include complex proxy/firewall configurations?
+    - During a recent upgrade event, did Staging testing underestimate Production upgrade task durations? 
+
+    - During a recent upgrade event, were Customer docker container memory, cpu, and replica settings reported to have been misconfigured and had to
         be fixed under a P1 Case? 
 
-3.  Customer Production bds_hub database was recently __________ TB.
+1. Customer Production bds_hub database was recently __________ TB.
 
-4.  The upgrade is planned to be performed using a simplified Upgrade
+1. The upgrade is planned to be performed using a simplified Upgrade
     Docker stack implemented by deploying new Synopsys-supplied
     deployment (.yml) files. These Upgrade .yml files will be different
     from the Production versions of the files.
 
-5.  Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
+1. Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
 
-6.  The upgrade is expected to take about __________ hours. 
+1. The upgrade is expected to take about __________ hours. 
 
     - If Fallback is required, an additional __________ hours would be
         required.
@@ -116,89 +215,88 @@ Customer to prepare private documentation of the following system information:
 
 This section provides a brief overview of the upgrade plan.
 
-1.  **Planning**
+1. **Planning**
 
-    1.  Identify upgrade and production requirements
+    1. Identify upgrade and production requirements
 
-    2.  Write post-upgrade validation test plan
+    1. Write post-upgrade validation test plan
 
-    3.  Inventory database connections
+    1. Inventory database connections
 
-    4.  Schedule Staging upgrade
+    1. Schedule Staging upgrade
 
-    5.  Open Synopsys SalesForce Case
+    1. Open Synopsys SalesForce Case
 
-2.  **First, In Staging**
+1. **First, In Staging**
 
-    6.  **Prepare Environment
+    1. Prepare Environment
+        1. Create Production-like Staging environment
 
-        1.  Test and resolve performance issues
+        1. Test and resolve performance issues
 
-            1.  Implement guidance from Best Practices, Sage,
+            1. Implement guidance from Best Practices, Sage,
                 system_check.sh, sar, Zenoss 
 
-            2.  Customer IT team to test and resolve issues
+            1. Customer IT team to test and resolve issues
 
-                1.  Consider: dd, pgbench, sysbench, bonnie++
+                1. Consider: dd, pgbench, sysbench, bonnie++
 
-        2.  Remove unused data; delete, truncate/drop, cull, configure
+        1. Remove unused data; delete, truncate/drop, cull, configure
             settings
 
-        3.  Vacuum analyze full bds_hub
+        1. Vacuum analyze full bds_hub
 
-        4.  Run PostgreSQL tuning utility
+        1. Run PostgreSQL tuning utility
 
-        5.  Backup database
+        1. Backup database
 
-        6.  Create Production-like Staging environment
+        1. Ensure disk space for db vacuum, migration
 
-        7.  Ensure disk space for db vacuum, migration
+        1. Check memory
 
-        8.  Check memory
+        1. Download upgrade-related files
 
-        9.  Download upgrade-related files
+        1. Schedule Staging upgrade
 
-        10.  Schedule Staging upgrade
+    1. Perform Upgrade in Staging
 
-    7.  Perform Upgrade
+        1. Stop scanning and external connections
 
-        11.  Stop scanning and external connections
+        1. Bring down docker stack
 
-        12.  Bring down docker stack
+        1. If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
 
-        13.  If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
+        1. Optional: upgrade OS, kernel 
 
-        14.  Optional: upgrade OS, kernel 
+        1. Optional: upgrade Docker with yum
 
-        15.  Optional: upgrade Docker with yum
+        1. Optional: satisfy other requirements, objectives. 
 
-        16.  Optional: satisfy other requirements, objectives. 
+        1. Deploy docker migration stack
 
-        17.  Deploy docker migration stack
+        1. Restore database with pre-upgrade-version of hub_db_migrate.sh
 
-        18.  Restore database with pre-upgrade-version of hub_db_migrate.sh
+        1. Vacuum audit_event table
 
-        19.  Vacuum audit_event table
+        1. Optional, upgrade PostgreSQL
 
-        20.  Optional, upgrade PostgreSQL
+             1. Bring down docker stack
 
-             1.  Bring down docker stack
+             1. Upgrade PostgeSQL
 
-             2.  Upgrade PostgeSQL
+        1. Deploy Black Duck with target version of Production deployment .yml files
 
-        21.  Deploy Black Duck with target version of Production deployment .yml files
+    1. Post-Staging-Upgrade Steps
 
-    8.  Post-Upgrade Steps
+        1. Run upgrade-validation tests
 
-        22.  Run upgrade-validation tests
+        1. Re-run benchmark tests
 
-        23.  Re-run benchmark tests
+        1. Announce upgrade completion to stakeholders
 
-        24.  Announce upgrade completion to stakeholders
+1. Then, In Production
 
-3.  Then, In Production
-
-    9.  Schedule and repeat "In Staging" steps as above
+    1.  Schedule and repeat "In Staging" steps as above
 
 
 
@@ -207,14 +305,14 @@ This section provides a brief overview of the upgrade plan.
 
 Planning for an upgrade should occur days or weeks prior to an
 upgrade. This is not about actually changing everything. It is only
-about planning on what to do prior to the Black Duck upgrade.**
+about planning on what to do prior to the Black Duck upgrade.
 
 
 **Determining Upgrade and production requirements**
 ---------------------------------------------------
 
 In this section, the areas that need to be checked prior to upgrading
-Black Duck. This includes server setup (RAM, CPUs, Storage), O/S
+Black Duck are described. This includes server setup (RAM, CPUs, Storage), O/S
 versions, and application versions.
 
 ### **Documentation**
@@ -239,20 +337,24 @@ get you an advance copy. These documents include:
 -   Black Duck Scanning Best Practices
     (<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)
 
+Customer must also review the README and Announcments files provided with the target Black Duck release.
+
 As these documents are updated over time, it is important to keep up
 on the changes.
 
-Those documents are the primary resources the customer should follow;
+Those documents are the primary resources the customer should follow to perform a Black Duck upgrade;
 this Upgrade Support Plan document tries to augment, not replicate,
 them. If something is unclear in this upgrade document, refer to the
 primary documents or ask Black Duck Support. 
 
 In particular, Chapter 6 of the Installing Black Duck using Docker
 Swarm (Upgrading Black Duck) should be reviewed. This document indicates
-the supported versions of the target operating system, kernel, java,
+the supported **versions** of the target operating system, kernel, java,
 docker, and PostgreSQL. NOTE: since certain versions of PostgreSQL are
 supported in certain versions, the Black Duck server must be at that
-minimum version prior to upgrading PostgreSQL. For instance, if the
+minimum version prior to upgrading PostgreSQL. 
+
+For instance, if the
 Installation Guide indicates that PostgreSQL 11.7 is now supported for
 external databases as part of the 2020.6.x release, you cannot upgrade
 PostgreSQL to 11.7 until the Black Duck server is at that release
@@ -268,7 +370,8 @@ for your release):
   |Docker|Community 19.03|
   |PostgreSQL (external database)|9.6.x or 11.7|
 
-### **Checklist:**
+
+### **Checklist**
 
 Depending on how many projects and versions of those projects your
 organization is planning on supporting, it is important to make sure
@@ -296,7 +399,7 @@ plans.
 -   Customer to review those documents and resolve with Synopsys any
     questions or issues discovered with Synopsys.
 
--   Customer needs to determine if any upgrades need to occur and if
+-   Customer needs to determine if any server upgrades need to occur and if
     they should be done prior to the Black Duck upgrade.
 
 
@@ -304,31 +407,29 @@ plans.
 **Write post-upgrade validation test plan**
 -------------------------------------------
 
-It is highly recommended that you have a set of regression tests that
-you run when you upgrade Black Duck. If there was a hiccup that caused
-database corruption, then this will help provide validation that the
-upgrade worked correctly. This set of regression tests could be as
-simple as verifying that the same projects are visible, that the results
+Customer is required to have a Production-mimicing set of major stress and regression tests that
+are run when upgrading Black Duck. This set of regression tests might include
+verifying that the same projects are visible, that the results
 of key BOMs of project-versions are OK, that admins can access license
 management, policy management, or other sections.
 
 In addition to this, there will be new functionality with the new
-releases. If your organization is looking to take advantage of these
+release. If your organization is looking to take advantage of these
 changes, then you will need to make sure that these changes fit into
 your policies and procedures. Having tests to check these features will
 provide validation specific to your installation.
 
 You may have cases open with Synopsys concerning your use of the
 product that are slated to be fixed in this release. RFEs you have
-requested may also be part of this release. There should be some tests
+requested may also be part of this release. There should be tests
 to verify that these fixes and improvements work as expected in this
 release.
 
 In this section, the areas that need to be checked prior to upgrading
-Black Duck. This includes server setup (RAM, CPUs, Storage), O/S
+Black Duck are listed. This includes server setup (RAM, CPUs, Storage), O/S
 versions, and application versions.
 
-### **Checklist:**
+### **Checklist**
 
 -   Review Regression Tests to see if changes in functionality impact
     the test cases.
@@ -336,28 +437,30 @@ versions, and application versions.
     -   Make changes as necessary for target release
 
 -   Review Release Notes for areas to test (at least both Chapters 1
-    and 2, for all applicable Black Duck versions).
+    and 2, for all applicable Black Duck versions that will be spanned by this Black Duck upgrade event).
 
     -   Create Test Cases for the functionality that you will use or
         may impact your use
 
 -   Review issues opened with Synopsys (or recent issues not tracked
-    yet) and determine if any may be fixed in the target release
+    yet) and determine if any may be fixed in the target release.
 
     -   Create Test Cases for the functionality that you will use or
-        may impact your use
+        may impact your use.
 
--   Review Scripts based on Black Duck APIs
+-   Review Scripts based on Black Duck APIs.
 
     -   Create Test Cases to verify that interface is still working
-        the same way after the upgrade
+        the same way after the upgrade.
+
+
 
 **Document Database/API Connections**
 -------------------------------------
 
-It is important to see what connections are made between the various
+It is important for the Customer know unequivocally what connections are made, by Customer users, between the various
 tools that may interact with the Black Duck Database and/or REST API.
-These will be used during the upgrade to minimize impact to the database
+These connections will need to be blocked during the upgrade, to minimize impact to the database
 and server.
 
 Customer to create an inventory of all the different kinds of Black
@@ -379,6 +482,8 @@ upgrade (guidance provided below) including:
 
 -   Server Logins (to either Black Duck or database server (if
     external))
+
+
 
 **Scheduling Upgrades**
 -----------------------
@@ -424,7 +529,7 @@ is(are) ready.
 TODO:  be sure to elaborate on resolving networking issues, such as proxies, firewalls, tls certificates, etc, etc.
 
 It is important that any performance issues be resolved or mitigated
-prior to an upgrade in order to keep the upgrade time required
+prior to an upgrade in order to keep the upgrade duration 
 minimized. 
 
 These are a few of the documents/tools that can help determine if
@@ -460,9 +565,9 @@ to the upgrade:
 
 ### system_check.sh
 
-(.../hub/hub_docker/hub_<version>/docker-swarm/bin/system_check.sh)
+(./hub_<version>/docker-swarm/bin/system_check.sh)
 
-Run on Black Duck Server and Database Server. Check to see if there
+Run this on the Black Duck Server as well as on the Database Server if applicable. Check to see if there
 are any issues that need to be dealt with prior to the upgrades
 
 ### sar
@@ -481,30 +586,33 @@ NOTE: Should you need to look at the SAR results from the other day,
 go to /var/log/sa and type "sar -f sa\#\#" where \#\# is the day of the
 month.
 
+
+
 ### Other Customer monitoring tools, such as zenoss?
 
 Customer to document plans to use any such monitoring tools.
+
+
 
 ### SynopsysGatherServerSpecs_202007.bash
 
 TODO: Pete to test and update this script if needed.
 
-This captures a
+This optional ad hoc script captures a
 lot of system data including top, cpu, mem, application versions, etc.
 It has several psql queries that need to be modified for your setup. The
 end of the script does latency testing that may need to be configured if
-there are any partitions you do not wish tested.
+there are any partitions you do **not** wish tested.
 
 Synopsys can provide the script:
 
-TODO:is this is a different script, needs own header, or did the filename change?
+TODO: is this is a different script, needs own header, or did the filename change?
 
-> bash
-
-> export PGPASSWORD='<PSQL Database Password>'
+```shell
+export PGPASSWORD='<PSQL Database Password>'
+./SynopsysMonitorDbActivity_202007.bash > SynopsysMonitorDbActivity_202007.out 2>&1
+```
 TODO: should use ~/.pgpass
-
-> ./SynopsysMonitorDbActivity_202007.bash > SynopsysMonitorDbActivity_202007.out 2>&1
 
 
 
@@ -517,11 +625,11 @@ Using the output of the sar/ksar command and the
 SynopsysGatherServerSpecs_202007.bash script (and possibly the Zenoss
 output), determine if you have any Performance issues.
 
-This could potentially include memory, network performance between
+This could potentially include memory exhaustion, cpu overload, disk i/o throttling, network performance between
 database server and iSCI disks (especially "read"), nfs-mounted database
-directories
+directories, etc.
 
-Get help from the Customer Admins to resolve the Performance Issues
+Get help from the Customer Admins to resolve the Performance Issues.
 
 The Server, network, and database admins should be able to help the
 customer in resolving any detected performance issues. Using the data
@@ -535,7 +643,7 @@ Admins to determine the appropriate actions:
 -   Increase CPU Cores of the Black Duck and/or Database Server (if
     needed)
 
--   Make sure sufficient storage is available for database,
+-   Make sure sufficient quantity and speed of storage is available for database,
     application, and log partitions (if needed)
 
 -   Make sure that the connection to the database (e.g. NFS, iSCSI,
@@ -573,6 +681,7 @@ time for mthreads in 4 8 16 ; do echo test threads \$mthreads ; sysbench
 fileio --file-test-mode=rndrw --threads=\$mthreads run | grep -e
 "\(read|writ\).*/" ; done
 ```
+
 ```
 Mon Jul 27 11:17:08 EDT 2020
 Mon Jul 27 15:17:08 UTC 2020
@@ -625,7 +734,7 @@ sudo su -
 yum install postgresql-contrib
 ```
 
-To run pgbench, run the following as yourself:
+To run pgbench, run the following as non-root user:
 
 Example:
 ```
@@ -658,8 +767,7 @@ sys 0m49.548s
 
 ### pg_test_fsync
 
-pg_test_fsync is intended to give you a reasonable idea of what the
-fastest
+pg_test_fsync is intended to give you a reasonable idea of what the fastest
 [wal_sync_method](https://www.postgresql.org/docs/current/runtime-config-wal.html#GUC-WAL-SYNC-METHOD)
 is on your specific system, as well as supplying diagnostic information
 in the event of an identified I/O problem.
@@ -676,7 +784,7 @@ O_DIRECT supported on this platform for open_datasync and
 open_sync.
 Compare file sync methods using one 8kB write:
 (in wal_sync_method preference order, except fdatasync
-is Linux's default)
+is Linuxs default)
         open_datasync                    1828.665 ops/sec
         fdatasync                        1839.337 ops/sec
         fsync                             538.328 ops/sec
@@ -684,7 +792,7 @@ is Linux's default)
         open_sync                         442.936 ops/sec
 Compare file sync methods using two 8kB writes:
 (in wal_sync_method preference order, except fdatasync
-is Linux's default)
+is Linuxs default)
         open_datasync                     945.146 ops/sec
         fdatasync                        1461.665 ops/sec
         fsync                             531.997 ops/sec
@@ -717,8 +825,9 @@ respect to data read and write speed, the number of seeks that can be
 performed per second, and the number of file metadata operations that
 can be performed per second.
 ```
--   date --utc ; hostname -f ; time bonnie++ # need 2 x RAM to be free on disk 
+date --utc ; hostname -f ; time bonnie++ # need 2 x RAM to be free on disk 
 ```
+
 ```
 Fri Jul 24 20:53:01 UTC 2020
 sup-pjalajas-hub.dc1.lan
@@ -839,7 +948,9 @@ Database Migration scripts (part of the upgrade), then this should be
 explicitly tested as part of the staging testing. 
 
 Contact your Synopsys Support to make sure you understand what might
-be impacted by the database removal. Make sure your verification tests
+be impacted by the database removal. 
+
+Make sure your verification tests
 can verify that that data migrated correctly and that the database is
 removed.
 
@@ -848,14 +959,15 @@ release and then remove the database in another release (to make sure
 that there are no issues prior to deleting the data), this test may need
 to be done in each release.
 
+
 ### bdio Database
 
 The BDIO Database was removed as part of the 2020.2.0 upgrade (TODO: confirm).
 One of the Database Migration scripts removed that database. Should your
-database be greater than 1 TB, there may be timeout issues when running
-that script. Make sure you either test that migration with a copy of the
-production database or make sure Synopsys Support is present during the
-upgrade or both.
+database be on the order of 1 TB or more, then there may be timeout issues when running
+that script. Make sure you thoroughly test that migration in your Staging environment with a full copy of the
+production database.
+
 
 ### bds_hub_report Database
 
@@ -870,6 +982,7 @@ removed as part of the Database Migration scripts. If the Customer has
 not generated any reports using the bds_hub_report database, the
 Database Migration script to remove that database should be quick.
 
+
 ### bds_hub, postgresql, template0, and template1 Database
 
 These databases are still valid as of the 2020.6.1 release.  (TODO:  update/confirm)
@@ -883,8 +996,9 @@ These databases are still valid as of the 2020.6.1 release.  (TODO:  update/conf
 
 Depending on the activity on the Black Duck server, the number of
 records taken up by the logging could be in the millions. It is
-important to trim those logs periodically and definitely prior to an
+important to trim those logs periodically and specifically prior to an
 upgrade.
+
 
 ### Notification Logs
 
@@ -898,8 +1012,11 @@ the notifications logs should be retained, by default that duration is
 ```
 BLACKDUCK_HUB_NOTIFICATIONS_DELETE_DAYS=30
 ```
+
+
 ### Audit_Events
 
+TODO:  confirm:    
 There is no automatic cleanup of Audit Events as of 2020.6.1. These
 events are required for a few days but other logging has now been added
 to the Black Duck tool so these Events are no longer needed as logging.
@@ -1643,18 +1760,18 @@ We need to talk about these.  (TODO:  needs work)
 1.  If at any point in the migrations, an unrecoverable error occurs,
     the plan is to fallback to version the previous version.
 
-2.  In order to fall back to the pre-upgrade version, first remove the volumes.
+1.  In order to fall back to the pre-upgrade version, first remove the volumes.
 
     1.  Start up pre-upgrade version, and THEN Run 'docker volume prune' after
         verifying no other volumes are in use. 
 
-    2.  Alternatively, 'docker volume ls' to list and docker volume rm
+    1.  Alternatively, 'docker volume ls' to list and docker volume rm
         <volume name> each related volume. 
 
-3.  Using the restore commands to re-establish the pre-upgrade version of the backup
+1.  Using the restore commands to re-establish the pre-upgrade version of the backup
     taken during upgrade steps
 
-    3.  Expect about _________ hours to fallback to the pre-upgrade version.
+    1.  Expect about _________ hours to fallback to the pre-upgrade version.
 
 
 
@@ -1666,7 +1783,7 @@ TODO:  augment this section
 
 1.  To restore the PostgreSQL data during a fallback 
 
-2.  Use the docker-compose.dbmigrate.yml file located in the
+1.  Use the docker-compose.dbmigrate.yml file located in the
     docker-swarm directory. That starts the containers and volumes
     needed to migrate the database. 
 
@@ -1680,11 +1797,11 @@ docker stack deploy -c docker-compose.dbmigrate.yml hub
 
 > --with-registry-auth 
 
-3.  After the DB container has started, run the migration script
+1.  After the DB container has started, run the migration script
     located in the docker-swarm directory. This script restores the data
     from the existing database dump file. 
 
-    2.  This has a duration on the order of hours, so perform it in a
+    1.  This has a duration on the order of hours, so perform it in a
         screen multiplexer like screen or tmux, or as a detached
         background process.
 
