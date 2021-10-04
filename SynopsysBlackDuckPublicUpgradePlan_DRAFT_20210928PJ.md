@@ -50,16 +50,16 @@
     - [PostgreSQL Upgrades](#postgresql-upgrades)
   - [Replicate Production Database over into Staging Environment](#replicate-production-database-over-into-staging-environment)
   - [Duplicate Production Environment in Staging Environment](#duplicate-production-environment-in-staging-environment)
+    - [Download images, files, scripts](#download-images-files-scripts)
+      - [Download upgrade images](#download-upgrade-images)
+      - [Download Orchestration Files](#download-orchestration-files)
+      - [Download blackduck_migrator yaml file](#download-blackduck_migrator-yaml-file)
+      - [Download Upgrade-Monitoring Scripts](#download-upgrade-monitoring-scripts)
+    - [Update stakeholders about near-term upgrade Schedule](#update-stakeholders-about-near-term-upgrade-schedule)
 - [Perform Black Duck Upgrade](#perform-black-duck-upgrade)
   - [Perform Pre-upgrade steps](#perform-pre-upgrade-steps)
     - [Check Memory](#check-memory)
     - [Check Storage](#check-storage)
-    - [Download upgrade images](#download-upgrade-images)
-    - [Download Orchestration Files](#download-orchestration-files)
-      - [Updated YML Files](#updated-yml-files)
-    - [Download blackduck_migrator yaml file](#download-blackduck_migrator-yaml-file)
-    - [Obtain Upgrade Monitoring Scripts](#obtain-upgrade-monitoring-scripts)
-    - [Update stakeholders about near-term upgrade Schedule](#update-stakeholders-about-near-term-upgrade-schedule)
   - [Perform Upgrade, Day of Upgrade (Staging first, then Production)](#perform-upgrade-day-of-upgrade-staging-first-then-production)
     - [Stop scanning and external connections](#stop-scanning-and-external-connections)
       - [Stop Scanning](#stop-scanning)
@@ -1270,6 +1270,97 @@ Example: if Staging environment cannot "phone home", but Production can, that di
 
 
 
+### Download images, files, scripts
+
+Download and review all required files.  Resolve any quuestions or issues.
+
+
+#### Download upgrade images
+
+Any new docker images used by the Black Duck application should be
+downloaded to the target server prior to the upgrade. Downloading and
+adding the new images can be done any time prior to the upgrade.
+
+These are available at a location specified by your Synopsys Support
+person.
+
+Once they are on the target server, you can load them into docker:
+
+```
+ls | while read image; do docker load -i \$image; done 
+```
+
+
+#### Download Orchestration Files
+
+The Orchestration .yml and .env determine how the Black Duck
+application will startup with which functionality and resources.
+
+These need to be downloaded from github
+(<https://github.com/blackducksoftware/hub>) and updated to include
+customer-specific changes as indicated in the orchestration files for
+the previous release.
+
+This may take a while so be careful with the updates to these files.
+
+##### Download updated YML Files
+
+If Synopsys Support is providing updated YML files, then they will be
+dropped on the Synopsys sharefile or in the Support case
+
+
+#### Download blackduck_migrator yaml file 
+
+This is similar to docker-compose.yml and
+docker-compose.externaldb.yml. It starts up the required services.
+However, only those services required to do the Database Migration
+Scripts.
+
+Copy it into your docker-swarm location with the other orchestration
+files. BUT, make sure that the services setup matches the number of
+available cores and memory for your target server. By default, it is
+using up 69 GB of RAM and 8 cores. For example, if you have 8 cores and
+32 GB of RAM, you may want to reduce the \# of cores used by "services"
+to 2.
+
+
+
+#### Download Upgrade-Monitoring Scripts
+
+Test scripts may be provided by Synopsys to help with monitoring
+upgrades.
+
+For instance, SynopsysMonitorDbActivity_202007.bash is used to
+monitor PostgreSQL activity at the database/table level. It is to be
+used if the upgrade processing seems to have stalled (presumably due to
+a very large database table upgrade/migration).
+
+
+
+
+
+
+
+### Update stakeholders about near-term upgrade Schedule
+
+Given that the Black Duck server will be up and down during the
+upgrade, it is important that Customer non-Black-Duck external scripts, scans, etc should not be
+running during the upgrade.
+
+Planning with Synospys Support should be made sufficiently ahead of
+time so that they can plan support during your upgrade. In addition,
+those Customer teams using Black Duck need to plan their release schedules to
+will want to work around the schedule and put the downtime into their
+schedules. 
+
+
+
+
+
+
+
+
+
 
 
 # Perform Black Duck Upgrade
@@ -1301,79 +1392,14 @@ docker volume prune TODO: elaborate
 
 
 
-### Download upgrade images
-
-Any new docker images used by the Black Duck application should be
-downloaded to the target server prior to the upgrade. Downloading and
-adding the new images can be done any time prior to the upgrade.
-
-These are available at a location specified by your Synopsys Support
-person.
-
-Once they are on the target server, you can load them into docker:
-
-```
-ls | while read image; do docker load -i \$image; done 
-```
-
-
-### Download Orchestration Files
-
-The Orchestration .yml and .env determine how the Black Duck
-application will startup with which functionality and resources.
-
-These need to be downloaded from github
-(<https://github.com/blackducksoftware/hub>) and updated to include
-customer-specific changes as indicated in the orchestration files for
-the previous release.
-
-This may take a while so be careful with the updates to these files.
-
-#### Updated YML Files
-
-If Synopsys Support is providing updated YML files, then they will be
-dropped on the Synopsys sharefile or in the Support case
-
-
-### Download blackduck_migrator yaml file 
-
-This is similar to docker-compose.yml and
-docker-compose.externaldb.yml. It starts up the required services.
-However, only those services required to do the Database Migration
-Scripts.
-
-Copy it into your docker-swarm location with the other orchestration
-files. BUT, make sure that the services setup matches the number of
-available cores and memory for your target server. By default, it is
-using up 69 GB of RAM and 8 cores. For example, if you have 8 cores and
-32 GB of RAM, you may want to reduce the \# of cores used by "services"
-to 2.
 
 
 
-### Obtain Upgrade Monitoring Scripts
-
-Test scripts may be provided by Synopsys to help with monitoring
-upgrades.
-
-For instance, SynopsysMonitorDbActivity_202007.bash is used to
-monitor PostgreSQL activity at the database/table level. It is to be
-used if the upgrade processing seems to have stalled (presumably due to
-a very large database table upgrade/migration).
 
 
 
-### Update stakeholders about near-term upgrade Schedule
 
-Given that the Black Duck server will be up and down during the
-upgrade, it is important that Customer non-Black-Duck external scripts, scans, etc should not be
-running during the upgrade.
 
-Planning with Synospys Support should be made sufficiently ahead of
-time so that they can plan support during your upgrade. In addition,
-those Customer teams using Black Duck need to plan their release schedules to
-will want to work around the schedule and put the downtime into their
-schedules. 
 
 
 
