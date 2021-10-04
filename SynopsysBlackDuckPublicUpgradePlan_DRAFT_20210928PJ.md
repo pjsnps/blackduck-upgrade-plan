@@ -318,78 +318,42 @@ This section provides a brief overview of the upgrade plan.
 - Inventory database connections
 - Schedule Staging upgrade
 - Open Synopsys SalesForce Case
-
 ## First, In Staging
-
-    - Prepare Environment
-        - Create Production-like Staging environment
-
-        - Test and resolve performance issues
-
-            - Implement guidance from Best Practices, Sage,
+- Prepare Environment
+    - Create Production-like Staging environment
+    - Test and resolve performance issues
+        - Implement guidance from Best Practices, Sage,
                 system_check.sh, sar, Zenoss 
-
-            - Customer IT team to test and resolve issues
-
-                - Consider: dd, pgbench, sysbench, bonnie++
-
-        - Remove unused data; delete, truncate/drop, cull, configure
-            settings
-
-        - Vacuum analyze full bds_hub
-
-        - Run PostgreSQL tuning utility
-
-        - Backup database
-
-        - Ensure disk space for db vacuum, migration
-
-        - Check memory
-
-        - Download upgrade-related files
-
-        - Schedule Staging upgrade
-
-    - Perform Upgrade in Staging
-
-        - Stop scanning and external connections
-
-        - Bring down docker stack
-
-        - If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
-
-        - Optional: upgrade OS, kernel 
-
-        - Optional: upgrade Docker with yum
-
-        - Optional: satisfy other requirements, objectives. 
-
-        - Deploy docker migration stack
-
-        - Restore database with pre-upgrade-version of hub_db_migrate.sh
-
-        - Vacuum audit_event table
-
-        - Optional, upgrade PostgreSQL
-
+        - Customer IT team to test and resolve issues
+            - Consider: dd, pgbench, sysbench, bonnie++
+    - Remove unused data; delete, truncate/drop, cull, configure settings
+    - Vacuum analyze full bds_hub
+    - Run PostgreSQL tuning utility
+    - Backup database
+    - Ensure disk space for db vacuum, migration
+    - Check memory
+    - Download upgrade-related files
+    - Schedule Staging upgrade
+- Perform Upgrade in Staging
+    - Stop scanning and external connections
+    - Bring down docker stack
+    - If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
+    - Optional: upgrade OS, kernel 
+    - Optional: upgrade Docker with yum
+    - Optional: satisfy other requirements, objectives. 
+    - Deploy docker migration stack
+    - Restore database with pre-upgrade-version of hub_db_migrate.sh
+    - Vacuum audit_event table
+    - Optional, upgrade PostgreSQL
              - Bring down docker stack
-
              - Upgrade PostgeSQL
-
-        - Deploy Black Duck with target version of Production deployment .yml files
-
-    - Post-Staging-Upgrade Steps
-
-        - Run upgrade-validation tests
-
-        - Re-run benchmark tests
-
-        - Announce upgrade completion to stakeholders
-
+    - Deploy Black Duck with target version of Production deployment .yml files
+- Post-Staging-Upgrade Steps
+    - Run upgrade-validation tests
+    - Re-run benchmark tests
+    - Announce upgrade completion to stakeholders
 ## Then, In Production
-
-    - Schedule and repeat "In Staging" steps as above
-
+- Schedule and repeat "In Staging" steps as above
 
 
 # Plan the Upgrade
