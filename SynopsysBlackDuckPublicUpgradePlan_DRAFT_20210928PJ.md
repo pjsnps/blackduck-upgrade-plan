@@ -112,7 +112,9 @@ Customer to prepare private documentation of the following system information:
         - From that release archive, Customer to review release documentation:
 
 
+
 ```
+
 find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
 hub-2021.8.3/docker-swarm/README.md
@@ -133,14 +135,16 @@ hub-2021.8.3/README.md
 - Customer to run 
 
 
-` ./docker-swarm/bin/system_check.sh` 
+`./docker-swarm/bin/system_check.sh` 
 
 
-    - Customer to decide whether to use docker swarm kubernetes.
-    - Customer to work with Black Duck Support team to configure container services.
+- Customer to decide whether to use docker swarm kubernetes.
+- Customer to work with Black Duck Support team to configure container services.
 
 
-$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
+```
+
+grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
     image: blackducksoftware/blackduck-postgres:9.6-1.1
 	limits: {memory: 3072M}
 	reservations: {cpus: '1', memory: 3072M}
@@ -210,6 +214,8 @@ $ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory
     image: blackducksoftware/rabbitmq:1.2.3
 	  limits: {memory: 1024M}
 	  reservations: {memory: 1024M}
+
+```
 
 
 Resources to consider include: 
