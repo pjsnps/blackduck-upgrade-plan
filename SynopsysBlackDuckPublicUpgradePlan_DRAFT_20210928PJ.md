@@ -95,14 +95,15 @@
 
 This document is provided as-is, without warranty or liability.
 
+This document is a draft, informal, test, work in progress.
+
+- last updated  October 4, 2021, pjalajas. 
+
 This document is intended to be used by very large (databases on the order of 1 TB) enterprise Black Duck customers to help their Black Duck upgrades go smoothly.  
 
 This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
 
-This document is a Draft, informal, test, work in progress.
-
-- last updated  October 1, 2021, pjalajas. 
-- Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
+Use github Issues and Discussions and Pull Requests for any corrections or suggestions you may have.  
 
 TODO:  search this document for "TODO" and __________ and consider them.
 
