@@ -313,16 +313,11 @@ Resources to consider include:
 This section provides a brief overview of the upgrade plan.
 
 ## Planning
-
-    - Identify upgrade and production requirements
-
-    - Write post-upgrade validation test plan
-
-    - Inventory database connections
-
-    - Schedule Staging upgrade
-
-    - Open Synopsys SalesForce Case
+- Identify upgrade and production requirements
+- Write post-upgrade validation test plan
+- Inventory database connections
+- Schedule Staging upgrade
+- Open Synopsys SalesForce Case
 
 ## First, In Staging
 
