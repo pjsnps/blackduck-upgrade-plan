@@ -107,107 +107,103 @@ TODO:  Clean up this section
 Customer to prepare private documentation of the following system information:
 
 - Describe current Customer Black Duck instances: 
-
     - Customer to download desire upgrade target Black Duck release
         - https://github.com/blackducksoftware/hub/releases
         - From that release archive, Customer to review release documentation:
+```shell
+find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
-        ```shell
-	find hub-2021.8.3/ | grep -e en_US.*pdf -e md
-
-	hub-2021.8.3/docker-swarm/README.md
-	hub-2021.8.3/docs/en_US/getting_started.pdf
-	hub-2021.8.3/docs/en_US/install_kubernetes.pdf
-	hub-2021.8.3/docs/en_US/install_openshift.pdf
-	hub-2021.8.3/docs/en_US/install_swarm.pdf
-	hub-2021.8.3/docs/en_US/release_notes.pdf
-	hub-2021.8.3/Important_Upgrade_Announcement.md
-	hub-2021.8.3/kubernetes/blackduck/README.md
-	hub-2021.8.3/kubernetes/README.md
-	hub-2021.8.3/README.containers.md
-	hub-2021.8.3/README.md
-	```
-
+hub-2021.8.3/docker-swarm/README.md
+hub-2021.8.3/docs/en_US/getting_started.pdf
+hub-2021.8.3/docs/en_US/install_kubernetes.pdf
+hub-2021.8.3/docs/en_US/install_openshift.pdf
+hub-2021.8.3/docs/en_US/install_swarm.pdf
+hub-2021.8.3/docs/en_US/release_notes.pdf
+hub-2021.8.3/Important_Upgrade_Announcement.md
+hub-2021.8.3/kubernetes/blackduck/README.md
+hub-2021.8.3/kubernetes/README.md
+hub-2021.8.3/README.containers.md
+hub-2021.8.3/README.md
+```
     - Customer to run 
-
-	```shell
-	./docker-swarm/bin/system_check.sh
-	```
+```shell
+./docker-swarm/bin/system_check.sh
+```
     - Customer to decide whether to use docker swarm kubernetes.
     - Customer to work with Black Duck Support team to configure container services.
 
-        ```shell
-	$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
-	    image: blackducksoftware/blackduck-postgres:9.6-1.1
-		limits: {memory: 3072M}
-		reservations: {cpus: '1', memory: 3072M}
+```shell
+$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
+    image: blackducksoftware/blackduck-postgres:9.6-1.1
+	limits: {memory: 3072M}
+	reservations: {cpus: '1', memory: 3072M}
 
-	    image: blackducksoftware/blackduck-authentication:2021.8.3
-	       HUB_MAX_MEMORY: 512m
-		limits: {cpus: '1', memory: 1024M}
-		reservations: {memory: 1024M}
+    image: blackducksoftware/blackduck-authentication:2021.8.3
+       HUB_MAX_MEMORY: 512m
+	limits: {cpus: '1', memory: 1024M}
+	reservations: {memory: 1024M}
 
-	    image: blackducksoftware/blackduck-webapp:2021.8.3
-	      HUB_MAX_MEMORY: 2048m
-		limits: {cpus: '1', memory: 2560M}
-		reservations: {cpus: '1', memory: 2560M}
+    image: blackducksoftware/blackduck-webapp:2021.8.3
+      HUB_MAX_MEMORY: 2048m
+	limits: {cpus: '1', memory: 2560M}
+	reservations: {cpus: '1', memory: 2560M}
 
-	    image: blackducksoftware/blackduck-scan:2021.8.3
-	      HUB_MAX_MEMORY: 2048m
-		limits: {cpus: '1', memory: 2560M}
-		reservations: {cpus: '1', memory: 2560M}
+    image: blackducksoftware/blackduck-scan:2021.8.3
+      HUB_MAX_MEMORY: 2048m
+	limits: {cpus: '1', memory: 2560M}
+	reservations: {cpus: '1', memory: 2560M}
 
-	    image: blackducksoftware/blackduck-jobrunner:2021.8.3
-	       HUB_MAX_MEMORY: 4096m
-		limits: {cpus: '1', memory: 4608M}
-		reservations: {cpus: '1', memory: 4608M}
+    image: blackducksoftware/blackduck-jobrunner:2021.8.3
+       HUB_MAX_MEMORY: 4096m
+	limits: {cpus: '1', memory: 4608M}
+	reservations: {cpus: '1', memory: 4608M}
 
-	    image: blackducksoftware/blackduck-cfssl:1.0.3
-		limits: {memory: 640M}
-		reservations: {memory: 640M}
+    image: blackducksoftware/blackduck-cfssl:1.0.3
+	limits: {memory: 640M}
+	reservations: {memory: 640M}
 
-	    image: blackducksoftware/blackduck-logstash:1.0.10
-		limits: {memory: 1024M}
-		reservations: {memory: 1024M}
+    image: blackducksoftware/blackduck-logstash:1.0.10
+	limits: {memory: 1024M}
+	reservations: {memory: 1024M}
 
-	    image: blackducksoftware/blackduck-registration:2021.8.3
-		limits: {memory: 640M}
-		reservations: {memory: 640M}
+    image: blackducksoftware/blackduck-registration:2021.8.3
+	limits: {memory: 640M}
+	reservations: {memory: 640M}
 
-	    image: blackducksoftware/blackduck-nginx:2.0.6
-		limits: {memory: 512M}
-		reservations: {memory: 512M}
+    image: blackducksoftware/blackduck-nginx:2.0.6
+	limits: {memory: 512M}
+	reservations: {memory: 512M}
 
-	    image: blackducksoftware/blackduck-webui:2021.8.3
-		limits: {cpus: '1', memory: 640M}
-		reservations: {cpus: '0.5', memory: 640M}
+    image: blackducksoftware/blackduck-webui:2021.8.3
+	limits: {cpus: '1', memory: 640M}
+	reservations: {cpus: '0.5', memory: 640M}
 
-	    image: blackducksoftware/blackduck-documentation:2021.8.3
-		limits: {memory: 512M}
-		reservations: {memory: 512M}
+    image: blackducksoftware/blackduck-documentation:2021.8.3
+	limits: {memory: 512M}
+	reservations: {memory: 512M}
 
-	      image: blackducksoftware/blackduck-upload-cache:1.0.18
-		  limits: {memory: 512M}
-		  reservations: {memory: 512M}
+      image: blackducksoftware/blackduck-upload-cache:1.0.18
+	  limits: {memory: 512M}
+	  reservations: {memory: 512M}
 
-	    image: blackducksoftware/blackduck-redis:2021.8.3
-		limits: {memory: 1024M}
-		reservations: {memory: 1024M}
+    image: blackducksoftware/blackduck-redis:2021.8.3
+	limits: {memory: 1024M}
+	reservations: {memory: 1024M}
 
-	    image: blackducksoftware/blackduck-bomengine:2021.8.3
-	      HUB_MAX_MEMORY: 4096m
-		  limits: {memory: 4608M}
-		  reservations: {memory: 1536M}
+    image: blackducksoftware/blackduck-bomengine:2021.8.3
+      HUB_MAX_MEMORY: 4096m
+	  limits: {memory: 4608M}
+	  reservations: {memory: 1536M}
 
-	    image: blackducksoftware/blackduck-matchengine:2021.8.3
-		limits: { memory: 4608M, cpus: '1' }
-		reservations: { memory: 1536M, cpus: '1' }
-	      HUB_MAX_MEMORY: 4096m
+    image: blackducksoftware/blackduck-matchengine:2021.8.3
+	limits: { memory: 4608M, cpus: '1' }
+	reservations: { memory: 1536M, cpus: '1' }
+      HUB_MAX_MEMORY: 4096m
 
-	    image: blackducksoftware/rabbitmq:1.2.3
-		  limits: {memory: 1024M}
-		  reservations: {memory: 1024M}
-	```
+    image: blackducksoftware/rabbitmq:1.2.3
+	  limits: {memory: 1024M}
+	  reservations: {memory: 1024M}
+```
 
 Resources to consider include: 
 
@@ -216,36 +212,25 @@ Resources to consider include:
 - Resource reservations and limits
     - ram
     - cpu
-
 - Database: in container or external? 
-
 - Does installation include Synopsys Alert?
     - Is Alert database in container or external database?
-
 - How are database disks connected?
    - Example: over iSCSI over 2-NIC mpath ethernet elsewhere in the same datacenter. 
-
 - Any previously Synopsys-reported infrastructure performance issues with their internal sysadmins, including possible proxy/firewall issues?
-
 - Customer has Staging and Production environments. 
     - Does customer Staging exactly replicate Production in terms of size and networking configuration?
     - Does customer environment include complex proxy/firewall configurations?
     - During a recent upgrade event, did Staging testing underestimate Production upgrade task durations? 
-
 - During a recent upgrade event, were Customer docker container memory, cpu, and replica settings reported to have been misconfigured and had to
         be fixed under a P1 Case? 
-
 - Customer Production bds_hub database was recently __________ TB.
-
 - The upgrade is planned to be performed using a simplified Upgrade
     Docker stack implemented by deploying new Synopsys-supplied
     deployment (.yml) files. These Upgrade .yml files will be different
     from the Production versions of the files.
-
 - Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
-
 - The upgrade is expected to take about __________ hours. 
-
     - If Fallback is required, an additional __________ hours would be
         required.
 
