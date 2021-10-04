@@ -7,28 +7,51 @@
   - [Contacts](#contacts)
   - [Customer Upgrade Schedule](#customer-upgrade-schedule)
   - [Customer Background Information](#customer-background-information)
-- [Overview](#overview)
-  - [Planning](#planning)
-  - [First, In Staging](#first-in-staging)
-  - [Then, In Production](#then-in-production)
 - [Plan the Upgrade](#plan-the-upgrade)
-  - [Determining Upgrade and production requirements](#determining-upgrade-and-production-requirements)
+  - [Determine Upgrade and production requirements](#determine-upgrade-and-production-requirements)
+    - [Documentation](#documentation)
+    - [Checklist](#checklist)
   - [Write post-upgrade validation test plan](#write-post-upgrade-validation-test-plan)
+    - [Checklist](#checklist-1)
   - [Document Database/API Connections](#document-databaseapi-connections)
   - [Schedule the Upgrades (Staging and Production)](#schedule-the-upgrades-staging-and-production)
+    - [Open a Synopsys SalesForce Case](#open-a-synopsys-salesforce-case)
 - [Perform Upgrade-Preparation Activities](#perform-upgrade-preparation-activities)
   - [Resolve Performance and Networking Issues](#resolve-performance-and-networking-issues)
-  - [Resolve Performance and Networking Issues](#resolve-performance-and-networking-issues-1)
+    - [Implement Best Practices](#implement-best-practices)
+    - [Sage](#sage)
+    - [system_check.sh](#system_checksh)
+    - [sar](#sar)
+    - [Other Customer monitoring tools, such as zenoss?](#other-customer-monitoring-tools-such-as-zenoss)
   - [Clean up Black Duck Projects and Scans](#clean-up-black-duck-projects-and-scans)
   - [Clean up Databases](#clean-up-databases)
-  - [Trim the Notification and audit_event logs](#trim-the-notification-and-audit_event-logs)
-  - [Clean up Database](#clean-up-database)
+    - [bdio Database](#bdio-database)
+    - [bds_hub_report Database](#bds_hub_report-database)
+    - [bds_hub, postgresql, template0, and template1 Database](#bds_hub-postgresql-template0-and-template1-database)
+    - [Trim the Notification and audit_event logs](#trim-the-notification-and-audit_event-logs)
+    - [Remove any orphaned large objects](#remove-any-orphaned-large-objects)
+    - [Run PostgreSQL tuning utility](#run-postgresql-tuning-utility)
+    - [Full Vacuum of Database](#full-vacuum-of-database)
+    - [Upgrade O/S, Kernel, Docker, Postgresql](#upgrade-os-kernel-docker-postgresql)
   - [Duplicate Production Database in Staging Environment](#duplicate-production-database-in-staging-environment)
+    - [Production Database Replication](#production-database-replication)
   - [Duplicate Production Environment in Staging Environment](#duplicate-production-environment-in-staging-environment)
 - [Perform Black Duck Upgrade](#perform-black-duck-upgrade)
   - [Perform Pre-upgrade steps](#perform-pre-upgrade-steps)
-  - [Perform Upgrade, Day of Upgrade (Staging then Production)](#perform-upgrade-day-of-upgrade-staging-then-production)
+    - [Check Memory](#check-memory)
+    - [Check Storage](#check-storage)
+    - [Download upgrade images](#download-upgrade-images)
+    - [Download Orchestration Files](#download-orchestration-files)
+    - [blackduck_migrator yaml file](#blackduck_migrator-yaml-file)
+    - [Schedule the upgrade](#schedule-the-upgrade)
+  - [Perform Upgrade, Day of Upgrade (Staging first, then Production)](#perform-upgrade-day-of-upgrade-staging-first-then-production)
+    - [Stop scanning and external connections](#stop-scanning-and-external-connections)
+    - [Start the actual upgrade](#start-the-actual-upgrade)
   - [Perform Post-Upgrade Steps](#perform-post-upgrade-steps)
+    - [After an upgrade, Black Duck performs a tremendous amount of work on the database behind the scenes.   IMPORTANT:  wait for system to quiesce before continuing.  This could take hours on a very large Black Duck installation.](#after-an-upgrade-black-duck-performs-a-tremendous-amount-of-work-on-the-database-behind-the-scenes---important--wait-for-system-to-quiesce-before-continuing--this-could-take-hours-on-a-very-large-black-duck-installation)
+    - [Run upgrade-validation tests.](#run-upgrade-validation-tests)
+    - [Re-run benchmark tests.](#re-run-benchmark-tests)
+    - [Announce upgrade completion to stakeholders](#announce-upgrade-completion-to-stakeholders)
 - [Contingency: Fallback Steps](#contingency-fallback%C2%A0steps)
   - [Restore steps, during Fallback](#restore-steps-during-fallback)
 
@@ -247,62 +270,15 @@ Resources to consider include:
     - If Fallback is required, an additional __________ hours would be
         required.
 
-# Overview
-
-This section provides a brief overview of the upgrade plan.
-
-## Planning
-- Identify upgrade and production requirements
-- Write post-upgrade validation test plan
-- Inventory database connections
-- Schedule Staging upgrade
-- Open Synopsys SalesForce Case
-## First, In Staging
-- Prepare Environment
-    - Create Production-like Staging environment
-    - Test and resolve performance issues
-        - Implement guidance from Best Practices, Sage,
-                system_check.sh, sar, Zenoss 
-        - Customer IT team to test and resolve issues
-            - Consider: dd, pgbench, sysbench, bonnie++
-    - Remove unused data; delete, truncate/drop, cull, configure settings
-    - Vacuum analyze full bds_hub
-    - Run PostgreSQL tuning utility
-    - Backup database
-    - Ensure disk space for db vacuum, migration
-    - Check memory
-    - Download upgrade-related files
-    - Schedule Staging upgrade
-- Perform Upgrade in Staging
-    - Stop scanning and external connections
-    - Bring down docker stack
-    - If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
-    - Optional: upgrade OS, kernel 
-    - Optional: upgrade Docker with yum
-    - Optional: satisfy other requirements, objectives. 
-    - Deploy docker migration stack
-    - Restore database with pre-upgrade-version of hub_db_migrate.sh
-    - Vacuum audit_event table
-    - Optional, upgrade PostgreSQL
-             - Bring down docker stack
-             - Upgrade PostgeSQL
-    - Deploy Black Duck with target version of Production deployment .yml files
-- Post-Staging-Upgrade Steps
-    - Run upgrade-validation tests
-    - Re-run benchmark tests
-    - Announce upgrade completion to stakeholders
-## Then, In Production
-- Schedule and repeat "In Staging" steps as above
-
 
 # Plan the Upgrade
 
 Planning for an upgrade should occur days or weeks prior to an
-upgrade. This is not about actually changing everything. It is only
-about planning on what to do prior to the Black Duck upgrade.
+upgrade. This is not about actually *changing* anything in the Customer Black Duck
+Environment. It is only about *planning* on what to do prior to the Black Duck upgrade.
 
 
-## Determining Upgrade and production requirements
+## Determine Upgrade and production requirements
 
 In this section, the areas that need to be checked prior to upgrading
 Black Duck are described. This includes server setup (RAM, CPUs, Storage), O/S
@@ -505,6 +481,9 @@ minimized.
 These are a few of the documents/tools that can help determine if
 there are any issues.
 
+If any issues are discovered, resolve them prior to performing the Black Duck upgrade.
+
+
 ### Implement Best Practices 
 
 (<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)
@@ -560,9 +539,7 @@ month.
 
 Customer to document plans to use any such monitoring tools.
 
-
-
-### SynopsysGatherServerSpecs_202007.bash
+#### SynopsysGatherServerSpecs.bash
 
 TODO: Pete to test and update this script if needed.
 
@@ -585,46 +562,10 @@ TODO: should use ~/.pgpass
 
 
 
-## Resolve Performance and Networking Issues
-TODO:  add networking, proxy, firewall and other related improvements here
-
-Using the output of the sar/ksar command and the
-SynopsysGatherServerSpecs_202007.bash script (and possibly the Zenoss
-output), determine if you have any Performance issues.
-
-This could potentially include memory exhaustion, cpu overload, disk i/o throttling, network performance between
-database server and iSCI disks (especially "read"), nfs-mounted database
-directories, etc.
-
-Get help from the Customer Admins to resolve the Performance Issues.
-
-The Server, network, and database admins should be able to help the
-customer in resolving any detected performance issues. Using the data
-from the previous section (e.g. sar, cpus, mem) combined with the Best
-Practices and the following tools, the Customer should work with their
-Admins to determine the appropriate actions:
-
--   Increase RAM of the Black Duck and/or Database Server (if
-    needed)
--   Increase CPU Cores of the Black Duck and/or Database Server (if
-    needed)
--   Make sure sufficient quantity and speed of storage is available for database,
-    application, and log partitions (if needed)
--   Make sure that the connection to the database (e.g. NFS, iSCSI,
-    fibre-connected) has sufficient bandwidth to avoid iowaits, caching,
-    and latency issues.
-
-Some of the following benchmarking tools (e.g. dd, pgbench, sysbench,
-or bonnie++) may be used to collect a performance baseline for
-comparison with a separate run after the upgrade, in both Staging and
-Production.
-
-TODO: Is this stack of commands and descriptions too much for this doc?
 
 
 
-
-### sysbench
+#### sysbench
 
 sysbench provides benchmarking capabilities for Linux. sysbench
 supports testing CPU, memory, file I/O, mutex performance, and even
@@ -680,7 +621,7 @@ sys     0m13.697s
 
 
 
-### pgbench
+#### pgbench
 
 pgbench is a simple program for running benchmark tests on
 PostgreSQL.
@@ -729,7 +670,7 @@ sys 0m49.548s
 
 
 
-### pg_test_fsync
+#### pg_test_fsync
 
 pg_test_fsync is intended to give you a reasonable idea of what the fastest
 [wal_sync_method](https://www.postgresql.org/docs/current/runtime-config-wal.html#GUC-WAL-SYNC-METHOD)
@@ -782,7 +723,7 @@ Non-Synced 8kB writes:
 
 
 
-### bonnie++
+#### bonnie++
 
 Bonnie++ allows you to benchmark how your file systems perform with
 respect to data read and write speed, the number of seeks that can be
@@ -839,7 +780,7 @@ sys     2m53.775s
 
 
 
-### dd
+#### dd
 
 You can use dd to create a large file as quickly as possible to
 see how long it takes. It is a very basic test and not very customisable
@@ -950,7 +891,7 @@ These databases are still valid as of the 2020.6.1 release.  (TODO:  update/conf
 
 
 
-## Trim the Notification and audit_event logs
+### Trim the Notification and audit_event logs
 
 Depending on the activity on the Black Duck server, the number of
 records taken up by the logging could be in the millions. It is
@@ -958,7 +899,7 @@ important to trim those logs periodically and specifically prior to an
 upgrade.
 
 
-### Notification Logs
+#### Notification Logs
 
 Notification logs are sometimes used by integration tools to trigger
 alerts or the generation/update of JIRA cases so they do need to stick
@@ -968,11 +909,11 @@ In the blackduck-config.env file, the Customer can indicate how long
 the notifications logs should be retained, by default that duration is
 30 days:
 ```
-BLACKDUCK_HUB_NOTIFICATIONS_DELETE_DAYS=30
+BLACKDUCK_HUB_NOTIFICATIONS_DELETE_DAYS=7
 ```
 
 
-### Audit_Events
+#### Audit_Events
 
 TODO:  confirm:    
 There is no automatic cleanup of Audit Events as of 2020.6.1. These
@@ -990,7 +931,6 @@ delete from st.audit_event where event_timestamp < now() - interval '10 days';
 
 
 
-## Clean up Database
 
 ### Remove any orphaned large objects
 
@@ -1040,57 +980,6 @@ If this has been done as part of the database server setup, then this
 does not need to be redone unless the server configuration has changed
 (e.g. memory, cores, storage)
 
-
-
-### Upgrade O/S, Kernel, Docker, Postgresql
-
-As time passes, the minimum requirements for Black Duck changes. There
-tends to be a transitional period across multiple releases where one
-version is supported, then two, then just the latest.
-
-So, most upgrades of the O/S, Kernel, Docker, and Postgresql are done
-between Black Duck upgrades.
-
-Take a look at the supported versions in the next release
-(installation guide) and determine if the O/S, kernel, docker, or
-PostgreSQL need to be upgraded. NOTE that some require the Black Duck to
-be upgraded before you can upgrade the O/S, Kernel, Docker, or
-PostgreSQL. This is because the current version may not support the new
-version until after the upgrade.
-
-
-
-#### O/S and/or Kernel upgrade
-
-Working with your server admins for the downtime required to upgrade
-the O/S and/or kernel. Sometimes the upgrade occurs because a patch
-(security or bugfix) is required. Sometimes it is because Black Duck
-will no longer be supporting the version you are using.
-
-Work with your system admins to perform the upgrade.
-
-
-
-#### Docker Upgrades
-
-At this point, it looks like there is no "upgrade" per se. The
-currently supported version is 18.03. However 19.03 of Docker is
-available. So, to "upgrade", the old Docker installation would have to
-be uninstalled and the new Docker installation would have to be
-installed.
-
-<Need to test in order to verify that images and cert secrets do not have to be reinstalled>
-
-
-
-#### PostgreSQL Upgrades
-
-Work with your Database Administrators to upgrade your Postgresql
-instance. 9.6.x was previously supported in both the container and
-external databases. 11.7.x is supported in the external databases as of
-Black Duck 2020.6. But, since 11.7.x was not supported until Black Duck
-2020.6.x, you need to upgrade Black Duck to at least 2020.6.0 before
-upgrading Postgresql.
 
 
 
@@ -1230,6 +1119,99 @@ TIME ZONE,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Upgrade O/S, Kernel, Docker, Postgresql
+
+As time passes, the minimum requirements for Black Duck changes. There
+tends to be a transitional period across multiple releases where one
+version is supported, then two, then just the latest.
+
+So, most upgrades of the O/S, Kernel, Docker, and Postgresql are done
+between Black Duck upgrades.
+
+Take a look at the supported versions in the next release
+(installation guide) and determine if the O/S, kernel, docker, or
+PostgreSQL need to be upgraded. NOTE that some require the Black Duck to
+be upgraded before you can upgrade the O/S, Kernel, Docker, or
+PostgreSQL. This is because the current version may not support the new
+version until after the upgrade.
+
+
+
+#### O/S and/or Kernel upgrade
+
+Working with your server admins for the downtime required to upgrade
+the O/S and/or kernel. Sometimes the upgrade occurs because a patch
+(security or bugfix) is required. Sometimes it is because Black Duck
+will no longer be supporting the version you are using.
+
+Work with your system admins to perform the upgrade.
+
+
+
+#### Docker Upgrades
+
+At this point, it looks like there is no "upgrade" per se. The
+currently supported version is 18.03. However 19.03 of Docker is
+available. So, to "upgrade", the old Docker installation would have to
+be uninstalled and the new Docker installation would have to be
+installed.
+
+<Need to test in order to verify that images and cert secrets do not have to be reinstalled>
+
+
+
+#### PostgreSQL Upgrades
+
+Work with your Database Administrators to upgrade your Postgresql
+instance. 9.6.x was previously supported in both the container and
+external databases. 11.7.x is supported in the external databases as of
+Black Duck 2020.6. But, since 11.7.x was not supported until Black Duck
+2020.6.x, you need to upgrade Black Duck to at least 2020.6.0 before
+upgrading Postgresql.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Duplicate Production Database in Staging Environment
 
 Sometimes issues arise due to scale. Unless you have created a test
@@ -1254,10 +1236,10 @@ staging/test environment, then the following steps must be performed.
 Just as with the creation of a similar/exact copy of the production
 database in the test/staging environment, the same should be done with
 the hardware (CPU Cores, RAM, storage access (iSCSI vs NFS), storage
-type (spinning disk vs flash), and amount of storage. The versions of
+type (spinning disk vs flash), amount of storage, and networking (including proxies and firewalls). The versions of
 Linux, Docker, and PostgreSQL should also be the same.
 
-
+Example: if Staging environment cannot "phone home", but Production can, that discrepancy should be resolved prior to upgrading Black Duck. 
 
 
 
@@ -1354,7 +1336,7 @@ a very large database table upgrade/migration).
 
 
 
-### Schedule upgrade
+### Schedule the upgrade
 
 Given that the Black Duck server will be up and down during the
 upgrade, it is important that external scripts, scans, etc should not be
@@ -1370,7 +1352,7 @@ schedules.
 
 
 
-## Perform Upgrade, Day of Upgrade (Staging then Production)
+## Perform Upgrade, Day of Upgrade (Staging first, then Production)
 
 The upgrades normally take enough time to bring down Black Duck,
 restart Black Duck, and run through any Database Migration scripts.
