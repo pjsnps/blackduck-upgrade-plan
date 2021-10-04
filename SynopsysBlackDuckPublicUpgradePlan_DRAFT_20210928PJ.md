@@ -131,16 +131,16 @@ hub-2021.8.3/README.md
  - Customer to run 
 
 
-```
-./docker-swarm/bin/system_check.sh
-```
+``` 
+./docker-swarm/bin/system_check.sh 
+``` 
 
 
     - Customer to decide whether to use docker swarm kubernetes.
     - Customer to work with Black Duck Support team to configure container services.
 
 
-```
+``` 
 $ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
     image: blackducksoftware/blackduck-postgres:9.6-1.1
 	limits: {memory: 3072M}
