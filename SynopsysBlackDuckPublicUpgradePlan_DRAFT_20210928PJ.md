@@ -2,13 +2,15 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Notices](#notices)
-- [Contacts](#contacts)
-- [Introduction](#introduction)
-  - [Status of This Document](#status-of-this-document)
-  - [Upgrade Schedule](#upgrade-schedule)
-  - [Background Information](#background-information)
+- [Preface](#preface)
+- [Customer details](#customer-details)
+  - [Contacts](#contacts)
+  - [Customer Upgrade Schedule](#customer-upgrade-schedule)
+  - [Customer Background Information](#customer-background-information)
 - [Overview](#overview)
+  - [Planning](#planning)
+  - [First, In Staging](#first-in-staging)
+  - [Then, In Production](#then-in-production)
 - [Plan the Upgrade](#plan-the-upgrade)
   - [Determining Upgrade and production requirements](#determining-upgrade-and-production-requirements)
     - [Documentation](#documentation)
@@ -82,6 +84,7 @@
       - [Docker service replicas](#docker-service-replicas)
       - [Vacuum audit_event table](#vacuum-audit_event-table)
   - [Perform Post-Upgrade Steps](#perform-post-upgrade-steps)
+    - [After an upgrade, Black Duck performs a tremendous amount of work on the database behind the scenes.   IMPORTANT:  wait for system to quiesce before continuing.  This could take hours on a very large Black Duck installation.](#after-an-upgrade-black-duck-performs-a-tremendous-amount-of-work-on-the-database-behind-the-scenes---important--wait-for-system-to-quiesce-before-continuing--this-could-take-hours-on-a-very-large-black-duck-installation)
     - [Run upgrade-validation tests.](#run-upgrade-validation-tests)
     - [Re-run benchmark tests.](#re-run-benchmark-tests)
     - [Announce upgrade completion to stakeholders](#announce-upgrade-completion-to-stakeholders)
@@ -91,76 +94,84 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-# Notices
+
+
+
+# Preface
+
 This document is provided as-is, without warranty or liability.
 
 This document is intended to be used by very large (databases on the order of 1 TB) enterprise Black Duck customers to help their Black Duck upgrades go smoothly.  
 
 This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
 
-# Contacts
+This document is a Draft, informal, test, work in progress.
 
-1. Customer: 
+- last updated  October 1, 2021, pjalajas. 
+- Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
 
-1. Case(s): 
+TODO:  search this document for "TODO" and __________ and consider them.
+
+Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
+
+This document has been reviewed by: 
+
+-  
+-  
+
+
+# Customer details
+TODO:  Clean up this section
+
+## Contacts
+
+- Customer: 
+
+- Case(s): 
     - Current SalesForce Case number:
     - Prior related cases for reference: 
 
-1. Customer: 
+- Customer: 
     - Name:
     - email:
     - phone:
     - timezone:
 
-1. Synopsys Support Staff member(s): 
+- Synopsys Support Staff member(s): 
     - Name(s):  
     - email(s):
     - phone(s):
     - timezone(s):
 
-1. Support links: 
+- Support links: 
     - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
     - email:  software-integrity-support@synopsys.com
 
-# Introduction
 
-## Status of This Document
+## Customer Upgrade Schedule
 
-1. This document is a Draft, informal, test, work in progress.
-    - last updated  October 1, 2021, pjalajas. 
-    - Contact Pete Jalajas pjalajas@synopsys.com with any questions, suggestions, or corrections. 
-
-1. TODO:  search this documement for "TODO" and __________ and consider them.
-
-1. Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
-
-1. This document has been reviewed by:
-    -  
-    -  
-
-## Upgrade Schedule
-
-1. Staging: 
+- Staging: 
     - Date: 
     - From version:
     - To version:
 
-1. Production:
+- Production:
     - Only after successful completion of the upgrade on Staging, and
     resolution of any findings from that upgrade, Customer is currently
     expected to schedule upgrading Production on 
     - Date:
 
-## Background Information
+## Customer Background Information
 
 Customer to prepare private documentation of the following system information:
 
-1. Describe Customer Black Duck instances: 
-    1.  Customer to download desire upgrade target Black Duck release
-        - https://github.com/blackducksoftware/hub/releases
-    1.  From that release archive, Customer to review release documentation:
+- Describe current Customer Black Duck instances: 
 
-	```shell
+    - Customer to download desire upgrade target Black Duck release
+        - https://github.com/blackducksoftware/hub/releases
+        - From that release archive, Customer to review release documentation:
+
+        ```shell
 	find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
 	hub-2021.8.3/docker-swarm/README.md
@@ -176,15 +187,15 @@ Customer to prepare private documentation of the following system information:
 	hub-2021.8.3/README.md
 	```
 
-    1. Customer to run 
+    - Customer to run 
 
 	```shell
 	./docker-swarm/bin/system_check.sh
 	```
-    1.  Customer to decide whether to use docker swarm kubernetes.
-    1.  Customer to work with Black Duck Support team to configure container services.
+    - Customer to decide whether to use docker swarm kubernetes.
+    - Customer to work with Black Duck Support team to configure container services.
 
-	```shell
+        ```shell
 	$ grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
 	    image: blackducksoftware/blackduck-postgres:9.6-1.1
 		limits: {memory: 3072M}
@@ -265,34 +276,34 @@ Resources to consider include:
     - ram
     - cpu
 
-    1. Database: in container or external? 
+- Database: in container or external? 
 
-    1. Does installation include Synopsys Alert?
-        - Is Alert database in container or external database?
+- Does installation include Synopsys Alert?
+    - Is Alert database in container or external database?
 
-    1. How are database disks connected?
-        - Example: over iSCSI over 2-NIC mpath ethernet elsewhere in the same datacenter. 
+- How are database disks connected?
+   - Example: over iSCSI over 2-NIC mpath ethernet elsewhere in the same datacenter. 
 
-    1. Any previously Synopsys-reported infrastructure performance issues with their internal sysadmins, including possible proxy/firewall issues?
+- Any previously Synopsys-reported infrastructure performance issues with their internal sysadmins, including possible proxy/firewall issues?
 
-1. Customer has Staging and Production environments. 
+- Customer has Staging and Production environments. 
     - Does customer Staging exactly replicate Production in terms of size and networking configuration?
     - Does customer environment include complex proxy/firewall configurations?
     - During a recent upgrade event, did Staging testing underestimate Production upgrade task durations? 
 
-    - During a recent upgrade event, were Customer docker container memory, cpu, and replica settings reported to have been misconfigured and had to
+- During a recent upgrade event, were Customer docker container memory, cpu, and replica settings reported to have been misconfigured and had to
         be fixed under a P1 Case? 
 
-1. Customer Production bds_hub database was recently __________ TB.
+- Customer Production bds_hub database was recently __________ TB.
 
-1. The upgrade is planned to be performed using a simplified Upgrade
+- The upgrade is planned to be performed using a simplified Upgrade
     Docker stack implemented by deploying new Synopsys-supplied
     deployment (.yml) files. These Upgrade .yml files will be different
     from the Production versions of the files.
 
-1. Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
+- Any significant database migration steps expected?  Any other potential causes of long delays during upgrade?
 
-1. The upgrade is expected to take about __________ hours. 
+- The upgrade is expected to take about __________ hours. 
 
     - If Fallback is required, an additional __________ hours would be
         required.
@@ -301,88 +312,88 @@ Resources to consider include:
 
 This section provides a brief overview of the upgrade plan.
 
-1. Planning
+## Planning
 
-    1. Identify upgrade and production requirements
+    - Identify upgrade and production requirements
 
-    1. Write post-upgrade validation test plan
+    - Write post-upgrade validation test plan
 
-    1. Inventory database connections
+    - Inventory database connections
 
-    1. Schedule Staging upgrade
+    - Schedule Staging upgrade
 
-    1. Open Synopsys SalesForce Case
+    - Open Synopsys SalesForce Case
 
-1. First, In Staging
+## First, In Staging
 
-    1. Prepare Environment
-        1. Create Production-like Staging environment
+    - Prepare Environment
+        - Create Production-like Staging environment
 
-        1. Test and resolve performance issues
+        - Test and resolve performance issues
 
-            1. Implement guidance from Best Practices, Sage,
+            - Implement guidance from Best Practices, Sage,
                 system_check.sh, sar, Zenoss 
 
-            1. Customer IT team to test and resolve issues
+            - Customer IT team to test and resolve issues
 
-                1. Consider: dd, pgbench, sysbench, bonnie++
+                - Consider: dd, pgbench, sysbench, bonnie++
 
-        1. Remove unused data; delete, truncate/drop, cull, configure
+        - Remove unused data; delete, truncate/drop, cull, configure
             settings
 
-        1. Vacuum analyze full bds_hub
+        - Vacuum analyze full bds_hub
 
-        1. Run PostgreSQL tuning utility
+        - Run PostgreSQL tuning utility
 
-        1. Backup database
+        - Backup database
 
-        1. Ensure disk space for db vacuum, migration
+        - Ensure disk space for db vacuum, migration
 
-        1. Check memory
+        - Check memory
 
-        1. Download upgrade-related files
+        - Download upgrade-related files
 
-        1. Schedule Staging upgrade
+        - Schedule Staging upgrade
 
-    1. Perform Upgrade in Staging
+    - Perform Upgrade in Staging
 
-        1. Stop scanning and external connections
+        - Stop scanning and external connections
 
-        1. Bring down docker stack
+        - Bring down docker stack
 
-        1. If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
+        - If not already done, backup external database with pre-upgrade-version of hub_create_data_dump.sh
 
-        1. Optional: upgrade OS, kernel 
+        - Optional: upgrade OS, kernel 
 
-        1. Optional: upgrade Docker with yum
+        - Optional: upgrade Docker with yum
 
-        1. Optional: satisfy other requirements, objectives. 
+        - Optional: satisfy other requirements, objectives. 
 
-        1. Deploy docker migration stack
+        - Deploy docker migration stack
 
-        1. Restore database with pre-upgrade-version of hub_db_migrate.sh
+        - Restore database with pre-upgrade-version of hub_db_migrate.sh
 
-        1. Vacuum audit_event table
+        - Vacuum audit_event table
 
-        1. Optional, upgrade PostgreSQL
+        - Optional, upgrade PostgreSQL
 
-             1. Bring down docker stack
+             - Bring down docker stack
 
-             1. Upgrade PostgeSQL
+             - Upgrade PostgeSQL
 
-        1. Deploy Black Duck with target version of Production deployment .yml files
+        - Deploy Black Duck with target version of Production deployment .yml files
 
-    1. Post-Staging-Upgrade Steps
+    - Post-Staging-Upgrade Steps
 
-        1. Run upgrade-validation tests
+        - Run upgrade-validation tests
 
-        1. Re-run benchmark tests
+        - Re-run benchmark tests
 
-        1. Announce upgrade completion to stakeholders
+        - Announce upgrade completion to stakeholders
 
-1. Then, In Production
+## Then, In Production
 
-    1.  Schedule and repeat "In Staging" steps as above
+    - Schedule and repeat "In Staging" steps as above
 
 
 
@@ -1771,8 +1782,9 @@ in terms of also reducing the memory and cpu configuration of each of those serv
 
 #### Vacuum audit_event table 
 
-When the migration script is finished and If Customer has not done
-"vacuum full analyze" prior to the upgrade, Synopsys strongly recommends
+When the migration script is finished, and if Customer has not done
+"vacuum full analyze" prior to the upgrade, or if Customer has not done a database restore,
+then Synopsys strongly recommends
 that you run the VACUUM command on the audit_event table to optimize
 PostgreSQL performance. See "Installing Black Duck using Docker Swarm",
 Chapter 6: "Upgrading Black Duck", "Migration script to purge unused
@@ -1785,6 +1797,8 @@ rows in the audit event table".
 
 
 ## Perform Post-Upgrade Steps
+
+### After an upgrade, Black Duck performs a tremendous amount of work on the database behind the scenes.   IMPORTANT:  wait for system to quiesce before continuing.  This could take hours on a very large Black Duck installation. 
 
 ### Run upgrade-validation tests.
 
@@ -1821,21 +1835,21 @@ with the appropriate status to provide an "all clear".
 
 We need to talk about these.  (TODO:  needs work)
 
-1.  If at any point in the migrations, an unrecoverable error occurs,
+- If at any point in the migrations, an unrecoverable error occurs,
     the plan is to fallback to version the previous version.
 
-1.  In order to fall back to the pre-upgrade version, first remove the volumes.
+- In order to fall back to the pre-upgrade version, first remove the volumes.
 
-    1.  Start up pre-upgrade version, and THEN Run 'docker volume prune' after
+    - Start up pre-upgrade version, and THEN Run 'docker volume prune' after
         verifying no other volumes are in use. 
 
-    1.  Alternatively, 'docker volume ls' to list and docker volume rm
+    - Alternatively, 'docker volume ls' to list and docker volume rm
         <volume name> each related volume. 
 
-1.  Using the restore commands to re-establish the pre-upgrade version of the backup
+- Using the restore commands to re-establish the pre-upgrade version of the backup
     taken during upgrade steps
 
-    1.  Expect about _________ hours to fallback to the pre-upgrade version.
+    - Expect about _________ hours to fallback to the pre-upgrade version.
 
 
 
@@ -1844,9 +1858,9 @@ We need to talk about these.  (TODO:  needs work)
 
 TODO:  augment this section
 
-1.  To restore the PostgreSQL data during a fallback 
+- To restore the PostgreSQL data during a fallback 
 
-1.  Use the docker-compose.dbmigrate.yml file located in the
+- Use the docker-compose.dbmigrate.yml file located in the
     docker-swarm directory. That starts the containers and volumes
     needed to migrate the database. 
 
@@ -1854,7 +1868,7 @@ TODO:  augment this section
 docker stack deploy -c docker-compose.dbmigrate.yml hub 
 ```
 
-1.  Note that there are some versions of Docker where if the images
+- Note that there are some versions of Docker where if the images
     live in a private repository, docker stack will not pull them unless
     the following flag is added to the above command: 
 
@@ -1862,11 +1876,11 @@ docker stack deploy -c docker-compose.dbmigrate.yml hub
 --with-registry-auth 
 ```
 
-1.  After the DB container has started, run the migration script
+- After the DB container has started, run the migration script
     located in the docker-swarm directory. This script restores the data
     from the existing database dump file. 
 
-    1.  This has a duration on the order of hours, so perform it in a
+    - This has a duration on the order of hours, so perform it in a
         screen multiplexer like screen or tmux, or as a detached
         background process.
 
