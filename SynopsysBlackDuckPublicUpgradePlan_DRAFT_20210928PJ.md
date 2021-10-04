@@ -1270,12 +1270,12 @@ Example: if Staging environment cannot "phone home", but Production can, that di
 
 
 
-### Download images, files, scripts
+## Download images, files, scripts
 
 Download and review all required files.  Resolve any quuestions or issues.
 
 
-#### Download upgrade images
+### Download upgrade images
 
 Any new docker images used by the Black Duck application should be
 downloaded to the target server prior to the upgrade. Downloading and
@@ -1291,7 +1291,7 @@ ls | while read image; do docker load -i \$image; done
 ```
 
 
-#### Download Orchestration Files
+### Download Orchestration Files
 
 The Orchestration .yml and .env determine how the Black Duck
 application will startup with which functionality and resources.
@@ -1303,13 +1303,13 @@ the previous release.
 
 This may take a while so be careful with the updates to these files.
 
-##### Download updated YML Files
+#### Download updated YML Files
 
 If Synopsys Support is providing updated YML files, then they will be
 dropped on the Synopsys sharefile or in the Support case
 
 
-#### Download blackduck_migrator yaml file 
+### Download blackduck_migrator yaml file 
 
 This is similar to docker-compose.yml and
 docker-compose.externaldb.yml. It starts up the required services.
@@ -1325,7 +1325,7 @@ to 2.
 
 
 
-#### Download Upgrade-Monitoring Scripts
+### Download Upgrade-Monitoring Scripts
 
 Test scripts may be provided by Synopsys to help with monitoring
 upgrades.
@@ -1341,7 +1341,7 @@ a very large database table upgrade/migration).
 
 
 
-### Update stakeholders about near-term upgrade Schedule
+## Update stakeholders about near-term upgrade Schedule
 
 Given that the Black Duck server will be up and down during the
 upgrade, it is important that Customer non-Black-Duck external scripts, scans, etc should not be
