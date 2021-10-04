@@ -384,10 +384,8 @@ get you an advance copy. These documents include:
 
 -   Black Duck Release Notes
     (<https://community.synopsys.com/s/article/Black-Duck-Release-Notes>)
-
 -   Black Duck Install Guide
     (<https://community.synopsys.com/s/article/Black-Duck-Installing-Black-Duck-using-Docker-Swarm>)
-
 -   Black Duck Scanning Best Practices
     (<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)
 
@@ -435,24 +433,16 @@ plans.
 -   Customer to ensure all system requirements are or will be met, as
     listed in Chapter 2, Installation Planning, of the Installing Black
     Duck using Docker Swarm. 
-
     -   O/S Version OK? If not, when should an upgrade occur?
-
     -   Docker Version OK? If not, when should an upgrade occur?
-
     -   PostgreSQL Version OK? If not, when should an upgrade occur?
-
     -   RAM sufficient for the server (Check documentation and
         docker-compose.externaldb.yml or docker-compose.yml, and
         docker-compose.local-overrides.yml on the Black Duck server)?
-
     -   CPUs sufficient for the server (Check documentation and the same files as the RAM check)?
-
     -   Check Storage (df -hl on the Black Duck server)
-
 -   Customer to review those documents and resolve with Synopsys any
     questions or issues discovered with Synopsys.
-
 -   Customer needs to determine if any server upgrades need to occur and if
     they should be done prior to the Black Duck upgrade.
 
@@ -486,23 +476,16 @@ versions, and application versions.
 
 -   Review Regression Tests to see if changes in functionality impact
     the test cases.
-
     -   Make changes as necessary for target release
-
 -   Review Release Notes for areas to test (at least both Chapters 1
     and 2, for all applicable Black Duck versions that will be spanned by this Black Duck upgrade event).
-
     -   Create Test Cases for the functionality that you will use or
         may impact your use
-
 -   Review issues opened with Synopsys (or recent issues not tracked
     yet) and determine if any may be fixed in the target release.
-
     -   Create Test Cases for the functionality that you will use or
         may impact your use.
-
 -   Review Scripts based on Black Duck APIs.
-
     -   Create Test Cases to verify that interface is still working
         the same way after the upgrade.
 
@@ -521,17 +504,11 @@ that they may be efficiently and promptly terminated before starting the
 upgrade (guidance provided below) including:
 
 -   External Queries using SQL or Rest API
-
     -   Utilities
-
     -   Scripts
-
     -   SDK Calls
-
 -   Scan Results (Scans interacting with Black Duck Server)
-
 -   Infrastructure Queries (e.g. server/docker monitoring)
-
 -   Server Logins (to either Black Duck or database server (if
     external))
 
@@ -602,13 +579,9 @@ server. If there are issues flagged, then they should be resolved prior
 to the upgrade:
 
 -   Unmapped Scans
-
 -   Projects with Too Many Versions
-
 -   Projects with No Owners
-
 -   Project Versions with Excessive Scans
-
 -   Project Versions with No Scans
 
 ### system_check.sh
@@ -688,13 +661,10 @@ Admins to determine the appropriate actions:
 
 -   Increase RAM of the Black Duck and/or Database Server (if
     needed)
-
 -   Increase CPU Cores of the Black Duck and/or Database Server (if
     needed)
-
 -   Make sure sufficient quantity and speed of storage is available for database,
     application, and log partitions (if needed)
-
 -   Make sure that the connection to the database (e.g. NFS, iSCSI,
     fibre-connected) has sufficient bandwidth to avoid iowaits, caching,
     and latency issues.
@@ -939,14 +909,11 @@ time sh -c "dd if=/dev/zero of=[PATH] bs=[BLOCK_SIZE]k count=[LOOPS] && sync"
 A break down of the command is as follows:
 
 -   time -- times the overall process from start to finish
-
 -   of= this is the path which you would like to test. The path must
     be read/ writable.
-
 -   bs= is the block size to use. If you have a specific load which
     you are testing for, make this value mirror the write size which you
     would expect.
-
 -   sync -- forces the process to write the entire file to disk before
     completing. Note, that dd will return before completing but the time
     command will not, therefore the time output will include the sync to
@@ -1522,12 +1489,9 @@ can block upgrade database actions.
 To ensure this:
 
 -   Make backup of pg_hba.conf file.
-
 -   Edit pg_hba.conf to permit connections only from
     localhost/127.0.0.1 and the upgrading Black Duck server. 
-
 -   Set most "host" settings to "reject" or comment them out. 
-
 -   Restart PostgreSQL (to reload .conf changes, but to also
     disconnect any currently present external connections). 
 
@@ -1539,13 +1503,10 @@ control.
 #### Backup database
 
 -   Customer to backup the database. 
-
 -   Customer to move Production database dump file to separate machine
     if possible. 
-
 -   Customer to balance timing of Production backup with the reality
     that subsequent scans will not be in the backup. 
-
 -   If not already done, backup external database with pre-upgrade-version of  
     hub_create_data_dump.sh
 
@@ -1796,18 +1757,13 @@ We need to talk about these.  (TODO:  needs work)
 
 - If at any point in the migrations, an unrecoverable error occurs,
     the plan is to fallback to version the previous version.
-
 - In order to fall back to the pre-upgrade version, first remove the volumes.
-
     - Start up pre-upgrade version, and THEN Run 'docker volume prune' after
         verifying no other volumes are in use. 
-
     - Alternatively, 'docker volume ls' to list and docker volume rm
         <volume name> each related volume. 
-
 - Using the restore commands to re-establish the pre-upgrade version of the backup
     taken during upgrade steps
-
     - Expect about _________ hours to fallback to the pre-upgrade version.
 
 
@@ -1818,7 +1774,6 @@ We need to talk about these.  (TODO:  needs work)
 TODO:  augment this section
 
 - To restore the PostgreSQL data during a fallback 
-
 - Use the docker-compose.dbmigrate.yml file located in the
     docker-swarm directory. That starts the containers and volumes
     needed to migrate the database. 
@@ -1838,7 +1793,6 @@ docker stack deploy -c docker-compose.dbmigrate.yml hub
 - After the DB container has started, run the migration script
     located in the docker-swarm directory. This script restores the data
     from the existing database dump file. 
-
     - This has a duration on the order of hours, so perform it in a
         screen multiplexer like screen or tmux, or as a detached
         background process.
