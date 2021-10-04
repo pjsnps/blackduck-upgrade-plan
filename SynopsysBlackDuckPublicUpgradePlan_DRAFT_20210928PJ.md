@@ -15,7 +15,7 @@
     - [Checklist](#checklist-1)
   - [Document Database/API Connections](#document-databaseapi-connections)
   - [Schedule the Upgrades (Staging and Production)](#schedule-the-upgrades-staging-and-production)
-    - [Open a Synopsys SalesForce Case](#open-a-synopsys-salesforce-case)
+  - [Open a Synopsys SalesForce Case](#open-a-synopsys-salesforce-case)
 - [Perform Upgrade-Preparation Activities](#perform-upgrade-preparation-activities)
   - [Resolve Performance and Networking Issues](#resolve-performance-and-networking-issues)
     - [Implement Best Practices](#implement-best-practices)
@@ -23,18 +23,32 @@
     - [system_check.sh](#system_checksh)
     - [sar](#sar)
     - [Other Customer monitoring tools, such as zenoss?](#other-customer-monitoring-tools-such-as-zenoss)
+      - [SynopsysGatherServerSpecs.bash](#synopsysgatherserverspecsbash)
+      - [sysbench](#sysbench)
+      - [pgbench](#pgbench)
+      - [pg_test_fsync](#pg_test_fsync)
+      - [bonnie++](#bonnie)
+      - [dd](#dd)
   - [Clean up Black Duck Projects and Scans](#clean-up-black-duck-projects-and-scans)
   - [Clean up Databases](#clean-up-databases)
     - [bdio Database](#bdio-database)
     - [bds_hub_report Database](#bds_hub_report-database)
     - [bds_hub, postgresql, template0, and template1 Database](#bds_hub-postgresql-template0-and-template1-database)
     - [Trim the Notification and audit_event logs](#trim-the-notification-and-audit_event-logs)
+      - [Notification Logs](#notification-logs)
+      - [Audit_Events](#audit_events)
     - [Remove any orphaned large objects](#remove-any-orphaned-large-objects)
+      - [vacuumlo](#vacuumlo)
     - [Run PostgreSQL tuning utility](#run-postgresql-tuning-utility)
+      - [Pgtune](#pgtune)
     - [Full Vacuum of Database](#full-vacuum-of-database)
-    - [Upgrade O/S, Kernel, Docker, Postgresql](#upgrade-os-kernel-docker-postgresql)
-  - [Duplicate Production Database in Staging Environment](#duplicate-production-database-in-staging-environment)
-    - [Production Database Replication](#production-database-replication)
+      - [Make sure the database pgdata partition has enough space](#make-sure-the-database-pgdata-partition-has-enough-space)
+      - [Perform Full Vacuum](#perform-full-vacuum)
+  - [Upgrade O/S, Kernel, Docker, Postgresql](#upgrade-os-kernel-docker-postgresql)
+    - [O/S and/or Kernel upgrade](#os-andor-kernel-upgrade)
+    - [Docker Upgrades](#docker-upgrades)
+    - [PostgreSQL Upgrades](#postgresql-upgrades)
+  - [Replicate Production Database over into Staging Environment](#replicate-production-database-over-into-staging-environment)
   - [Duplicate Production Environment in Staging Environment](#duplicate-production-environment-in-staging-environment)
 - [Perform Black Duck Upgrade](#perform-black-duck-upgrade)
   - [Perform Pre-upgrade steps](#perform-pre-upgrade-steps)
@@ -42,16 +56,31 @@
     - [Check Storage](#check-storage)
     - [Download upgrade images](#download-upgrade-images)
     - [Download Orchestration Files](#download-orchestration-files)
-    - [blackduck_migrator yaml file](#blackduck_migrator-yaml-file)
-    - [Schedule the upgrade](#schedule-the-upgrade)
+      - [Updated YML Files](#updated-yml-files)
+    - [Download blackduck_migrator yaml file](#download-blackduck_migrator-yaml-file)
+    - [Obtain Upgrade Monitoring Scripts](#obtain-upgrade-monitoring-scripts)
+    - [Update stakeholders about near-term upgrade Schedule](#update-stakeholders-about-near-term-upgrade-schedule)
   - [Perform Upgrade, Day of Upgrade (Staging first, then Production)](#perform-upgrade-day-of-upgrade-staging-first-then-production)
     - [Stop scanning and external connections](#stop-scanning-and-external-connections)
+      - [Stop Scanning](#stop-scanning)
+      - [Stop External Connections](#stop-external-connections)
+      - [Backup database](#backup-database)
     - [Start the actual upgrade](#start-the-actual-upgrade)
+      - [Bring down Black Duck Docker Application](#bring-down-black-duck-docker-application)
+      - [Start Black Duck with the new version of Black Duck](#start-black-duck-with-the-new-version-of-black-duck)
+      - [Start the abbreviated Database Migration YML](#start-the-abbreviated-database-migration-yml)
+      - [Monitor upgrade docker containers health.](#monitor-upgrade-docker-containers-health)
+      - [Restore database with pre-upgrade version of hub_db_migrate.sh (TODO: confirm)](#restore-database-with-pre-upgrade-version-of-hub_db_migratesh-todo-confirm)
+      - [Monitor the Black Duck database during Database Migration](#monitor-the-black-duck-database-during-database-migration)
+      - [Start the official release of Black Duck](#start-the-official-release-of-black-duck)
+      - [Monitor upgrade docker containers health.](#monitor-upgrade-docker-containers-health-1)
+      - [Docker service replicas](#docker-service-replicas)
+      - [Vacuum audit_event table](#vacuum-audit_event-table)
   - [Perform Post-Upgrade Steps](#perform-post-upgrade-steps)
-    - [After an upgrade, Black Duck performs a tremendous amount of work on the database behind the scenes.   IMPORTANT:  wait for system to quiesce before continuing.  This could take hours on a very large Black Duck installation.](#after-an-upgrade-black-duck-performs-a-tremendous-amount-of-work-on-the-database-behind-the-scenes---important--wait-for-system-to-quiesce-before-continuing--this-could-take-hours-on-a-very-large-black-duck-installation)
+    - [Wait...](#wait)
     - [Run upgrade-validation tests.](#run-upgrade-validation-tests)
-    - [Re-run benchmark tests.](#re-run-benchmark-tests)
-    - [Announce upgrade completion to stakeholders](#announce-upgrade-completion-to-stakeholders)
+    - [Run benchmark tests.](#run-benchmark-tests)
+    - [Announce upgrade completion (Staging or Production) to stakeholders](#announce-upgrade-completion-staging-or-production-to-stakeholders)
 - [Contingency: Fallback Steps](#contingency-fallback%C2%A0steps)
   - [Restore steps, during Fallback](#restore-steps-during-fallback)
 
@@ -440,7 +469,7 @@ Support help.
 Should the customer require Synopsys support, they should open a case
 requesting help.
 
-### Open a Synopsys SalesForce Case 
+## Open a Synopsys SalesForce Case 
 
 You can create a SalesForce case by going to
 <https://community.synopsys.com> and logging in with your Community site
@@ -1145,7 +1174,7 @@ TIME ZONE,
 
 
 
-### Upgrade O/S, Kernel, Docker, Postgresql
+## Upgrade O/S, Kernel, Docker, Postgresql
 
 As time passes, the minimum requirements for Black Duck changes. There
 tends to be a transitional period across multiple releases where one
@@ -1163,7 +1192,7 @@ version until after the upgrade.
 
 
 
-#### O/S and/or Kernel upgrade
+### O/S and/or Kernel upgrade
 
 Working with your server admins for the downtime required to upgrade
 the O/S and/or kernel. Sometimes the upgrade occurs because a patch
@@ -1174,7 +1203,7 @@ Work with your system admins to perform the upgrade.
 
 
 
-#### Docker Upgrades
+### Docker Upgrades
 
 At this point, it looks like there is no "upgrade" per se. The
 currently supported version is 18.03. However 19.03 of Docker is
@@ -1186,7 +1215,7 @@ installed.
 
 
 
-#### PostgreSQL Upgrades
+### PostgreSQL Upgrades
 
 Work with your Database Administrators to upgrade your Postgresql
 instance. 9.6.x was previously supported in both the container and
@@ -1212,7 +1241,7 @@ upgrading Postgresql.
 
 
 
-## Duplicate Production Database in Staging Environment
+## Replicate Production Database over into Staging Environment
 
 Sometimes issues arise due to scale. Unless you have created a test
 database with the possible scaling issues of the production database,
@@ -1224,10 +1253,8 @@ data as in production.
 Another way is to replicate the production data in the staging
 environment. This is easier with an external database.
 
-### Production Database Replication
 
-If the production database is going to be duplicated in the
-staging/test environment, then the following steps must be performed.
+
 
 
 
@@ -1308,7 +1335,7 @@ If Synopsys Support is providing updated YML files, then they will be
 dropped on the Synopsys sharefile or in the Support case
 
 
-### blackduck_migrator yaml file 
+### Download blackduck_migrator yaml file 
 
 This is similar to docker-compose.yml and
 docker-compose.externaldb.yml. It starts up the required services.
@@ -1324,7 +1351,7 @@ to 2.
 
 
 
-Upgrade Monitoring Scripts
+### Obtain Upgrade Monitoring Scripts
 
 Test scripts may be provided by Synopsys to help with monitoring
 upgrades.
@@ -1336,15 +1363,15 @@ a very large database table upgrade/migration).
 
 
 
-### Schedule the upgrade
+### Update stakeholders about near-term upgrade Schedule
 
 Given that the Black Duck server will be up and down during the
-upgrade, it is important that external scripts, scans, etc should not be
+upgrade, it is important that Customer non-Black-Duck external scripts, scans, etc should not be
 running during the upgrade.
 
 Planning with Synospys Support should be made sufficiently ahead of
 time so that they can plan support during your upgrade. In addition,
-those teams using Black Duck need to plan their release schedules to
+those Customer teams using Black Duck need to plan their release schedules to
 will want to work around the schedule and put the downtime into their
 schedules. 
 
@@ -1538,7 +1565,11 @@ You can monitor the services as follows:
 watch docker ps
 ```
 
-Restore database with pre-upgrade version of hub_db_migrate.sh (TODO: confirm)
+
+
+
+
+#### Restore database with pre-upgrade version of hub_db_migrate.sh (TODO: confirm)
 
 
 #### Monitor the Black Duck database during Database Migration
@@ -1618,18 +1649,15 @@ watch docker ps
 
 #### Docker service replicas
 
-TODO:  move this replicas section to better location?
+Customers should implement container replica counts in their .yml files.   If customer is
+using replicas, but not via the .yml files, then Customr should increase replicas manually.
 
-Ask Black Duck Support if your installation would benefit from using multiple Docker replicas
-for one or more of the Black Duck Docker servers (scan, jobrunner, etc). 
-If so, they will instruction you on how to implement that, both in terms of instantiating the replicas, but also 
-in terms of also reducing the memory and cpu configuration of each of those services/containers. 
 
 
 
 #### Vacuum audit_event table 
 
-When the migration script is finished, and if Customer has not done
+TODO: is this redundant here?:   When the migration script is finished, and if Customer has not done
 "vacuum full analyze" prior to the upgrade, or if Customer has not done a database restore,
 then Synopsys strongly recommends
 that you run the VACUUM command on the audit_event table to optimize
@@ -1645,7 +1673,12 @@ rows in the audit event table".
 
 ## Perform Post-Upgrade Steps
 
-### After an upgrade, Black Duck performs a tremendous amount of work on the database behind the scenes.   IMPORTANT:  wait for system to quiesce before continuing.  This could take hours on a very large Black Duck installation. 
+### Wait...
+
+After an upgrade, Black Duck performs a tremendous amount of work on the database behind the scenes.   
+IMPORTANT:  wait for system to quiesce before continuing.  
+This could take hours on a very large Black Duck installation. 
+
 
 ### Run upgrade-validation tests.
 
@@ -1653,7 +1686,7 @@ Customer run the tests required to verify that the existing projects
 and process were not impacted unexpectedly by the upgrade.
 
 
-### Re-run benchmark tests. 
+### Run benchmark tests. 
 
 Customer run the benchmark tests that they ran prior to the upgrade
 (see above)
@@ -1668,7 +1701,7 @@ fileio --file-test-mode=rndrw --threads=\$mthreads run | grep -e
 ```
 
 
-### Announce upgrade completion to stakeholders
+### Announce upgrade completion (Staging or Production) to stakeholders
 
 When the upgrade is successfully complete, Customer will update their
 internal customers, as well as the Synopsys Salesforce Community Case,
