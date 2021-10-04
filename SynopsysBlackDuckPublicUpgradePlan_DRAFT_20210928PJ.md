@@ -483,6 +483,10 @@ engaged.
 
 # Perform Upgrade-Preparation Activities
 
+The preceding section described *Planning* actions that did not change the customer environment
+in preparation for the Black Duck upgrade.  By contrast, this section describes *changes* to 
+be made in the Customer Black Duck environment *prior to* implementing the actual upgrade. 
+
 Prior to the target upgrade (be it test/staging or production), the
 following activities must be performed to make sure that the environment is ready. 
 
