@@ -111,21 +111,21 @@ Customer to prepare private documentation of the following system information:
         - https://github.com/blackducksoftware/hub/releases
         - From that release archive, Customer to review release documentation:
 
-```
-find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
-hub-2021.8.3/docker-swarm/README.md
-hub-2021.8.3/docs/en_US/getting_started.pdf
-hub-2021.8.3/docs/en_US/install_kubernetes.pdf
-hub-2021.8.3/docs/en_US/install_openshift.pdf
-hub-2021.8.3/docs/en_US/install_swarm.pdf
-hub-2021.8.3/docs/en_US/release_notes.pdf
-hub-2021.8.3/Important_Upgrade_Announcement.md
-hub-2021.8.3/kubernetes/blackduck/README.md
-hub-2021.8.3/kubernetes/README.md
-hub-2021.8.3/README.containers.md
-hub-2021.8.3/README.md
-```
+    find hub-2021.8.3/ | grep -e en_US.*pdf -e md
+     
+    hub-2021.8.3/docker-swarm/README.md
+    hub-2021.8.3/docs/en_US/getting_started.pdf
+    hub-2021.8.3/docs/en_US/install_kubernetes.pdf
+    hub-2021.8.3/docs/en_US/install_openshift.pdf
+    hub-2021.8.3/docs/en_US/install_swarm.pdf
+    hub-2021.8.3/docs/en_US/release_notes.pdf
+    hub-2021.8.3/Important_Upgrade_Announcement.md
+    hub-2021.8.3/kubernetes/blackduck/README.md
+    hub-2021.8.3/kubernetes/README.md
+    hub-2021.8.3/README.containers.md
+    hub-2021.8.3/README.md
+
 
 
 - Customer to run 
