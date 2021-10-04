@@ -128,12 +128,10 @@ hub-2021.8.3/README.md
 ```
 
 
- - Customer to run 
+- Customer to run 
 
 
-``` 
-./docker-swarm/bin/system_check.sh 
-``` 
+` ./docker-swarm/bin/system_check.sh` 
 
 
     - Customer to decide whether to use docker swarm kubernetes.
