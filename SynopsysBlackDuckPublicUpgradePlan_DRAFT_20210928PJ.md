@@ -453,7 +453,7 @@ upgrade (guidance provided below) including:
 
 
 
-## Scheduling Upgrades
+## Schedule the Upgrades (Staging and Production)
 
 If Synopsys Support is required, then the customer should schedule the
 start of an upgrade to occur during the morning of a normal business day
@@ -464,7 +464,7 @@ Support help.
 Should the customer require Synopsys support, they should open a case
 requesting help.
 
-### Opening a Synopsys SalesForce Request
+### Open a Synopsys SalesForce Case 
 
 You can create a SalesForce case by going to
 <https://community.synopsys.com> and logging in with your Community site
@@ -481,14 +481,16 @@ engaged.
 
 
 
-# Perform Pre-Upgrade Activities
+# Perform Upgrade-Preparation Activities
 
 Prior to the target upgrade (be it test/staging or production), the
 following activities must be performed to make sure that the environment is ready. 
 
+This activity should be performed weeks or months before the upgrade. 
 
 
-## Performance and Networking Issues
+
+## Resolve Performance and Networking Issues
 
 TODO:  be sure to elaborate on resolving networking issues, such as proxies, firewalls, tls certificates, etc, etc.
 
@@ -499,7 +501,7 @@ minimized.
 These are a few of the documents/tools that can help determine if
 there are any issues.
 
-### Best Practices 
+### Implement Best Practices 
 
 (<https://community.synopsys.com/s/article/Black-Duck-Scanning-Best-Practices>)
 
@@ -579,7 +581,7 @@ TODO: should use ~/.pgpass
 
 
 
-## Resolving Performance and Networking Issues
+## Resolve Performance and Networking Issues
 TODO:  add networking, proxy, firewall and other related improvements here
 
 Using the output of the sar/ksar command and the
@@ -874,7 +876,7 @@ sys 0m14.998s
 
 
 
-## Cleaning up Black Duck Projects and Scans
+## Clean up Black Duck Projects and Scans
 
 Using the output of the Sage script, you can determine what scans,
 project-versions, and whole projects can be removed.
@@ -893,7 +895,7 @@ vacuum and/or an application upgrade.
 
 
 
-## Cleaning up Databases
+## Clean up Databases
 
 From time-to-time, Databases used by Black Duck become obsolete. If an
 upcoming release requires the removal of a database as part of the
@@ -944,7 +946,7 @@ These databases are still valid as of the 2020.6.1 release.  (TODO:  update/conf
 
 
 
-## Trimming the Notification and audit_event logs
+## Trim the Notification and audit_event logs
 
 Depending on the activity on the Black Duck server, the number of
 records taken up by the logging could be in the millions. It is
@@ -984,7 +986,7 @@ delete from st.audit_event where event_timestamp < now() - interval '10 days';
 
 
 
-## Database Cleanup
+## Clean up Database
 
 ### Remove any orphaned large objects
 
@@ -1224,7 +1226,7 @@ TIME ZONE,
 
 
 
-## Duplicating Production Database in Staging Environment
+## Duplicate Production Database in Staging Environment
 
 Sometimes issues arise due to scale. Unless you have created a test
 database with the possible scaling issues of the production database,
@@ -1243,7 +1245,7 @@ staging/test environment, then the following steps must be performed.
 
 
 
-## Duplicating Production Environment in Staging Environment
+## Duplicate Production Environment in Staging Environment
 
 Just as with the creation of a similar/exact copy of the production
 database in the test/staging environment, the same should be done with
