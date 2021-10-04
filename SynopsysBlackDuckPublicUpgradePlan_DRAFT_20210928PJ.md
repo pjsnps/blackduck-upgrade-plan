@@ -110,6 +110,7 @@ Customer to prepare private documentation of the following system information:
     - Customer to download desire upgrade target Black Duck release
         - https://github.com/blackducksoftware/hub/releases
         - From that release archive, Customer to review release documentation:
+
 ```shell
 find hub-2021.8.3/ | grep -e en_US.*pdf -e md
 
@@ -125,10 +126,13 @@ hub-2021.8.3/kubernetes/README.md
 hub-2021.8.3/README.containers.md
 hub-2021.8.3/README.md
 ```
+
     - Customer to run 
+
 ```shell
 ./docker-swarm/bin/system_check.sh
 ```
+
     - Customer to decide whether to use docker swarm kubernetes.
     - Customer to work with Black Duck Support team to configure container services.
 
