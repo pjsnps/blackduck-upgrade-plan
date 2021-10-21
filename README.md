@@ -3,24 +3,24 @@ Upgrading Black Duck in large complex enterprises can be complicated.  This docu
 
 This document is provided as-is, without warranty or liability.
 
-Example usage for beginners:
-- either just use this web ui
+Example usage for beginners to edit this document on github:
+- either just use this github web ui
 - or, use command line with vi
      - git clone https://github.com/pjsnps/blackduck-upgrade-plan.git                                                                               
      - cd blackduck-upgrade-plan/
-     -   git checkout pjsnps-patch-1 # keeping on a branch until this is proven worthy                                      
-     -   vi SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md 
-     -   doctoc --github --maxlevel 2 SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md # replace toc
-     -   pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
-     -   git commit -a -m "short message"  # commit to your local store
-     -   git push  # push your change up to github
-     -   \# check it in your browser:  https://github.com/pjsnps/blackduck-upgrade-plan/blob/pjsnps-patch-1/SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
+     - git checkout pjsnps-patch-1 # keeping on a branch until this is proven worthy                                      
+     - vi SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md 
+     - doctoc --github --maxlevel 2 SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md # replace toc
+     - pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
+     - git commit -a -m "short message"  # commit to your local store
+     - git push  # push your change up to github
+     - \# check it in your browser:  https://github.com/pjsnps/blackduck-upgrade-plan/blob/pjsnps-patch-1/SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
 
-     -   \# next time you edit
-     -   git pull  # get any changes others might have made
-     -   vi SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md                                                                 
-     -   doctoc --github --maxlevel 2 SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md # replace toc
-     -   pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
-     -   git push
+     - \# next time you edit
+     - git pull  # get any changes others might have made
+     - vi SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md                                                                 
+     - doctoc --github --maxlevel 2 SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md # replace toc
+     - pandoc -f markdown -t html -o - -i SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md | links -dump | less -inRF  # check it on command line
+     - git push
 
- Markdown syntax:  https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
+Markdown syntax:  https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
