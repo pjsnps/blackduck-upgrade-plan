@@ -95,36 +95,57 @@
 
 This document is provided as-is, without warranty or liability.
 
-This document is a draft, informal, test, work in progress.
+This document is an unofficial, draft, informal, test, work in progress.
 
-- last updated  October 4, 2021, pjalajas. 
+- last updated October 21, 2021 by pjalajas. 
+
+This document is intended to augment, not replace, the official documents here:
+https://github.com/blackducksoftware/hub/tree/master/docs/en_US
 
 This document is intended to be used by very large (databases on the order of 1 TB) enterprise Black Duck customers to help their Black Duck upgrades go smoothly.  
 
 This document is only for on-premise installations; hosted/SaaS Black Duck instances are upgraded by Black Duck SaaS team.  
 
+This document is only for docker-swarm installations.
+
 Use github Issues and Discussions and Pull Requests for any corrections or suggestions you may have.  
 
 TODO:  search this document for "TODO" and __________ and consider them.
 
-Document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
+This document filename: SynopsysBlackDuckPublicUpgradePlan_DRAFT_20210928PJ.md
 
-This document has been reviewed by: 
 
--  
--  
+
+
+
+# Official Upgrade Documentation
+
+Customer to download desired upgrade target Black Duck release.
+    - https://github.com/blackducksoftware/hub/releases
+    - From that release archive, Customer to review release documentation:
+        - https://github.com/blackducksoftware/hub/tree/master/docs/en_US
+
+```
+example: 
+hub-2021.8.3/docker-swarm/README.md
+hub-2021.8.3/docs/en_US/getting_started.pdf
+hub-2021.8.3/docs/en_US/install_swarm.pdf
+hub-2021.8.3/docs/en_US/release_notes.pdf
+hub-2021.8.3/Important_Upgrade_Announcement.md
+hub-2021.8.3/README.containers.md
+hub-2021.8.3/README.md
+
+```
+
+
+
 
 
 # Customer details
-TODO:  Clean up this section
+
+Customer to prepare private documentation of the following system information:
 
 ## Contacts
-
-- Customer: 
-
-- Case(s): 
-    - Current SalesForce Case number:
-    - Prior related cases for reference: 
 
 - Customer: 
     - Name:
@@ -142,144 +163,54 @@ TODO:  Clean up this section
     - website: Synopsys Software Integrity Community: https://community.synopsys.com/s/
     - email:  software-integrity-support@synopsys.com
 
+## Synopsys SalesForce Case
+
+- Case(s): 
+    - Current SalesForce Case number:
+    - Prior related cases for reference: 
+
 
 ## Customer Upgrade Schedule
 
 - Staging: 
     - Date: 
-    - From version:
-    - To version:
+    - From Black Duck version:
+    - To Black Duck version:
 
 - Production:
     - Only after successful completion of the upgrade on Staging, and
     resolution of any findings from that upgrade, Customer is currently
-    expected to schedule upgrading Production on 
+    expected to schedule upgrading Production on:
     - Date:
+
+
 
 ## Customer Background Information
 
-Customer to prepare private documentation of the following system information:
-
-- Describe current Customer Black Duck instances: 
-    - Customer to download desire upgrade target Black Duck release
-        - https://github.com/blackducksoftware/hub/releases
-        - From that release archive, Customer to review release documentation:
-
-
-
-```
-
-find hub-2021.8.3/ | grep -e en_US.*pdf -e md
-
-hub-2021.8.3/docker-swarm/README.md
-hub-2021.8.3/docs/en_US/getting_started.pdf
-hub-2021.8.3/docs/en_US/install_kubernetes.pdf
-hub-2021.8.3/docs/en_US/install_openshift.pdf
-hub-2021.8.3/docs/en_US/install_swarm.pdf
-hub-2021.8.3/docs/en_US/release_notes.pdf
-hub-2021.8.3/Important_Upgrade_Announcement.md
-hub-2021.8.3/kubernetes/blackduck/README.md
-hub-2021.8.3/kubernetes/README.md
-hub-2021.8.3/README.containers.md
-hub-2021.8.3/README.md
-
-```
-
-
-- Customer to run 
-
+Customer to run the following command on Black Duck server, and database server if separate.
 
 `./docker-swarm/bin/system_check.sh` 
 
 
-- Customer to decide whether to use docker swarm kubernetes.
-- Customer to work with Black Duck Support team to configure container services.
 
 
-```
 
-grep -E -e image -e HUB_MAX_MEMORY -e limits -e reservations -e cpus -e memory -e replicas ./hub-2021.8.3/docker-swarm/docker-compose.yml
-    image: blackducksoftware/blackduck-postgres:9.6-1.1
-	limits: {memory: 3072M}
-	reservations: {cpus: '1', memory: 3072M}
 
-    image: blackducksoftware/blackduck-authentication:2021.8.3
-       HUB_MAX_MEMORY: 512m
-	limits: {cpus: '1', memory: 1024M}
-	reservations: {memory: 1024M}
-
-    image: blackducksoftware/blackduck-webapp:2021.8.3
-      HUB_MAX_MEMORY: 2048m
-	limits: {cpus: '1', memory: 2560M}
-	reservations: {cpus: '1', memory: 2560M}
-
-    image: blackducksoftware/blackduck-scan:2021.8.3
-      HUB_MAX_MEMORY: 2048m
-	limits: {cpus: '1', memory: 2560M}
-	reservations: {cpus: '1', memory: 2560M}
-
-    image: blackducksoftware/blackduck-jobrunner:2021.8.3
-       HUB_MAX_MEMORY: 4096m
-	limits: {cpus: '1', memory: 4608M}
-	reservations: {cpus: '1', memory: 4608M}
-
-    image: blackducksoftware/blackduck-cfssl:1.0.3
-	limits: {memory: 640M}
-	reservations: {memory: 640M}
-
-    image: blackducksoftware/blackduck-logstash:1.0.10
-	limits: {memory: 1024M}
-	reservations: {memory: 1024M}
-
-    image: blackducksoftware/blackduck-registration:2021.8.3
-	limits: {memory: 640M}
-	reservations: {memory: 640M}
-
-    image: blackducksoftware/blackduck-nginx:2.0.6
-	limits: {memory: 512M}
-	reservations: {memory: 512M}
-
-    image: blackducksoftware/blackduck-webui:2021.8.3
-	limits: {cpus: '1', memory: 640M}
-	reservations: {cpus: '0.5', memory: 640M}
-
-    image: blackducksoftware/blackduck-documentation:2021.8.3
-	limits: {memory: 512M}
-	reservations: {memory: 512M}
-
-      image: blackducksoftware/blackduck-upload-cache:1.0.18
-	  limits: {memory: 512M}
-	  reservations: {memory: 512M}
-
-    image: blackducksoftware/blackduck-redis:2021.8.3
-	limits: {memory: 1024M}
-	reservations: {memory: 1024M}
-
-    image: blackducksoftware/blackduck-bomengine:2021.8.3
-      HUB_MAX_MEMORY: 4096m
-	  limits: {memory: 4608M}
-	  reservations: {memory: 1536M}
-
-    image: blackducksoftware/blackduck-matchengine:2021.8.3
-	limits: { memory: 4608M, cpus: '1' }
-	reservations: { memory: 1536M, cpus: '1' }
-      HUB_MAX_MEMORY: 4096m
-
-    image: blackducksoftware/rabbitmq:1.2.3
-	  limits: {memory: 1024M}
-	  reservations: {memory: 1024M}
 
 ```
 
+Black Duck resources to consider include: 
 
-Resources to consider include: 
-
-- Number of container replicas:
+- Number of container replicas to use.
 - HUB_MAX_MEMORY
+- container replicas? 3?  20?  1?
+- MAX_CONCURRENT_JOBS?
 - Resource reservations and limits
     - ram
     - cpu
+    - cpu values deleted?
 - Database: in container or external? 
+    - enterprise-level database configuration parameters?
 - Does installation include Synopsys Alert?
     - Is Alert database in container or external database?
 - How are database disks connected?
